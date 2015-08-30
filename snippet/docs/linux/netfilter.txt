@@ -1,0 +1,293 @@
+
+
+include/
+    linux/
+        netfilter.h
+                #include <uapi/linux/netfilter.h>
+
+                typedef unsigned int
+                nf_hookfn(unsigned int hooknum,
+                          struct sk_buff *skb,
+                          const struct net_device *in,
+                          const struct net_device *out,
+                          int (*okfn)(struct sk_buff *));
+
+                struct nf_hook_ops {
+                    struct list_head list;
+
+                    /* User fills in from here down. */
+                    nf_hookfn *hook;
+                    struct module *owner;
+                    u_int8_t pf;
+                    unsigned int hooknum;
+                    /* Hooks are ordered in ascending priority. */
+                    int priority;
+                };
+
+                /* Function to register/unregister hook points. */
+                int nf_register_hook(struct nf_hook_ops *reg);
+                void nf_unregister_hook(struct nf_hook_ops *reg);
+                int nf_register_hooks(struct nf_hook_ops *reg, unsigned int n);
+                void nf_unregister_hooks(struct nf_hook_ops *reg, unsigned int n);
+
+                bool nf_hooks_active(u_int8_t pf, unsigned int hook)
+                {
+                    return !list_empty(&nf_hooks[pf][hook]);
+                }
+
+                int nf_hook(u_int8_t pf, unsigned int hook, struct sk_buff *skb,
+                            struct net_device *indev, struct net_device *outdev,
+                            int (*okfn)(struct sk_buff *))
+                {
+                    return nf_hook_thresh(pf, hook, skb, indev, outdev, okfn, INT_MIN);
+                }
+
+                int NF_HOOK(uint8_t pf, unsigned int hook, struct sk_buff *skb,
+                            struct net_device *in, struct net_device *out,
+                            int (*okfn)(struct sk_buff *))
+                {
+                    return NF_HOOK_THRESH(pf, hook, skb, in, out, okfn, INT_MIN);
+                }
+
+    uapi/linux/
+        netfilter.h
+                /* Responses from hook functions. */
+                #define NF_DROP 0
+                #define NF_ACCEPT 1
+                #define NF_STOLEN 2
+                #define NF_QUEUE 3
+                #define NF_REPEAT 4
+                #define NF_STOP 5
+                #define NF_MAX_VERDICT NF_STOP
+
+                /* hooknum of IPv4 or IPv6, ie, IPv4 or IPv6 Hooks */
+                enum nf_inet_hooks {
+                    NF_INET_PRE_ROUTING,
+                    NF_INET_LOCAL_IN,
+                    NF_INET_FORWARD,
+                    NF_INET_LOCAL_OUT,
+                    NF_INET_POST_ROUTING,
+                    NF_INET_NUMHOOKS
+                };
+
+                /* Netfilter Protocol Family, ie, the value of pf in struct nf_hook_ops */
+                enum {
+                    NFPROTO_UNSPEC =  0,   /* Undefined */
+                    NFPROTO_IPV4   =  2,   /* IPv4 Protocol */
+                    NFPROTO_ARP    =  3,   /* ARP Protocol */
+                    NFPROTO_BRIDGE =  7,   /* Linux Bridge */
+                    NFPROTO_IPV6   = 10,   /* IPv6 Protocol */
+                    NFPROTO_DECNET = 12,   /* DecNet */
+                    NFPROTO_NUMPROTO,
+                };
+
+        netfilter_arp.h
+                #include <linux/netfilter.h>
+
+                /* There is no PF_ARP. */
+                #define NF_ARP      0
+
+                /* ARP Hooks */
+                #define NF_ARP_IN   0
+                #define NF_ARP_OUT  1
+                #define NF_ARP_FORWARD  2
+                #define NF_ARP_NUMHOOKS 3
+
+        netfilter_ipv4.h
+                #include <linux/netfilter.h>
+
+                enum nf_ip_hook_priorities {
+                    NF_IP_PRI_FIRST = INT_MIN,
+                    NF_IP_PRI_CONNTRACK_DEFRAG = -400,
+                    NF_IP_PRI_RAW = -300,
+                    NF_IP_PRI_SELINUX_FIRST = -225,
+                    NF_IP_PRI_CONNTRACK = -200,
+                    NF_IP_PRI_MANGLE = -150,
+                    NF_IP_PRI_NAT_DST = -100,
+                    NF_IP_PRI_FILTER = 0,
+                    NF_IP_PRI_SECURITY = 50,
+                    NF_IP_PRI_NAT_SRC = 100,
+                    NF_IP_PRI_SELINUX_LAST = 225,
+                    NF_IP_PRI_CONNTRACK_HELPER = 300,
+                    NF_IP_PRI_CONNTRACK_CONFIRM = INT_MAX,
+                    NF_IP_PRI_LAST = INT_MAX,
+                };
+
+                /* only for userspace compatibility */
+                #ifndef __KERNEL__
+
+                #include <limits.h> /* for INT_MIN, INT_MAX */
+
+                /* IP Cache bits. */
+                /* Src IP address. */
+                #define NFC_IP_SRC      0x0001
+                /* Dest IP address. */
+                #define NFC_IP_DST      0x0002
+                /* Input device. */
+                #define NFC_IP_IF_IN        0x0004
+                /* Output device. */
+                #define NFC_IP_IF_OUT       0x0008
+                /* TOS. */
+                #define NFC_IP_TOS      0x0010
+                /* Protocol. */
+                #define NFC_IP_PROTO        0x0020
+                /* IP options. */
+                #define NFC_IP_OPTIONS      0x0040
+                /* Frag & flags. */
+                #define NFC_IP_FRAG     0x0080
+
+                /* Per-protocol information: only matters if proto match. */
+                /* TCP flags. */
+                #define NFC_IP_TCPFLAGS     0x0100
+                /* Source port. */
+                #define NFC_IP_SRC_PT       0x0200
+                /* Dest port. */
+                #define NFC_IP_DST_PT       0x0400
+                /* Something else about the proto */
+                #define NFC_IP_PROTO_UNKNOWN    0x2000
+
+                /* IP Hooks */
+                /* After promisc drops, checksum checks. */
+                #define NF_IP_PRE_ROUTING   0
+                /* If the packet is destined for this box. */
+                #define NF_IP_LOCAL_IN      1
+                /* If the packet is destined for another interface. */
+                #define NF_IP_FORWARD       2
+                /* Packets coming from a local process. */
+                #define NF_IP_LOCAL_OUT     3
+                /* Packets about to hit the wire. */
+                #define NF_IP_POST_ROUTING  4
+                #define NF_IP_NUMHOOKS      5
+                #endif /* ! __KERNEL__ */
+
+        netfilter_ipv6.h
+                #include <linux/netfilter.h>
+
+                enum nf_ip6_hook_priorities {
+                    NF_IP6_PRI_FIRST = INT_MIN,
+                    NF_IP6_PRI_CONNTRACK_DEFRAG = -400,
+                    NF_IP6_PRI_RAW = -300,
+                    NF_IP6_PRI_SELINUX_FIRST = -225,
+                    NF_IP6_PRI_CONNTRACK = -200,
+                    NF_IP6_PRI_MANGLE = -150,
+                    NF_IP6_PRI_NAT_DST = -100,
+                    NF_IP6_PRI_FILTER = 0,
+                    NF_IP6_PRI_SECURITY = 50,
+                    NF_IP6_PRI_NAT_SRC = 100,
+                    NF_IP6_PRI_SELINUX_LAST = 225,
+                    NF_IP6_PRI_CONNTRACK_HELPER = 300,
+                    NF_IP6_PRI_LAST = INT_MAX,
+                };
+
+                /* only for userspace compatibility */
+                #ifndef __KERNEL__
+
+                #include <limits.h> /* for INT_MIN, INT_MAX */
+
+                /* IP Cache bits. */
+                /* Src IP address. */
+                #define NFC_IP6_SRC              0x0001
+                /* Dest IP address. */
+                #define NFC_IP6_DST              0x0002
+                /* Input device. */
+                #define NFC_IP6_IF_IN            0x0004
+                /* Output device. */
+                #define NFC_IP6_IF_OUT           0x0008
+                /* TOS. */
+                #define NFC_IP6_TOS              0x0010
+                /* Protocol. */
+                #define NFC_IP6_PROTO            0x0020
+                /* IP options. */
+                #define NFC_IP6_OPTIONS          0x0040
+                /* Frag & flags. */
+                #define NFC_IP6_FRAG             0x0080
+
+
+                /* Per-protocol information: only matters if proto match. */
+                /* TCP flags. */
+                #define NFC_IP6_TCPFLAGS         0x0100
+                /* Source port. */
+                #define NFC_IP6_SRC_PT           0x0200
+                /* Dest port. */
+                #define NFC_IP6_DST_PT           0x0400
+                /* Something else about the proto */
+                #define NFC_IP6_PROTO_UNKNOWN    0x2000
+
+                /* IP6 Hooks */
+                /* After promisc drops, checksum checks. */
+                #define NF_IP6_PRE_ROUTING  0
+                /* If the packet is destined for this box. */
+                #define NF_IP6_LOCAL_IN     1
+                /* If the packet is destined for another interface. */
+                #define NF_IP6_FORWARD      2
+                /* Packets coming from a local process. */
+                #define NF_IP6_LOCAL_OUT        3
+                /* Packets about to hit the wire. */
+                #define NF_IP6_POST_ROUTING 4
+                #define NF_IP6_NUMHOOKS     5
+                #endif /* ! __KERNEL__ */
+
+        netfilter_decnet.h
+                #include <linux/netfilter.h>
+
+                /* DECnet Hooks */
+                /* After promisc drops, checksum checks. */
+                #define NF_DN_PRE_ROUTING   0
+                /* If the packet is destined for this box. */
+                #define NF_DN_LOCAL_IN      1
+                /* If the packet is destined for another interface. */
+                #define NF_DN_FORWARD       2
+                /* Packets coming from a local process. */
+                #define NF_DN_LOCAL_OUT     3
+                /* Packets about to hit the wire. */
+                #define NF_DN_POST_ROUTING  4
+                /* Input Hello Packets */
+                #define NF_DN_HELLO     5
+                /* Input Routing Packets */
+                #define NF_DN_ROUTE     6
+                #define NF_DN_NUMHOOKS      7
+
+                enum nf_dn_hook_priorities {
+                    NF_DN_PRI_FIRST = INT_MIN,
+                    NF_DN_PRI_CONNTRACK = -200,
+                    NF_DN_PRI_MANGLE = -150,
+                    NF_DN_PRI_NAT_DST = -100,
+                    NF_DN_PRI_FILTER = 0,
+                    NF_DN_PRI_NAT_SRC = 100,
+                    NF_DN_PRI_DNRTMSG = 200,
+                    NF_DN_PRI_LAST = INT_MAX,
+                };
+
+                /* only for userspace compatibility */
+                #ifndef __KERNEL__
+
+                #include <limits.h> /* for INT_MIN, INT_MAX */
+
+                /* IP Cache bits. */
+                /* Src IP address. */
+                #define NFC_DN_SRC      0x0001
+                /* Dest IP address. */
+                #define NFC_DN_DST      0x0002
+                /* Input device. */
+                #define NFC_DN_IF_IN        0x0004
+                /* Output device. */
+                #define NFC_DN_IF_OUT       0x0008
+                #endif /* ! __KERNEL__ */
+
+        netfilter_bridge.h
+                #include <linux/netfilter.h>
+
+                /* Bridge Hooks */
+                /* After promisc drops, checksum checks. */
+                #define NF_BR_PRE_ROUTING   0
+                /* If the packet is destined for this box. */
+                #define NF_BR_LOCAL_IN      1
+                /* If the packet is destined for another interface. */
+                #define NF_BR_FORWARD       2
+                /* Packets coming from a local process. */
+                #define NF_BR_LOCAL_OUT     3
+                /* Packets about to hit the wire. */
+                #define NF_BR_POST_ROUTING  4
+                /* Not really a hook, but used for the ebtables broute table */
+                #define NF_BR_BROUTING      5
+                #define NF_BR_NUMHOOKS      6

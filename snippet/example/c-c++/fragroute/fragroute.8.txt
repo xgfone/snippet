@@ -1,0 +1,198 @@
+
+
+
+FRAGROUTE(8)                                         FRAGROUTE(8)
+
+
+NAME
+       fragroute - intercept, modify, and rewrite egress traffic
+
+SYNOPSIS
+       fragroute [-f file] host
+
+DESCRIPTION
+       fragroute  intercepts, modifies, and rewrites egress traf-
+       fic destined for the specified host, implementing most  of
+       the  attacks described in the Secure Networks ``Insertion,
+       Evasion, and Denial of Service: Eluding Network  Intrusion
+       Detection'' paper of January 1998.
+
+       The options are as follows:
+
+       -f file
+              Read  ruleset  from  the  specified file instead of
+              /usr/local/etc/fragroute.conf.
+
+       Unlike fragrouter(8), this program  only  affects  packets
+       originating  from  the local machine destined for a remote
+       host.  Do not enable IP forwarding on the local machine.
+
+RULESET
+       fragroute is composed of several modules which enable var-
+       ious  configuration directives. Each directive operates on
+       a logical packet queue handed to it by the previous  rule.
+
+       # string ...
+              Ruleset comment, no-op.
+
+       delay first|last|random ms
+              Delay  the  delivery  of the first, last, or a ran-
+              domly selected packet from the  queue  by  ms  mil-
+              liseconds.
+
+       drop first|last|random prob-%
+              Drop the first, last, or a randomly selected packet
+              from the queue with a probability  of  prob-%  per-
+              cent.
+
+       dup first|last|random prob-%
+              Duplicate  the  first, last, or a randomly selected
+              packet from the queue with a probability of  prob-%
+              percent.
+
+       echo string ...
+              Echo the string argument(s) to standard output.
+
+       ip_chaff dup|opt|ttl
+              Interleave  IP  packets in the queue with duplicate
+              IP packets containing  different  payloads,  either
+              scheduled  for  later delivery, carrying invalid IP
+              options, or bearing short time-to-live values.
+
+
+
+                                                                1
+
+
+
+
+
+FRAGROUTE(8)                                         FRAGROUTE(8)
+
+
+       ip_frag size [old|new]
+              Fragment each packet in the queue into size-byte IP
+              fragments, preserving the complete transport header
+              in the first fragment.  Optional  fragment  overlap
+              may  be  specified as old or new, to favor newer or
+              older data.
+
+       ip_opt lsrr|ssrr ptr ip-addr ...
+              Add IP options to every packet, to enable loose  or
+              strict  source  routing. The route should be speci-
+              fied as  list  of  IP  addresses,  and  a  bytewise
+              pointer  into  them  (e.g. the minimum ptr value is
+              4).
+
+       ip_ttl ttl
+              Set the IP time-to-live value of  every  packet  to
+              ttl.
+
+       ip_tos tos
+              Set the IP type-of-service bits for every packet to
+              tos.
+
+       order random|reverse
+              Re-order the packets in the queue randomly,  or  in
+              reverse.
+
+       print  Print  each  packet  in  the queue in tcpdump-style
+              format.
+
+       tcp_chaff cksum|null|paws|rexmit|seq|syn|ttl
+              Interleave TCP segments in the queue with duplicate
+              TCP  segments containing different payloads, either
+              bearing invalid TCP  checksums,  null  TCP  control
+              flags,  older TCP timestamp options for PAWS elimi-
+              nation,  faked  retransmits  scheduled  for   later
+              delivery,  out-of-window sequence numbers, requests
+              to re-synchronize sequence numbers  mid-stream,  or
+              short time-to-live values.
+
+       tcp_opt mss|wscale size
+              Add  TCP  options  to  every TCP packet, to set the
+              maximum segment size or window scaling factor.
+
+       tcp_seg size [old|new]
+              Segment each TCP data segment  in  the  queue  into
+              size-byte  TCP  segments.  Optional segment overlap
+              may be specified as old or new, to favor  newer  or
+              older data.
+
+EXAMPLES
+       Fragment  all traffic to a Windows host into forward-over-
+       lapping 8-byte fragments (favoring  older  data),  reorder
+       randomly, and print to standard output:
+
+
+
+
+                                                                2
+
+
+
+
+
+FRAGROUTE(8)                                         FRAGROUTE(8)
+
+
+            ip_frag 8 old
+            order random
+            print
+
+       Segment  all  TCP  data to a host into forward-overlapping
+       4-byte segments (favoring  newer  data),  interleave  with
+       overwriting, random chaff segments bearing older timestamp
+       options for PAWS elimination, reorder randomly, and  print
+       to standard output:
+
+            tcp_seg 4 new
+            tcp_chaff paws
+            order random
+            print
+
+FILES
+       /usr/local/etc/fragroute.conf
+              Default configuration ruleset
+
+SEE ALSO
+       fragtest(8)
+
+AUTHOR
+       Dug Song <dugsong@monkey.org>
+
+BUGS
+       It is entirely possible to mangle your outgoing traffic so
+       badly that no remote TCP/IP stack will accept it. K.I.S.S.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                3
+
+

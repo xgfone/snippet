@@ -1,0 +1,66 @@
+
+
+
+FRAGTEST(8)                                           FRAGTEST(8)
+
+
+NAME
+       fragtest - test IP fragment reassembly behaviour
+
+SYNOPSIS
+       fragtest TESTS ... host
+
+DESCRIPTION
+       fragtest  probes  the  remote host to determine its TCP/IP
+       stack behaviour.
+
+       The TESTS may include any of  the  following  (or  may  be
+       specified as all to perform them all):
+
+       ping   Send an ICMP echo request to the host.
+
+       ip-opt Send  ICMP echo requests with different IP options,
+              to see which IP options are supported.
+
+       frag   Send an ICMP echo request as 8-byte fragments.
+
+       frag-new
+              Send an ICMP echo request as 8-byte fragments  with
+              an  overlapping  16-byte  fragment,  favoring newer
+              data in reassembly.
+
+       frag-old
+              Send an ICMP echo request as 8-byte fragments  with
+              an  overlapping  16-byte  fragment,  favoring older
+              data in reassembly.
+
+       frag-timeout
+              Send an ICMP  echo  request  as  8-byte  fragments,
+              omitting  the  last  fragment, and wait for an ICMP
+              time-exceeded-in-reassembly reply.
+
+SEE ALSO
+       fragroute(8)
+
+AUTHOR
+       Dug Song <dugsong@monkey.org>
+
+BUGS
+       Firewalls or other filtering network devices may block  IP
+       fragments,  packets  with  IP  options, ICMP echo traffic,
+       etc.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                1
+
+
