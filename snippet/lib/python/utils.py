@@ -129,11 +129,3 @@ def remove_builtins(args):
             raise AttributeError("{0} doesn't exist".format(arg))
         delattr(builtins, arg)
         _CACHE_BUILTIN.pop(arg)
-
-
-def f(*args, **kwargs):
-    print(args, kwargs)
-
-aa = map2(f, [11, 22, 33])
-for a in aa:
-    print(a)
