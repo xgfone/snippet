@@ -40,7 +40,7 @@ def get_engine(conf_group, use_slave=False):
 
     If `use_slave` is True, the operations of read and write are detached.
     """
-    facade = _create_facade_lazily(conf_group.name, conf_group)
+    facade = _create_facade_lazily(conf_group._group.name, conf_group)
     return facade.get_engine(use_slave=use_slave)
 
 
@@ -49,5 +49,5 @@ def get_session(conf_group, use_slave=False, **kwargs):
 
     If `use_slave` is True, the operations of read and write are detached.
     """
-    facade = _create_facade_lazily(conf_group.name, conf_group)
+    facade = _create_facade_lazily(conf_group._group.name, conf_group)
     return facade.get_session(use_slave=use_slave, **kwargs)
