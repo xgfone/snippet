@@ -14,7 +14,8 @@ from scrapy.utils.misc import md5sum
 from scrapy.utils.misc import arg_to_iter
 from twisted.internet.defer import DeferredList
 
-from crawler.utils import URL
+from crawler.utils import URL, to_str
+from crawler import settings
 
 
 class GroupDownPipelineMinix(object):
@@ -82,13 +83,13 @@ class GroupDownPipelineMinix(object):
                 result[item[self.URLS_NAME][n]] = x.getErrorMessage()
         # TODO: Save the result
 
-        return super(GroupDownPipelineMinix, self).item_completed(results, item, info)
-
         # file_paths = [x['path'] for ok, x in results if ok]
         # if not file_paths:
         #     raise DropItem("Item contains no files")
         # item['image_paths'] = file_paths
         # return item
+
+        return super(GroupDownPipelineMinix, self).item_completed(results, item, info)
 
 
 class FileGroupPipeline(GroupDownPipelineMinix, FilesPipeline):
@@ -99,3 +100,17 @@ class FileGroupPipeline(GroupDownPipelineMinix, FilesPipeline):
 class ImageGroupPipeline(GroupDownPipelineMinix, ImagesPipeline):
     DEFAULT_EXT = '.jpg'
     URLS_NAME = 'image_urls'
+
+
+class TextPipeline(object):
+    def _get_dirname(self):
+        if not os.path.exists(settings.TEXTS_STORE):
+            os.makedirs(settings.TEXTS_STORE)
+        return settings.TEXTS_STORE
+
+    def process_item(self, item, spider):
+        dirname = self._get_dirname()
+        path = os.path.join(dirname, item["title"] + ".txt")
+        with open(path, "w") as f:
+            for i in item["texts"]:
+                f.write(to_str(i))

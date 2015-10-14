@@ -1,5 +1,20 @@
 # encoding: utf-8
+import sys
 import urlparse
+
+if sys.version_info[0] == 2:
+    PY2 = True
+    PY3 = False
+else:
+    PY2 = False
+    PY3 = True
+
+
+def to_str(s, encoding='utf-8'):
+    if PY2:
+        return s.encode(encoding)
+    if PY3:
+        return s
 
 
 class URL(object):
