@@ -24,12 +24,18 @@ class BaseSpider(CrawlSpider):
         if _text_store:
             self.logger.info("The directory of the TEXT store is %s" % _text_store)
 
-        spider_site = kwargs.get("site", None)
+        spider_site = kwargs.pop("site", None)
         if not spider_site:
             spider_site = getattr(settings, "SPIDER_SITE", None)
         self.spider_site = spider_site
 
-        start_urls = getattr(self, "start_urls", None)
+        urls = kwargs.pop("start_urls", None)
+        if urls:
+            start_urls = urls.split(',')
+            if not start_urls[-1]:
+                start_urls = start_urls[:-1]
+        else:
+            start_urls = getattr(self, "start_urls", None)
         if not start_urls:
             start_urls = getattr(settings, "START_URLS", None)
             if start_urls and self.spider_site:
@@ -37,6 +43,7 @@ class BaseSpider(CrawlSpider):
             else:
                 start_urls = []
         self.start_urls = start_urls
+        print("*************** %s" % str(self.start_urls))
 
         allowed_domains = getattr(self, "allowed_domains", None)
         if not allowed_domains:
