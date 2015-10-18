@@ -1,0 +1,4 @@
+[USAGE]
+    $ scrapy crawl image -a site=1seke -a start_urls=XXX
+    $ scrapy crawl text -a site=1bboo -a start_urls=XXX -a min=30
+see settings.py
