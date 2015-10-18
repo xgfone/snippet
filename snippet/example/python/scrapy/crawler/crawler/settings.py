@@ -84,6 +84,7 @@ CSS_SELECTORS = {
         },
     }
 }
+FILE_MIN_SIZE = 30  # The unit is KB.
 ALLOWED_DOMAINS = [
 ]
 # #### Custom End

@@ -29,6 +29,11 @@ class BaseSpider(CrawlSpider):
             spider_site = getattr(settings, "SPIDER_SITE", None)
         self.spider_site = spider_site
 
+        file_min_size = kwargs.pop("min", 0)
+        if not file_min_size:
+            file_min_size = getattr(settings, "FILE_MIN_SIZE", 0)
+        self.file_min_size = int(file_min_size)
+
         urls = kwargs.pop("start_urls", None)
         if urls:
             start_urls = urls.split(',')
@@ -43,7 +48,6 @@ class BaseSpider(CrawlSpider):
             else:
                 start_urls = []
         self.start_urls = start_urls
-        print("*************** %s" % str(self.start_urls))
 
         allowed_domains = getattr(self, "allowed_domains", None)
         if not allowed_domains:
@@ -58,8 +62,6 @@ class BaseSpider(CrawlSpider):
             self.css_selector = css_selector
         else:
             self.css_selector = {}
-
-        print(self.start_urls, self.css_selector)
 
         super(BaseSpider, self).__init__(*args, **kwargs)
 

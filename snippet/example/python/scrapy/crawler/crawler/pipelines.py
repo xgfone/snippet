@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import os
 import os.path
 import hashlib
 
@@ -9,6 +10,7 @@ except ImportError:
     from io import BytesIO
 
 from scrapy import Request
+from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline, FilesPipeline
 from scrapy.utils.misc import md5sum
 from scrapy.utils.misc import arg_to_iter
@@ -108,9 +110,20 @@ class TextPipeline(object):
             os.makedirs(settings.TEXTS_STORE)
         return settings.TEXTS_STORE
 
+    def filter(self, path, item, spider):
+        if spider.file_min_size:
+            size = os.stat(path).st_size
+            if size < spider.file_min_size * 1024:
+                print("============= %s %s" % (size, spider.file_min_size*1024))
+                os.remove(path)
+
     def process_item(self, item, spider):
         dirname = self._get_dirname()
         path = os.path.join(dirname, item["title"] + ".txt")
         with open(path, "w") as f:
             for i in item["texts"]:
                 f.write(to_str(i))
+
+        self.filter(path, item, spider)
+
+        raise DropItem
