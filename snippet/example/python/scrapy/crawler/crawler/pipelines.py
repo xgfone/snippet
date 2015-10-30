@@ -46,6 +46,8 @@ class GroupDownPipelineMinix(object):
         except Exception:
             path = os.path.join("err", hashlib.sha1(url).hexdigest() + self.DEFAULT_EXT)
 
+        if request.spider.subdir:
+            path = os.path.join(request.spider.subdir, path)
         return path
 
     def image_downloaded(self, response, request, info):
@@ -59,11 +61,11 @@ class GroupDownPipelineMinix(object):
     def process_item(self, item, spider):
         info = self.spiderinfo
         requests = arg_to_iter(self.get_media_requests(item, info))
-        dlist = [self._process_request(r, info, item) for r in requests]
+        dlist = [self._process_request(r, info, item, spider) for r in requests]
         dfd = DeferredList(dlist, consumeErrors=1)
         return dfd.addCallback(self.item_completed, item, info)
 
-    def _process_request(self, request, info, item=None):
+    def _process_request(self, request, info, item=None, spider=None):
         if item:
             group = {
                 "urls": {},
@@ -72,6 +74,8 @@ class GroupDownPipelineMinix(object):
             for n, url in enumerate(item[self.URLS_NAME], 1):
                 group["urls"][url] = n
             request.group = group
+        if spider:
+            request.spider = spider
 
         return super(GroupDownPipelineMinix, self)._process_request(request, info)
 
@@ -105,20 +109,24 @@ class ImageGroupPipeline(GroupDownPipelineMinix, ImagesPipeline):
 
 
 class TextPipeline(object):
-    def _get_dirname(self):
-        if not os.path.exists(settings.TEXTS_STORE):
-            os.makedirs(settings.TEXTS_STORE)
-        return settings.TEXTS_STORE
+    def _get_dirname(self, spider):
+        if spider.subdir:
+            path = os.path.join(settings.TEXTS_STORE, spider.subdir)
+        else:
+            path = settings.TEXTS_STORE
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
 
     def filter(self, path, item, spider):
         if spider.file_min_size:
             size = os.stat(path).st_size
             if size < spider.file_min_size * 1024:
-                print("============= %s %s" % (size, spider.file_min_size*1024))
                 os.remove(path)
 
     def process_item(self, item, spider):
-        dirname = self._get_dirname()
+        dirname = self._get_dirname(spider)
         path = os.path.join(dirname, item["title"] + ".txt")
         with open(path, "w") as f:
             for i in item["texts"]:

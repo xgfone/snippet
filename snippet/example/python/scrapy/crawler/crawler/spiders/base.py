@@ -17,6 +17,8 @@ class BaseSpider(CrawlSpider):
             Rule(NextLinkExtractor(self), callback="handle_page", follow=True),
         )
 
+        self.subdir = kwargs.pop("subdir", None)
+
         _image_store = getattr(settings, "IMAGES_STORE", None)
         _text_store = getattr(settings, "TEXTS_STORE", None)
         if _image_store:
