@@ -6,14 +6,14 @@ DEFAULT_LOGGING = {
     "root": {
         "level": "DEBUG",
         "propagate": 0,
-        "handlers": ["file", "console"],
+        "handlers": ["file"],
         "filters": [],
     },
     "loggers": {
         "default": {
             "level": "INFO",
             "propagate": 0,
-            "handlers": ["file", "console"],
+            "handlers": ["file"],
             "filters": [],
         }
     },
@@ -47,7 +47,7 @@ DEFAULT_LOGGING = {
 
             # Arguments of handler
             "filename": "/var/log/{PROJECT}/{PROJECT}.log",
-            "when": "D",  # Backup once each day.
+            "when": "midnight",  # Backup once each day.
             "interval": 1,
             "backupCount": 31,  # The total number to backup.
         }
@@ -55,43 +55,39 @@ DEFAULT_LOGGING = {
 }
 
 
-def get_config(project, config=None):
+def get_config(project, config=None, filepath=None, console=False):
     import copy
     _config = copy.deepcopy(DEFAULT_LOGGING)
 
-    file_handler = _config["handlers"]["file"]
-    file_handler["filename"] = file_handler["filename"].format(PROJECT=project)
+    f = _config["handlers"]["file"]
+    f["filename"] = filepath if filepath else f["filename"].format(PROJECT=project)
+
+    if console:
+        _config["root"]["handlers"].append("console")
+        _config["loggers"]["default"]["handlers"].append("console")
     _config["loggers"][project] = _config["loggers"]["default"]
 
     if not isinstance(config, dict):
         return _config
 
-    version = config.get("version", None)
-    if version is not None:
-        _config["version"] = version
+    data1 = ("version", "incremental", "root")
+    for d in data1:
+        v = config.get(d, None)
+        if v is not None:
+            _config[d] = v
 
-    incremental = config.get("incremental", None)
-    if incremental is not None:
-        _config["incremental"] = incremental
-
-    root = config.get("root", None)
-    if root is not None:
-        _config["root"] = root
-
-    loggers = config.get("loggers", {})
-    for k, v in loggers.items():
-        _config["loggers"][k] = v
-
-    formatters = config.get("formatters", {})
-    for k, v in formatters.items():
-        _config["formatters"][k] = v
-
-    handlers = config.get("handlers", {})
-    for k, v in handlers.items():
-        _config["handlers"][k] = v
-
-    filters = config.get("filters", {})
-    for k, v in filters.items():
-        _config["filters"][k] = v
+    data2 = ("loggers", "formatters", "handlers", "filters")
+    for d in data2:
+        for k, v in config.get(d, {}).items():
+            if d in _config:
+                _config[d].update(v)
+            else:
+                _config[d][k] = copy.deepcopy(v)
 
     return _config
+
+
+def setup_logging(project, config=None, filepath=None, console=False):
+    from logging.config import dictConfig
+    config = get_config(project, config, filepath, console)
+    dictConfig(config)
