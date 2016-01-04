@@ -6,8 +6,8 @@ from oslo_log import log as logging
 
 CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
-_BACKEND_MAPPING = {'sqlalchemy': "{PROJECT}.db.sqlalchemy.api"}
 
+_BACKEND_MAPPING = {'sqlalchemy': "{PROJECT}.db.sqlalchemy.api"}
 IMPL = concurrency.TpoolDbapiWrapper(CONF, backend_mapping=_BACKEND_MAPPING)
 # import threading
 # from oslo_db import api
@@ -26,9 +26,9 @@ IMPL = concurrency.TpoolDbapiWrapper(CONF, backend_mapping=_BACKEND_MAPPING)
 
 ####################################
 # API Interface
-def insert_data(*args, **kwargs):
-    return IMPL.insert_data(*args, **kwargs)
+def get_data(id):
+    return IMPL.get_data(id)
 
 
-def get_all_datas(*args, **kwargs):
-    return IMPL.get_all_datas(*args, **kwargs)
+def set_data(data):
+    return IMPL.set_data(data)

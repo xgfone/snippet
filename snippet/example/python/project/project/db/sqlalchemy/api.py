@@ -1,25 +1,34 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 import sys
+import logging
 
 from oslo_config import cfg
 from oslo_db import options as oslo_db_options
 from oslo_db.sqlalchemy import utils as sqlalchemyutils
-from oslo_log import log as logging
 
-from .base import get_session
+from .base import get_session, get_engine
 from . import models
 
 LOG = logging.getLogger(__name__)
-
 CONF = cfg.CONF
+
 CONF.register_opts(oslo_db_options.database_opts, 'database')
-CONF.register_opts(oslo_db_options.database_opts, 'api_database')
+
+# For Test
+oslo_db_options.set_defaults(CONF, connection="sqlite:///:memory:")
+DB_INIT = False
 
 
 def get_backend():
     """The backend is this module itself."""
+    # For Test
+    global DB_INIT
+    if not DB_INIT:
+        models.TestData.metadata.create_all(get_engine(CONF.database))
+        DB_INIT = True
+
     return sys.modules[__name__]
 
 
@@ -31,7 +40,7 @@ def get_attr(obj, name):
     return obj[name]
 
 
-class _RowRroxy(object):
+class RowRroxy(object):
     def __init__(self, obj, *args, **kwargs):
         self._obj = obj
         self._args = args
@@ -56,17 +65,25 @@ def model_query(model, session):
 
 ###############################################################
 # API Interfaces
-def get_all_datas():
-    session = get_session(CONF.api_database)
-    model = models.UserInfo
-    query = model_query(model, session)
-    return query.all()
+def get_data(_id):
+    model = models.TestData
+    session = get_session(CONF.database)
+    query = sqlalchemyutils.model_query(model, session)
+    obj = query.filter_by(id=_id).first()
+    if obj:
+        return {
+            "id": obj.id,
+            "data": obj.data
+        }
+    else:
+        return None
 
 
-def insert_data(*args, **kwargs):
-    def _get_obj(*args, **kwargs):
-        return models.UserInfo(*args, **kwargs)
-
-    session = get_session(CONF.api_database)
-    obj = _get_obj(*args, **kwargs)
+def set_data(data):
+    model = models.TestData
+    session = get_session(CONF.database)
+    obj = model(data=data)
     obj.save(session)
+    return {
+        "id": obj.id,
+    }
