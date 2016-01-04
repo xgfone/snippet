@@ -1,0 +1,180 @@
+
+
+选项
+tcpdump默认只抓取一个包的前68或96个字节，如果要查看更多内容，需要加"-s number"选项，下面是我最常用的选项:
+-i any : 监听所有接口，
+-n : 不解析主机名
+-nn : 不解析主机名和端口名
+-X : 以16进制和ascii格式显示包
+-XX : 和-X一样，但会显示以太网头
+-v, -vv, -vvv : 获取包含信息量更多的包
+-c : 获取指定数量的包，达到该数量后tcpdump停止
+-S : 显示绝对序列号
+-e : 获取以太网头
+-q : 显示少量的协议信息
+-E : 通过密钥来解密IPSEC交互
+-s : 设置snaplength(snaplength是抓取的字节数)
+
+tcpdump 4.0已经将默认的snaplength从68字节改成96字节，可以返回更多的信息，但仍然不是全部。
+
+一些基本用法
+根据想得到的交互种类，来采用不同的选项组合，如下所示:
+1.基本信息  // 用很少的选项查看简要信息
+tcpdump -nS
+2.基本信息(非常冗长)  // 查看大量交互，很冗长且没有名词解释
+tcpdump -nnvvS
+3.交互的深入观察  // 为减小负载增加"-X"选项,但不会抓取包的更多信息
+tcpdump -nnvvXS
+4.整包浏览  //"s"增加snaplength，抓取整个包
+tcpdump -nnvvXSs 1514
+
+表达式
+表达式可以使你过滤掉各种类型的交互来准确找出你想要的。
+掌握表达式并且学习将它们创造性的结合起来能使你真正发挥出tcpdump的强大。
+有三种主要的表达式:type,dir,和proto。
+
+Type选项包括host,net和port。
+dir选项指明传输方向，包括src,dst,src或dst,src和dst。
+
+这些你必须要确保非常熟悉:
+- host // 根据ip地址查询交互(不用"-n"也能根据主机名查询交互)
+# tcpdump host 1.2.3.4
+
+- src,dst // 找出指定源地址或目的地址的交互
+# tcpdump src 2.3.4.5
+# tcpdump dst 3.4.5.6
+
+- net // 根据网络号抓取整个网络
+# tcpdump net 1.2.3.0/24
+
+- proto // 工作在tcp,udp,和icmp。注意你不用必须输入proto。
+# tcpdump icmp
+
+- port //  查看经过指定端口的交互
+# tcpdump port 3389
+
+- src,dst port // 找出指定源端口或目的端口的交互
+# tcpdump src port 1025
+# tcpdump dst port 389
+
+- src/dst, port, protocol // 将三个联合在一起
+# tcpdump src port 1025 and tcp
+# tcpdump udp and src port 53
+
+你也可以用选项来找出多个端口而不用一一指定，也可以仅查看大于或小于某一字节大小的包。
+- Port Ranges // 查看经过范围内端口的交互
+tcpdump portrange 21-23
+
+- Packet Size Filter // 查看大于或小于某一字节大小的包
+tcpdump less 32
+tcpdump greater 128
+
+也可以用符号来代替
+tcpdump > 32
+tcpdump <= 128
+
+写到一个文件
+tcpdump用"-w"选项可以将抓到的内容存入文件，再用"-r"选项读回来，这个功能非常好，可以抓取原始交互之后再用其他工具运行它。
+以这种方式抓取到的交互会存成tcpdump格式的文件，现在网络分析圈内基本都用这种格式，因此文件可以被所有工具读取，包括Wireshark, Snort等。
+
+- 抓取所有经过端口80的交互存入一个文件
+# tcpdump -s 1514 port 80 -w capture_file
+
+- 以后可以再读回来
+# tcpdump -r capture_file
+
+变得有创意
+表达式很好，但tcpdump真正的魅力在于创造性的将表达式联合在一起来准确的找到你想要的。有三种联合的方式(学过电脑的人会很熟悉):
+与
+and or &&
+或
+or or ||
+非
+not or !
+
+更多的例子
+# 从10.5.2.3到端口3389的tcp交互
+tcpdump -nnvvS and src 10.5.2.3 and dst port 3389
+# 从网络192.168到网络10或172.16的交互
+tcpdump -nvX src net 192.168.0.0/16 and dst net 10.0.0.0/8 or 172.16.0.0/16
+# 从192.168.0.2到网络172.16的非icmp交互
+tcpdump -nvvXSs 1514 dst 192.168.0.2 and src net and not icmp
+# 从Mars或Pluto到非SSH端口的交互
+tcpdump -vv src Mars or Pluto and not dst port 22
+
+
+分组
+在组装查询的时候对选项进行分组要记得用单引号，单引号用于告诉tcpdump忽略某些指定的字符(这里是小括号)，同样的方法可以用于对其他表达式进行分组，如host,port, net等。看看以下的命令:
+
+# 从10.0.2.4到端口3389或22的交互(错误的表达)
+tcpdump src 10.0.2.4 and (dst port 3389 or 22)
+
+如果你试图运行这个本来非常有用的命令，因为括号的原因会报错，可以对括号进行转义(前面加"/")或者将整个命令放在单引号中:
+# 从10.0.2.4到端口3389或22的交互(正确的表达)
+tcpdump 'src 10.0.2.4 and (dst port 3389 or 22)'
+
+进阶
+你也可以筛选出包的指定部分,以及将多个条件合并在一起，前者在找SYN或RST段的时候很有用，后者用于进行更高级的筛选。
+提示:tcp标识的一个字谜:Unskilled Attackers Pester Real Security Folk
+
+- 显示所有的URG包
+# tcpdump 'tcp[13] & 32!=0'
+
+- 显示所有的ACK包
+# tcpdump 'tcp[13] & 16!=0'
+
+- 显示所有的PSH包
+# tcpdump 'tcp[13] & 8!=0'
+
+- 显示所有的RST包
+# tcpdump 'tcp[13] & 4!=0'
+
+- 显示所有的SYN包
+# tcpdump 'tcp[13] & 2!=0'
+
+- 显示所有的FIN包
+# tcpdump 'tcp[13] & 1!=0'
+
+- 显示所有的SYM/ACK包
+# tcpdump 'tcp[13]=18'
+
+注意:只有PSH,RST,SYN和FIN标识显示在tcpdump的标识字段。URG和ACK也会显示，但显示在tcpdump的其他地方。
+
+记住这些过滤器工作的原因。上面的过滤器之所以能找到各种类型的包是因为tcp[13]观察的是tcp首部偏移量为13的位置(tcp的标志位为TCP报文的第13个字节)，&后面的数字是字节中的位，不等于0代表该位被打开。
+
+有了这么多强大的工具，就有很多方法来处理事情，下面是另一种抓指定tcp标识的包的方法。
+
+- 用tcpflags选项(表示TCP报文中标志位字节的偏移量 )抓取tcp标识
+# 'tcp[tcpflags] = tcp-syn' //匹配只有syn标志设置为1的 tcp报文
+# 'tcp[tcpflags] & (tcp-syn |tcp-ack |tcp-fin) !=0' //匹配含有syn，或ack或fin标志位的TCP报文
+
+/*
+偏移量有时会忘记。不过tcpdump为你提供更方便的用法，你不用记位这些数字，用字符就可以代替了.
+下面是tcpdump提供的字符偏移量：
+
+icmptype：表示icmp报文中类弄字节的偏移量
+icmpcode:表示icmp报文中编码字节的偏移量
+tcpflags:表示TCP报文中标志位字节的偏移量
+
+此外，还提供了很多值来对应上面的偏移字节：
+
+ICMP中类型字节的值可以是：
+icmp-echoreply, icmp-unreach, icmp-sourcequench, icmp-redi‐rect, icmp-echo, icmp-routeradvert,
+icmp-routersolicit, icmp-timxceed, icmp-paramprob, icmp-tstamp, icmp-tstam‐preply, icmp-ireq,
+icmp-ireqreply, icmp-maskreq, icmp-maskreply.
+
+TCP中标志位字节的值可以是：
+tcp-fin, tcp-syn, tcp-rst, tcp-push, tcp-ack, tcp-urg.
+*/
+
+指定的交互
+最后，你将会记住一些快捷的方法来抓取特定的交互，如ipv6和异常/恶意的包。
+
+- IPv6交互
+# tcpdump ip6
+
+- RST和SYN标识都打开的交互
+# tcpdump 'tcp[13] = 6'
+
+- 存在'Evil Bit'的交互
+# tcpdump 'ip[6] & 128 != 0'
