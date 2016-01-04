@@ -1,4 +1,4 @@
-codesnippet
+Snippets
 ===========
 
-A collection of some code snippets.
+The code snippets of all kinds of languages and some docs.
