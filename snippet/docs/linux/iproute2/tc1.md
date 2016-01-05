@@ -194,7 +194,7 @@ This diagram identifies the flow of borrowed tokens and the manner in which toke
 
 Any child class which wishes to borrow a token will request a token from its parent class, which if it is also over its rate will request to borrow from its parent class until either a token is located or the root class is reached. So the borrowing of tokens flows toward the leaf classes and the charging of the usage of tokens flows toward the root class.
 
-![IMG7](./_static/7.png)
+![IMG7](./_static/7.jpg)
 
 Note in this diagram that there are several HTB root classes. Each of these root classes can simulate a virtual circuit.
 
