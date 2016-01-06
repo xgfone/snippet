@@ -19,7 +19,7 @@
 
 [Openvswitch手册(4): Mirror](http://www.cnblogs.com/popsuper1982/p/3800585.html)
 
-另外两篇
+另外两篇（关于Mirror）
 
 http://www.cnblogs.com/sting2me/p/4849851.html
 
