@@ -7,8 +7,6 @@
 
 [基于 Open vSwitch 的 OpenFlow 实践](http://www.cnblogs.com/popsuper1982/p/3800525.html)
 
-[OpenFlow学习笔记](http://www.cnblogs.com/popsuper1982/p/3800558.html)
-
 [An overview of Openvswitch implementation](http://www.cnblogs.com/popsuper1982/p/3800560.html)
 
 [Network flow monitoring with Open vSwitch](http://www.cnblogs.com/popsuper1982/p/3800578.html)
