@@ -40,4 +40,4 @@ http://www.zouliblog.cn/?p=379
 
 ![OVS_Flow_Tables](./_static/OVS_Flow_Tables.png)
 
-![OVS_flow_Tables_with_ARP_responder](./_static/OVS_flow_Tables_with_ARP_responder.svg)
+![OVS_flow_Tables_with_ARP_responder](./_static/OVS_flow_Tables_with_ARP_responder.png)
