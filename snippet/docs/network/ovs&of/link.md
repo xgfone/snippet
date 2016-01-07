@@ -35,3 +35,9 @@ http://www.zouliblog.cn/?p=379
 [Openvswitch手册(8): ovs-vsctl的DB的操作](http://www.cnblogs.com/popsuper1982/p/3805105.html)
 
 [Openvswitch手册(9): Flow](http://www.cnblogs.com/popsuper1982/p/3810271.html)
+
+[Ovs-flow-logic](https://wiki.openstack.org/wiki/Ovs-flow-logic)
+
+![OVS_Flow_Tables](./_static/OVS_Flow_Tables.png)
+
+![OVS_flow_Tables_with_ARP_responder](./_static/OVS_flow_Tables_with_ARP_responder.svg)
