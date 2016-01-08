@@ -2,20 +2,20 @@
 HTB Linux queuing discipline manual - user guide
 ================================================
 
-Martin Devera aka devik (devik@cdi.cz)
-Manual: devik and Don Cohen
-Last updated: 5.5.2002
+- Martin Devera aka devik (devik@cdi.cz)
+- Manual: devik and Don Cohen
+- Last updated: 5.5.2002
 
 New text is in red color. Coloring is removed on new text after 3 months. Currently they depicts HTB3 changes
 
-* **1. Introduction**
-* **2. Link sharing**
-* **3. Sharing hierarchy**
-* **4. Rate ceiling**
-* **5. Burst**
-* **6. Priorizing bandwidth share**
-* **7. Understanding statistics**
-* **8. Making, debugging and sending error reports**
+* **1. [Introduction](./htb-user-guide.md#1-introduction)**
+* **2. [Link sharing](./htb-user-guide.md#2-link-sharing)**
+* **3. [Sharing hierarchy](./htb-user-guide.md#3-sharing-hierarchy)**
+* **4. [Rate ceiling](./htb-user-guide.md#4-rate-ceiling)**
+* **5. [Burst](./htb-user-guide.md#5-burst)**
+* **6. [Priorizing bandwidth share](./htb-user-guide.md#6-priorizing-bandwidth-share)**
+* **7. [Understanding statistics](./htb-user-guide.md#7-understanding-statistics)**
+* **8. [Making, debugging and sending error reports](./htb-user-guide.md#8-making-debugging-and-sending-error-reports)**
 
 ### 1. Introduction
 HTB is meant as a more understandable, intuitive and faster replacement for the CBQ qdisc in Linux. Both CBQ and HTB help you to control the use of the outbound bandwidth on a given link. Both allow you to use one physical link to simulate several slower links and to send different kinds of traffic on different simulated links. In both cases, you have to specify how to divide the physical link into simulated links and how to decide which simulated link to use for a given packet to be sent.
