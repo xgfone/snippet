@@ -10,6 +10,8 @@ Markdown Base
 ![cheatsheet2](./_static/2.png)
 ![cheatsheet3](./_static/3.png)
 
+## Others
+
 #### EMail
 The use is the same as LINK(\<a href\>).
 
