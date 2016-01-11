@@ -4,11 +4,11 @@ Git服务器架设
 Copyright © 2014 - 2016  xgfone(三界). All Rights Reserved.
 
 - **[前言](./build-git-server.md#前言)**
-- **[使用 HTTP 协议](./build-git-server.md#使用HTTP协议)**
-- **[使用 Git 协议](./build-git-server.md#使用Git协议)**
-- **[使用 SSH 协议](./build-git-server.md#使用SSH协议)**
-- **[Gitolite服务器架设](./build-git-server.md#Gitolite服务器架设)**
-- **[Gitosis服务器架设](./build-git-server.md#Gitosis服务器架设)**
+- **[使用 HTTP 协议](./build-git-server.md#使用http协议)**
+- **[使用 Git 协议](./build-git-server.md#使用git协议)**
+- **[使用 SSH 协议](./build-git-server.md#使用ssh协议)**
+- **[Gitolite服务器架设](./build-git-server.md#gitolite服务器架设)**
+- **[Gitosis服务器架设](./build-git-server.md#gitosis服务器架设)**
 
 ## 前言
 
