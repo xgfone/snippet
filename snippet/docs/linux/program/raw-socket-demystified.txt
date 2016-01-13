@@ -1,0 +1,1942 @@
+
+SOCK_RAW Demystified
+by ithilgore - ithilgore.ryu.L@gmail.com
+sock-raw.org / sock-raw.homeunix.org
+May 2008
+
+
+
+0x0. Index
+0x1. Introduction
+0x2. Creation
+0x3. IP_HDRINCL
+0x4. raw input
+0x5. raw output
+0x6. Summary
+0x7. Conclusion
+0x8. References
+
+
+0x1. Introduction
+=================
+
+This paper's purpose is to explain the often misunderstood nature of raw
+sockets. The driving force of writing this text was the curiosity of the author
+to learn the ins and outs of this powerful socket type also known as SOCK_RAW.
+What is going to be discussed here will *not* be another tutorial on how to
+hand-craft one's own packets. This topic has been overly discussed many times
+and one can find quite a few references on the net about it (mixter etc). What
+is going to be discussed here is what raw sockets do behind the scenes. We are
+going to delve into network stack internals for this reason. It is assumed that
+the reader has already some experience with sockets and is willing to look at
+some kernel code since raw sockets implementation is actually OS dependent. We
+will cover both FreeBSD 7.0 and Linux 2.6 implementations. Most things covered
+for FreeBSD may also apply to OpenBSD, NetBSD and even MAC OS X.
+
+
+
+0x2. Creation
+=============
+
+First things first. Creation. How is a raw socket created? What are the main
+intricacies involved? A raw socket is created by calling the socket(2) syscall
+and defining the socket type as SOCK_RAW like this:
+
+    int fd = socket(AF_INET, SOCK_RAW, XXX);
+
+where XXX is the *int protocol* that, as we shall discuss further on, is the
+main source of confusion and problems, delving from the very fact that
+different combinations can apply here. Valid values are: IPPROTO_RAW,
+IPPROTO_ICMP, IPPOROTO_IGMP, IPPROTO_TCP, 0 (caution here - see below),
+IPPROTO_UDP etc. With a different combination arises a different behaviour.
+And this behaviour is critical to the way the kernel interacts with the
+application creating the raw socket.
+
+Before getting into the specific combinations for each OS, let's first take a
+look at the actual meaning of the *protocol* value. For all protocols to work
+concurrently, a specific common design approach has been used. According to it,
+similar protocols are grouped into domains. A domain is usually defined by what
+is known as Protocol Family or Address Family, (the latter being a most recent
+practice) and a number of constants are used to differentiate between them. The
+most common ones are:
+
+PF_INET / AF_INET           --> Internet protocols (TCP, UDP etc)
+PF_LOCAL, PF_UNIX / AF_LOCAL, AF_UNIX   --> Unix local IPC protocol
+PF_ROUTE / AF_ROUTE             --> routing tables
+
+Linux defines these constants in /usr/src/linux-2.6.*/include/linux/socket.h
+
+/* Supported address families. */
+#define AF_UNSPEC   0
+#define AF_UNIX     1   /* Unix domain sockets      */
+#define AF_LOCAL    1   /* POSIX name for AF_UNIX   */
+#define AF_INET     2   /* Internet IP Protocol     */
+    /* ... */
+
+/* Protocol families, same as address families. */
+#define PF_UNSPEC   AF_UNSPEC
+#define PF_UNIX     AF_UNIX
+#define PF_LOCAL    AF_LOCAL
+#define PF_INET     AF_INET
+    /* ... */
+
+FreeBSD defines the above values (nearly the same) in /usr/src/sys/sys/socket.h
+
+As you might already have guessed we are going to occupy ourselves with the
+AF_INET family. The internet family breaks down its protocols into protocol
+types with each type having the possibility of consisting of more than one
+protocol.
+
+Linux defines the internet family protocol types in
+/usr/src/linux-2.6.*/include/linux/net.h
+
+enum sock_type {
+    SOCK_STREAM = 1,
+    SOCK_DGRAM  = 2,
+    SOCK_RAW    = 3,
+    SOCK_RDM    = 4,
+    SOCK_SEQPACKET  = 5,
+    SOCK_DCCP   = 6,
+    SOCK_PACKET = 10,
+};
+
+FreeBSD defines the AF_INET types in
+/usr/src/sys/sys/socket.h
+
+/*
+ * Types
+ */
+#define SOCK_STREAM 1       /* stream socket */
+#define SOCK_DGRAM  2       /* datagram socket */
+#define SOCK_RAW    3       /* raw-protocol interface */
+#if __BSD_VISIBLE
+#define SOCK_RDM    4       /* reliably-delivered message */
+#endif
+#define SOCK_SEQPACKET  5       /* sequenced packet stream */
+
+
+If you have done some socket programming in the past, then you probably
+recognise some of the above. One of them has to be the 2nd argument of a
+socket(AF_INET, ..., ...) call. The 3rd argument is the IPPROTO_XXX value which
+defines the actual protocol above IP. It is important to understand this
+implication. This value/number is what the IP layer will write to the
+protocol_type field in its header to define the upper level protocol. It is the
+"Protocol" field as you see in the IP header below (RFC 791).
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |Version|  IHL  |Type of Service|          Total Length         |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |         Identification        |Flags|      Fragment Offset    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Time to Live |    Protocol   |         Header Checksum       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                       Source Address                          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Destination Address                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Options                    |    Padding    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+It is one of the most crucial fields since it is the one that will be used by
+the IP layer on the receiver end to understand to which layer above it (for
+example TCP or UDP) the datagram has to be delivered.
+
+Linux defines these protocols in /usr/src/linux-2.6.*/include/linux/in.h
+
+/* Standard well-defined IP protocols.  */
+enum {
+    IPPROTO_IP = 0,         /* Dummy protocol for TCP       */
+    IPPROTO_ICMP = 1,       /* Internet Control Message Protocol    */
+    IPPROTO_IGMP = 2,       /* Internet Group Management Protocol   */
+    IPPROTO_IPIP = 4,       /* IPIP tunnels (older KA9Q tunnels use 94) */
+    IPPROTO_TCP = 6,        /* Transmission Control Protocol    */
+    IPPROTO_EGP = 8,        /* Exterior Gateway Protocol        */
+    IPPROTO_PUP = 12,       /* PUP protocol             */
+    IPPROTO_UDP = 17,       /* User Datagram Protocol       */
+    IPPROTO_IDP = 22,       /* XNS IDP protocol         */
+    IPPROTO_DCCP = 33,      /* Datagram Congestion Control Protocol */
+    IPPROTO_RSVP = 46,      /* RSVP protocol            */
+    IPPROTO_GRE = 47,       /* Cisco GRE tunnels (rfc 1701,1702)    */
+    IPPROTO_IPV6 = 41,      /* IPv6-in-IPv4 tunnelling      */
+    IPPROTO_ESP = 50,           /* Encapsulation Security Payload protocol */
+    IPPROTO_AH = 51,                /* Authentication Header protocol       */
+    IPPROTO_BEETPH = 94,            /* IP option pseudo header for BEET */
+    IPPROTO_PIM    = 103,       /* Protocol Independent Multicast   */
+    IPPROTO_COMP   = 108,           /* Compression Header protocol */
+    IPPROTO_SCTP   = 132,       /* Stream Control Transport Protocol    */
+    IPPROTO_UDPLITE = 136,      /* UDP-Lite (RFC 3828)          */
+    IPPROTO_RAW  = 255,     /* Raw IP packets           */
+    IPPROTO_MAX
+};
+
+
+FreeBSD defines the IPPROTO_XXX values in
+/usr/src/sys/netinet/in.h
+
+Here's the example for IPPROTO_RAW:
+
+#if __POSIX_VISIBLE >= 200112
+#define IPPROTO_RAW     255     /* raw IP packet */
+#define INET_ADDRSTRLEN     16
+#endif
+
+With so many different combinations it is best to discuss things serially so
+let's begin with the much used *0* protocol value. Did you ever wonder how the
+socket(2) system call magically finds which protocol to use even if it has been
+called like socket(..., ..., 0)?
+For example when an application calls it like:
+
+    socket(AF_INET, SOCK_STREAM, 0);
+
+how does the kernel find out which protocol to associate the socket with?
+Well the fact is that the kernel doesn't make any kind of guess - the kernel
+doesn't play dice with the userspace ( to quote a crazy physicist & great mind
+http://www.quotedb.com/quotes/878 in a slightly different context ) - in most
+cases that is ( see encryption & entropy for the opposite paradigm )
+On FreeBSD all that it does is associate the first protocol to find in the
+domains linked list through the function pffindproto(dom, type).
+
+Let's be more specific and see some POC code:
+
+A socket is created using the kernel function socreate() which is defined like
+this: (source code from FreeBSD 7.0 /usr/src/sys/kern/uipc_socket.c)
+
+/*
+ * socreate returns a socket with a ref count of 1.  The socket should be
+ * closed with soclose().
+ */
+int
+socreate(int dom, struct socket **aso, int type, int proto,
+    struct ucred *cred, struct thread *td)
+{
+    struct protosw *prp;
+    struct socket *so;
+    int error;
+
+    if (proto)
+        prp = pffindproto(dom, proto, type);
+    else
+        prp = pffindtype(dom, type);
+
+    /* .... */
+}
+
+
+The secret lies in the two functions pffindproto() and pffindtype(). If
+proto == 0 then pffindtype is called, which is less strict than pffindproto().
+As we can see from the code, pffindtype() doesn't check the protocol value at
+all and just returns the *first* protosw struct it finds, deducing it from
+just the pr_type (protocol type: SOCK_STREAM , SOCK_DGRAM, SOCK_RAW etc ) and
+family/domain ( AF_INET, AF_LOCAL etc ).
+Each protosw (protocol switch) struct is an association of a SOCK_XXX type and
+IPPROTO_XXX protocol. All of the protosw structs are inside the inetsw[] table
+which is pointed by the inetdomain entry in the global domains linked list.
+A graphical representation might clear things out a bit:
+
+domains:
+---------
+|   |           (domain linked list)
+---------
+    |
+    |------------>  isodomain:              inetdomain:
+            ---------           ---------
+        ------- |   | -----> -------|   | ------->    .....
+        |   ---------        |  ---------
+        |                    |
+        |                |
+        |---> isosw[]:           |---> inetsw[]:
+            ---------           ---------
+            |   |           |  IP   |
+            ---------           ---------
+            |   |           |  UDP  |
+            ---------           ---------
+            |   |           |  TCP  |
+            ---------           ---------
+            |   |           |IP(raw)| (default entry)
+            ---------           ---------
+            |   |           | ICMP  |
+            ---------           ---------
+                            | IGMP  |
+                                                ---------
+                        |  ...  |
+                        ---------
+                        |  ...  |
+                        ---------
+                            |IP(raw)| (wildcard entry)
+                                                ---------
+
+
+Note: The place of IP(raw) in the 4th index (inetsw[3]) is mentioned for
+historical reasons and newer implementations of the FreeBSD stack differ in
+that regard. In particular, if SCTP support is defined in the kernel then
+IP(raw), ICMP and the rest are moved 3 places up the inetsw[] array
+effectively becoming inetsw[6], inetsw[7] etc. Of course, this doesn't have any
+significant difference in kernel sources since inetsw[] is never accessed by
+index but by name. Throughout the whole text, we are going to use the
+convention referring to the default entry (inetsw[3]) as default_RAW and the
+wildcard RAW entry (the last member of inetsw[] and in the old times inetsw[6])
+as wildcard_RAW for clarity reasons.
+
+The raw wildcard entry (the one with .pr_protocol non assigned a value and thus
+having a value of 0) is defined as the last member of the inetsw[] array in
+/usr/src/sys/netinet/in_proto.h:
+
+/* raw wildcard */
+{
+    .pr_type =      SOCK_RAW,
+    .pr_domain =        &inetdomain,
+    .pr_flags =     PR_ATOMIC|PR_ADDR,
+    .pr_input =     rip_input,
+    .pr_ctloutput =     rip_ctloutput,
+    .pr_init =      rip_init,
+    .pr_usrreqs =       &rip_usrreqs
+},
+};  /* end of inetsw[] */
+
+
+Back to the search which goes like this:
+
+    pffindtype:  1. find corresponding domain through the *family* value
+             2. return the first entry of the corresponding protosw
+                table which matches the *type* value
+
+    pffindproto: 1. find corresponding domain through the *family* value
+             2. return the first match of the pair *type* - *protocol*
+             3. if no pair is found and type is SOCK_RAW then return
+                the default entry of raw IP - default_RAW (see below)
+
+both functions return an inetsw[] entry (that is a protosw * pointer to the
+corresponding array offset)
+
+
+/usr/src/sys/kernel/uipc_domain.c:
+
+struct protosw *
+pffindtype(int family, int type)
+{
+    struct domain *dp;
+    struct protosw *pr;
+
+    for (dp = domains; dp; dp = dp->dom_next)
+        if (dp->dom_family == family)
+            goto found;
+    return (0);
+found:
+    for (pr = dp->dom_protosw; pr < dp->dom_protoswNPROTOSW; pr++)
+        if (pr->pr_type && pr->pr_type == type)
+            return (pr);
+    return (0);
+}
+
+struct protosw *
+pffindproto(int family, int protocol, int type)
+{
+    struct domain *dp;
+    struct protosw *pr;
+    struct protosw *maybe = 0;
+
+    if (family == 0)
+        return (0);
+    for (dp = domains; dp; dp = dp->dom_next)
+        if (dp->dom_family == family)
+            goto found;
+    return (0);
+found:
+    for (pr = dp->dom_protosw; pr < dp->dom_protoswNPROTOSW; pr++) {
+        if ((pr->pr_protocol == protocol) && (pr->pr_type == type))
+            return (pr);
+
+        if (type == SOCK_RAW && pr->pr_type == SOCK_RAW &&
+            pr->pr_protocol == 0 && maybe == (struct protosw *)0)
+            maybe = pr;
+    }
+    return (maybe);
+}
+
+
+Inspecting the code above, we notice another great importance of SOCK_RAW.
+Basically, what the last few lines of pffindproto() do, is use SOCK_RAW as a
+fallback default protocol. This means that if a user application calls
+socket(2) like this:
+
+    socket(AF_INET, SOCK_RAW, 30);
+
+where a protocol of value 30 is not specified in the kernel, then instead of
+failing, the wildcard_RAW is used. This is because it is the only protosw
+struct in the inetsw[] array containing a .pr_protocol of 0 and a pr_type of
+SOCK_RAW.
+The same goes for a call like this:
+
+    socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+
+The SOCK_RAW type and IPPROTO_TCP don't match since SOCK_RAW only has entries
+for ICMP, IGMP and raw IP. However, it is a perfect valid call since the kernel
+will return the wildcard entry of SOCK_RAW.
+
+This goes for FreeBSD. As far as Linux is concerned, as you may already have
+noticed from the code snippet from above (in.h), the *0* value is actually
+defined as another protocol type for TCP. This practice has some strong effect
+in porting applications between *BSD and Linux. For example, for *BSD this is
+correct:
+
+    socket(AF_INET, SOCK_RAW, 0);
+
+Note that by issuing a value of 0 will return the default_RAW entry and not the
+wildcard entry, since pffindtype() will return the first protosw struct with
+type of SOCK_RAW inside the inetsw[] table and the first one is the default_RAW
+entry.
+
+On Linux you will get an EPROTONOSUPPORT error. See the kernel code below to
+understand why this happens.
+
+/usr/src/linux-2.6.*/net/ipv4/af_inet.c:
+
+
+/* Upon startup we insert all the elements in inetsw_array[] into
+ * the linked list inetsw.
+ */
+static struct inet_protosw inetsw_array[] =
+{
+    {
+        .type =       SOCK_STREAM,
+        .protocol =   IPPROTO_TCP,
+        .prot =       &tcp_prot,
+        .ops =        &inet_stream_ops,
+        .capability = -1,
+        .no_check =   0,
+        .flags =      INET_PROTOSW_PERMANENT |
+                  INET_PROTOSW_ICSK,
+    },
+
+    {
+        .type =       SOCK_DGRAM,
+        .protocol =   IPPROTO_UDP,
+        .prot =       &udp_prot,
+        .ops =        &inet_dgram_ops,
+        .capability = -1,
+        .no_check =   UDP_CSUM_DEFAULT,
+        .flags =      INET_PROTOSW_PERMANENT,
+       },
+
+
+       {
+           .type =       SOCK_RAW,
+           .protocol =   IPPROTO_IP,    /* wild card */
+           .prot =       &raw_prot,
+           .ops =        &inet_sockraw_ops,
+           .capability = CAP_NET_RAW,
+           .no_check =   UDP_CSUM_DEFAULT,
+           .flags =      INET_PROTOSW_REUSE,
+       }
+};
+
+
+static int inet_create(struct net *net, struct socket *sock, int protocol)
+{
+
+    /* ... */
+
+/* Look for the requested type/protocol pair. */
+    answer = NULL;
+lookup_protocol:
+    err = -ESOCKTNOSUPPORT;
+    rcu_read_lock();
+    list_for_each_rcu(p, &inetsw[sock->type]) {
+        answer = list_entry(p, struct inet_protosw, list);
+
+        /* Check the non-wild match. */
+        if (protocol == answer->protocol) {
+            if (protocol != IPPROTO_IP)
+                break;
+        } else {
+            /* Check for the two wild cases. */
+            if (IPPROTO_IP == protocol) {
+                protocol = answer->protocol;
+                break;
+            }
+            if (IPPROTO_IP == answer->protocol)
+                break;
+        }
+        err = -EPROTONOSUPPORT;
+        answer = NULL;
+    }
+
+    /* ... */
+
+}
+
+
+
+Remember from above that IPPROTO_IP = 0.
+The above code can be broken down to the following cases:
+
+1) socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    protocol = 6
+    answer = inet_protosw[0]
+    protocol = answer->protocol  : first "if" TRUE
+    OK
+
+2) socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    protocol = 17
+    answer = inet_protosw[1]
+    protocol = answer->protocol : first "if" TRUE
+    OK
+
+3) socket(AF_INET, SOCK_STREAM, 0);
+    protocol = 0
+    answer = inet_protosw[0]
+    if (protocol == answer->protocol) : FALSE
+    check else :
+            /* Check for the two wild cases. */
+            if (IPPROTO_IP == protocol) {
+                protocol = answer->protocol;
+                break;
+            }
+            : TRUE
+    note that protocol value 0 is substituted with the
+    real value of IPPROTO_TCP in line:
+        protocol = answer->protocol;
+    OK
+
+4) socket(AF_INET, SOCK_DGRAM, 0);
+    protocol = 0
+    answer = inet_protosw[1]
+    if (protocol == answer->protocol) : FALSE
+    check else :
+            /* Check for the two wild cases. */
+            if (IPPROTO_IP == protocol) {
+                protocol = answer->protocol;
+                break;
+            }
+            : TRUE
+    note that protocol value 0 is substituted with the
+    real value of IPPROTO_UDP in line:
+        protocol = answer->protocol;
+    OK
+
+5) socket(AF_INET, SOCK_RAW, 0);
+    protocol = 0
+    answer = inet_protosw[2]
+    protocol == IPPROTO_IP so : if (protocol != IPPROTO_IP)  is FALSE
+    not OK -> EPROTONOSUPPORT
+
+6) socket(AF_INET, SOCK_STREAM, 9); (where 9 can be any protocol
+                    except IPPROTO_TCP)
+    protocol = 9
+    answer = inet_protosw[0]
+    if (protocol == answer->protocol) : FALSE
+    check else :
+            /* Check for the two wild cases. */
+            if (IPPROTO_IP == protocol) {
+                protocol = answer->protocol;
+                break;
+            }
+            if (IPPROTO_IP == answer->protocol)
+                break;
+
+    both are a FALSE
+    not OK -> EPROTONOSUPPORT
+
+7) socket(AF_INET, SOCK_DGRAM, 9); (where 9 can be any protocol except
+                   IPPROTO_UDP)
+    same as above
+    not OK -> EPROTONOSUPPORT
+
+8) socket(AF_INET, SOCK_RAW, 9); (where 9 can be *any* protocol except 0)
+    protocol = 9
+    answer = inet_protosw[2]
+    if (protocol == answer->protocol) : FALSE
+    check else :
+            /* Check for the two wild cases. */
+            if (IPPROTO_IP == protocol) {
+                protocol = answer->protocol;
+                break;
+            }
+            : FALSE
+
+            if (IPPROTO_IP == answer->protocol)
+                break;
+            : TRUE
+    OK
+
+
+Case 8 demonstrates how Linux uses SOCK_RAW as a fallback protocol just like
+we saw with FreeBSD above.
+
+These are not the only differences between the two systems. We will discuss
+more of them further on.
+
+
+
+0x3. IP_HDRINCL
+===============
+
+One of the most serious decisions when writing low level network programs with
+raw sockets, is if the application will construct along with the transport
+level protocol header, the IP header as well. It would be best to do some
+historical flashback first, since many things have changed since the old days.
+Nowadays, the obvious way to tell the IP layer not to prepend its own header
+is by calling the setsockopt(2) syscall and setting the IP_HDRINCL (Header
+Included) option. However, not always did this option exist. In releases before
+Net/3, there was no IP_HDRINCL option and the only way to not have the kernel
+prepend its own header was to use specific kernel patches and set the protocol
+as IPPROTO_RAW ( inetsw[3] -- wildcard entry ). These patches were first made
+for 4.3BSD and Net/1 to support Traceroute that needed to write its own
+complete IP datagrams, since it messed with the TTL field. The interesting part
+is that since the arrival of IP_HDRINCL, Linux and FreeBSD chose different ways
+to continue the "tradition". On Linux when setting the protocol as IPPROTO_RAW,
+then by default the kernel sets the IP_HDRINCL option and thus does not prepend
+its own IP header. The code below proves this.
+
+/usr/src/linux-2.6.*/net/ipv4/af_inet.c
+
+static int inet_create(struct net *net, struct socket *sock, int protocol)
+{
+    /* ... */
+    if (SOCK_RAW == sock->type) {
+        inet->num = protocol;
+        if (IPPROTO_RAW == protocol)
+            inet->hdrincl = 1;      /* set IP_HDRINCL */
+    }
+    /* ... */
+}
+
+On FreeBSD however, the kernel never sets IP_HDRINCL by default, even if
+IPPROTO_RAW is used. This means that the application has to explicitly set the
+option whenever it wants to hand-craft its own IP header. We will see below
+when we delve into more details of raw sockets input/output that some IP header
+fields are/were always set by the kernel.
+
+To sum up, to make portable raw sockets applications that need to construct
+their own IP header, it is best to set the IP_HDRINCL always, since it is the
+common way for both Linux and *BSD.
+
+
+
+0x4. raw input
+==============
+
+After initializing a raw socket in our application, we have to know in advance
+which datagrams we are expecting to receive. The implementation approach taken
+here is entirely different between Linux and FreeBSD and deserves our
+attention.
+
+
+a. Linux
+********
+
+Linux has chosen the less resource-savy approach. After the IP layer processes
+a new incoming IP datagram, it calls ip_local_deliver_finish() kernel function
+which is responsibe for calling a registered transport protocol handler by
+inspecting the protocol field of the IP header (remember from above). However
+before it delivers the datagram to the handler, it checks every time if an
+application has created a raw socket with the *same* protocol number. If there
+is one or more such applications, it makes a copy of the datagram and delivers
+it to them as well.
+
+/usr/src/linux-2.6.*/net/ipv4/ip_input.c
+
+static int ip_local_deliver_finish(struct sk_buff *skb)
+{
+    __skb_pull(skb, ip_hdrlen(skb));
+
+    /* Point into the IP datagram, just past the header. */
+    skb_reset_transport_header(skb);
+
+    rcu_read_lock();
+    {
+        /* Note: See raw.c and net/raw.h, RAWV4_HTABLE_SIZE==MAX_INET_PROTOS */
+        int protocol = ip_hdr(skb)->protocol;
+        int hash;
+        struct sock *raw_sk;
+        struct net_protocol *ipprot;
+
+    resubmit:
+        hash = protocol & (MAX_INET_PROTOS - 1);
+        raw_sk = sk_head(&raw_v4_htable[hash]);
+
+        /* If there maybe a raw socket we must check - if not we
+         * don't care less
+         */
+        if (raw_sk && !raw_v4_input(skb, ip_hdr(skb), hash))
+            raw_sk = NULL;
+
+    /* ... */
+    /* transport protocol handler calling */
+    /* ... */
+
+}
+
+A question that arises here is what part of the datagram is passed to the raw
+socket? The IP payload only or the whole IP datagram (along with the IP header
+that is)? Paying a closer look at the code above we can deduce that the whole
+IP datagram is passed. Let's see why:
+
+First we have:
+
+__skb_pull(skb, ip_hdrlen(skb));
+
+What this essentialy does is shift the data pointer of the sk_buff to point
+just below the IP header (although this sounds controversial to what we
+deduced above, wait until you have read the whole part before raising obvious
+objections). It does that by adding a size of ip_hdrlen(skb) len to the
+skb->data member. This means that the skb_data now points to the IP payload -
+and since the packet travels upward the network stack the beginning of the IP
+payload is actually the beginning of the transport header (most likely the TCP
+header)
+
+__skb_pull is defined in:
+/usr/src/linux-2.6.*/include/linux/skbuff.h
+
+static inline unsigned char *__skb_pull(struct sk_buff *skb, unsigned int len)
+{
+    skb->len -= len;
+    BUG_ON(skb->len < skb->data_len);
+    return skb->data += len;
+}
+
+After __skb_pull we 've got another skb-relevant function being called:
+
+skb_reset_transport_header(skb);
+
+which updates the skb->transport_header member of the skb struct
+to point into the new place the skb->data pointed just before
+- guess what - the transport header.
+
+skb_reset_transport_header(skb) is defined in:
+/usr/src/linux-2.6.*/include/linux/skbuff.h
+
+static inline void skb_reset_transport_header(struct sk_buff *skb)
+{
+    skb->transport_header = skb->data;
+}
+
+Our sk_buff struct will now look like this:
+
+sk_buff {               buffer
+                --------------
+.skb_data                       |        |
+    |                       --------------
+        |                       | IP header  | <----
+        |                       --------------     |
+        -----------------> ->   | IP payload |     |
+                       |    |        |     |
+.transport_header ---------|    |        |     |
+                            --------------     |
+.network_header ------------------------------------
+
+}
+
+
+So in what part do we actually see that the *whole* IP datagram (along with the
+IP header) is sent to the user process having created a raw socket?
+Enter raw_v4_input().
+
+As the name itself suggest this is the main raw socket handler and is called by
+this line in ip_local_deliver_finish():
+
+    if (raw_sk && !raw_v4_input(skb, ip_hdr(skb), hash))
+
+Note the second argument ip_hdr(skb) to raw_v4_input. ip_hdr is defined in
+/usr/src/linux-2.6.*/include/linux/ip.h:
+
+static inline struct iphdr *ip_hdr(const struct sk_buff *skb)
+{
+    return (struct iphdr *)skb_network_header(skb);
+}
+
+and skb_network_header is defined in
+/usr/src/linux-2.6.*/include/linux/skbuff.h:
+
+static inline unsigned char *skb_network_header(const struct sk_buff *skb)
+{
+    return skb->network_header;
+}
+
+What the above basically does is pass the IP header of the current packet to
+the raw_v4_input function as a separate iphdr struct. This is done by casting
+the skbuff data part where the skb->network_header member points (the beginning
+of the IP header) into an iphdr struct.
+
+Its time for the raw_v4_input analysis:
+
+/usr/src/linux-2.6.*/net/ipv4/raw.c:
+
+/* IP input processing comes here for RAW socket delivery.
+ * Caller owns SKB, so we must make clones.
+ *
+ * RFC 1122: SHOULD pass TOS value up to the transport layer.
+ * -> It does. And not only TOS, but all IP header.
+ */
+int raw_v4_input(struct sk_buff *skb, struct iphdr *iph, int hash)
+{
+    struct sock *sk;
+    struct hlist_head *head;
+    int delivered = 0;
+
+    read_lock(&raw_v4_lock);
+    head = &raw_v4_htable[hash];
+    if (hlist_empty(head))
+        goto out;
+    sk = __raw_v4_lookup(__sk_head(head), iph->protocol,
+                 iph->saddr, iph->daddr,
+                 skb->dev->ifindex);
+
+    while (sk) {
+        delivered = 1;
+        if (iph->protocol != IPPROTO_ICMP || !icmp_filter(sk, skb)) {
+            struct sk_buff *clone = skb_clone(skb, GFP_ATOMIC);
+
+            /* Not releasing hash table! */
+            if (clone)
+                raw_rcv(sk, clone);
+        }
+        sk = __raw_v4_lookup(sk_next(sk), iph->protocol,
+                     iph->saddr, iph->daddr,
+                     skb->dev->ifindex);
+    }
+out:
+    read_unlock(&raw_v4_lock);
+    return delivered;
+}
+
+Note that the __raw_v4_lookup() function which essentialy checks if an
+application has created a raw socket with the specific protocol number
+mentioned in the IP header, takes into account the member iph->protocol as
+expected. One of the most important parts of the code above is the skb_clone()
+function which is called as many times as the number of the applications that
+need to receive a copy of the current datagram. This is implemented inside the
+while loop. The next part is the raw_rcv() call:
+
+int raw_rcv(struct sock *sk, struct sk_buff *skb)
+{
+    if (!xfrm4_policy_check(sk, XFRM_POLICY_IN, skb)) {
+        kfree_skb(skb);
+        return NET_RX_DROP;
+    }
+    nf_reset(skb);
+
+    skb_push(skb, skb->data - skb_network_header(skb));
+
+    raw_rcv_skb(sk, skb);
+    return 0;
+}
+
+This function accomplishes two things: (its imperative that the below is
+understood as this is the part that solves the possible objections to our
+sentence about the passing of the whole IP datagram to the raw socket)
+
+1) Calls skb_push() to revert the skbuff into its old form.
+skb_push() is the exact opposite of skb_pull():
+
+/**
+ *  skb_push - add data to the start of a buffer
+ *  @skb: buffer to use
+ *  @len: amount of data to add
+ *
+ *  This function extends the used data area of the buffer at the buffer
+ *  start. If this would exceed the total buffer headroom the kernel will
+ *  panic. A pointer to the first byte of the extra data is returned.
+ */
+static inline unsigned char *skb_push(struct sk_buff *skb, unsigned int len)
+{
+    skb->data -= len;
+    skb->len  += len;
+    if (unlikely(skb->data<skb->head))
+        skb_under_panic(skb, len, current_text_addr());
+    return skb->data;
+}
+
+So now remember its arguments and how the skbuff was like from
+the diagram above.
+
+    skb_push(skb, skb->data - skb_network_header(skb));
+
+The skbuff will now look like this:
+
+sk_buff {               buffer
+                --------------
+.skb_data                       |        |
+    |                       --------------
+        |------------------>    | IP header  | <----
+                                --------------     |
+                           ->   | IP payload |     |
+                       |    |        |     |
+.transport_header ---------|    |        |     |
+                            --------------     |
+.network_header ------------------------------------
+
+}
+
+
+You might be now wondering why do the skb_pull() part from above if we are
+going to turn back to this form anyway by calling skb_push() to do the exact
+opposite operation? The answer to this question is that raw sockets is an
+intermediate place where datagrams go. In the usual case where no raw sockets
+are open for some IPPROTO_ protocol, then as the packet moves up the network
+stack skb_pull() is only natural since the packet is slowly stripped of the
+lower layer headers. However, this overhead could be avoided by perhaps
+calling skb_pull() after the raw sockets mechanism is served and thus avoiding
+the extra skb_push() inside the raw_rcv(). (This needs to be tested though)
+
+
+2) Calls raw_rcv_skb() which is responsible for calling the generic
+function that passes the sk_buff to the application socket (and also
+increment a not yet implemented raw drops counter in case this fails):
+
+static int raw_rcv_skb(struct sock * sk, struct sk_buff * skb)
+{
+    /* Charge it to the socket. */
+
+    if (sock_queue_rcv_skb(sk, skb) < 0) {
+        /* FIXME: increment a raw drops counter here */
+        kfree_skb(skb);
+        return NET_RX_DROP;
+    }
+
+    return NET_RX_SUCCESS;
+}
+
+From all the above we conclude that not only is the IP payload passed to the
+raw socket but the IP header as well.
+
+
+b. FreeBSD
+**********
+
+FreeBSD takes another approach. It *never* passes TCP or UDP packets to raw
+sockets. Such packets need to be read directly at the datalink layer by using
+libraries like libpcap or the bpf API. It also *never* passes any fragmented
+datagram. Each datagram has to be completeley reassembled before it is passed
+to a raw socket.
+FreeBSD passes to a raw socket:
+    a) every IP datagram with a protocol field that is not registered in
+    the kernel
+    b) all IGMP packets after kernel finishes processing them
+    c) all ICMP packets (except echo request, timestamp request and address
+    mask request) after kernel finishes processes them
+
+
+We are going to study the first case which is of more interest. But before
+that, some introductory material on how the FreeBSD kernel registers the
+protocol handlers, has to be studied.
+
+In part 0x2. Creation we mentioned a few things about the protosw structs which
+are associations of a SOCK_XXX type with a IPPROTO_XXX protocol and reside in
+the global table inetsw[]. Apart from that, they have members which are
+function pointers to the corresponding protocol handlers (the so called hooks).
+pr_input() is responsible for handling incoming data from a lower level protocol
+while pr_output() handles outgoing data from a higher level protocol.
+
+/usr/src/sys/sys/protosw.h:
+
+struct protosw {
+    short   pr_type;        /* socket type used for */
+    struct  domain *pr_domain;  /* domain protocol a member of */
+    short   pr_protocol;        /* protocol number */
+    short   pr_flags;       /* see below */
+/* protocol-protocol hooks */
+    pr_input_t *pr_input;       /* input to protocol (from below) */
+    pr_output_t *pr_output;     /* output to protocol (from above) */
+    pr_ctlinput_t *pr_ctlinput; /* control input (from below) */
+    pr_ctloutput_t *pr_ctloutput;   /* control output (from above) */
+/* user-protocol hook */
+    pr_usrreq_t *pr_ousrreq;
+/* utility hooks */
+    pr_init_t *pr_init;
+    pr_fasttimo_t *pr_fasttimo; /* fast timeout (200ms) */
+    pr_slowtimo_t *pr_slowtimo; /* slow timeout (500ms) */
+    pr_drain_t *pr_drain;       /* flush any excess space possible */
+
+    struct  pr_usrreqs *pr_usrreqs; /* supersedes pr_usrreq() */
+};
+
+
+So the IP layer will usually call the corresponding protocol handler-hook
+pr_input() through this table when it receives a packet. To know which protocol
+goes to which handler, an initialization phase is mandatory. First, all protosw
+structures are initialized in /usr/src/sys/netinet/in_proto.c
+
+This resembles what we saw earlier on Linux at
+/usr/src/linux-2.6.*/net/ipv4/af_inet.c
+
+/usr/src/sys/netinet/in_proto.c:
+
+struct protosw inetsw[] = {
+{
+    .pr_type =      0,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_IP,
+    .pr_init =      ip_init,
+    .pr_slowtimo =      ip_slowtimo,
+    .pr_drain =     ip_drain,
+    .pr_usrreqs =       &nousrreqs
+},
+{
+    .pr_type =      SOCK_DGRAM,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_UDP,
+    .pr_flags =     PR_ATOMIC|PR_ADDR,
+    .pr_input =     udp_input,
+    .pr_ctlinput =      udp_ctlinput,
+    .pr_ctloutput =     ip_ctloutput,
+    .pr_init =      udp_init,
+    .pr_usrreqs =       &udp_usrreqs
+},
+{
+    .pr_type =      SOCK_STREAM,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_TCP,
+    .pr_flags =     PR_CONNREQUIRED|PR_IMPLOPCL|PR_WANTRCVD,
+    .pr_input =     tcp_input,
+    .pr_ctlinput =      tcp_ctlinput,
+    .pr_ctloutput =     tcp_ctloutput,
+    .pr_init =      tcp_init,
+    .pr_slowtimo =      tcp_slowtimo,
+    .pr_drain =     tcp_drain,
+    .pr_usrreqs =       &tcp_usrreqs
+},
+/* #ifdef SCTP */
+/* ... */
+/* #endif */
+{
+    .pr_type =      SOCK_RAW,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_RAW,
+    .pr_flags =     PR_ATOMIC|PR_ADDR,
+    .pr_input =     rip_input,
+    .pr_ctlinput =      rip_ctlinput,
+    .pr_ctloutput =     rip_ctloutput,
+    .pr_usrreqs =       &rip_usrreqs
+},
+{
+    .pr_type =      SOCK_RAW,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_ICMP,
+    .pr_flags =     PR_ATOMIC|PR_ADDR|PR_LASTHDR,
+    .pr_input =     icmp_input,
+    .pr_ctloutput =     rip_ctloutput,
+    .pr_usrreqs =       &rip_usrreqs
+},
+{
+    .pr_type =      SOCK_RAW,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_IGMP,
+    .pr_flags =     PR_ATOMIC|PR_ADDR|PR_LASTHDR,
+    .pr_input =     igmp_input,
+    .pr_ctloutput =     rip_ctloutput,
+    .pr_init =      igmp_init,
+    .pr_fasttimo =      igmp_fasttimo,
+    .pr_slowtimo =      igmp_slowtimo,
+    .pr_usrreqs =       &rip_usrreqs
+},
+{
+    .pr_type =      SOCK_RAW,
+    .pr_domain =        &inetdomain,
+    .pr_protocol =      IPPROTO_RSVP,
+    .pr_flags =     PR_ATOMIC|PR_ADDR|PR_LASTHDR,
+    .pr_input =     rsvp_input,
+    .pr_ctloutput =     rip_ctloutput,
+    .pr_usrreqs =       &rip_usrreqs
+},
+
+
+The question is how does the IP layer understand to which protocol handler it
+should hand the packet to? This is done by inspecting the Protocol field in the
+IP header (we mentioned this above) and then looking up the ip_protox[] table
+which is initialized in function ip_init().
+
+/usr/src/sys/netinet/ip_input.c:
+
+void
+ip_init(void)
+{
+    struct protosw *pr;
+    int i;
+
+    TAILQ_INIT(&in_ifaddrhead);
+    in_ifaddrhashtbl = hashinit(INADDR_NHASH, M_IFADDR, &in_ifaddrhmask);
+    pr = pffindproto(PF_INET, IPPROTO_RAW, SOCK_RAW);
+    if (pr == NULL)
+        panic("ip_init: PF_INET not found");
+
+    /* Initialize the entire ip_protox[] array to IPPROTO_RAW. */
+    for (i = 0; i < IPPROTO_MAX; i++)
+        ip_protox[i] = pr - inetsw;
+    /*
+     * Cycle through IP protocols and put them into the appropriate place
+     * in ip_protox[].
+     */
+    for (pr = inetdomain.dom_protosw;
+        pr < inetdomain.dom_protoswNPROTOSW; pr++)
+        if (pr->pr_domain->dom_family == PF_INET &&
+            pr->pr_protocol && pr->pr_protocol != IPPROTO_RAW) {
+            /* Be careful to only index valid IP protocols. */
+            if (pr->pr_protocol < IPPROTO_MAX)
+                ip_protox[pr->pr_protocol] = pr - inetsw;
+        }
+/* ... */
+
+}
+
+
+The ip_protox[] array is nothing else than a simple associative array which
+is used by IP to demultiplex incoming datagrams based on the *real* transport
+level protocol number. What do we mean by real? The actual number residing
+in the IP header in the Protocol field - the standardised number by all RFCs.
+The number defined in /usr/src/linux-2.6.*/include/linux/in.h for Linux and
+/usr/src/sys/netinet/in.h for FreeBSD. IPPROTO_XXX. Most protocols have such
+a global common number.
+
+The inetsw[] table doesn't have the protocol protosw structs arranged by this
+number. For example TCP which is defined to be protocol number 6 is in
+inetsw[2]. So ip_protox[6] has to point at inetsw[2]. Fairly simple. The same
+logic goes for all protocols that IP may need to hand datagrams to.
+Another diagram:
+
+    ip_protox[]                 inetsw[]
+
+    ---------                   ---------
+0       |   3   |                                   |  IP   |
+        ---------                                   ---------
+1       |   4   |-------------------------|             |  UDP  |
+        ---------                         |         ---------
+2   |   5   |------|         |------------------->  |  TCP  |
+        ---------      |         |        |         ---------
+3   |       |      |         |        |         |IP(raw)| (default)
+    ---------      |         |        |         ---------
+4   |   |      |         |        |--------->   | ICMP  |
+        ---------      |         |                  ---------
+5   |   |      |----------------------------->  | IGMP  |
+        ---------        |                      ---------
+6   |   3   |----------------|                  |  ...  |
+    ---------                                       ---------
+7   |   |                   |  ...  |
+    ---------                   ---------
+... |  ...  |                   |IP(raw)| (wildcard)
+    ---------                   ---------
+
+(Not represented above, to avoid cluttering, are the pointers coming from the
+unregistered protocols and going to the IP(raw) default entry.
+
+Where do SOCK_RAW and IPPROTO_RAW come into play in this part?
+To put it simply, if their protosw doesn't exist, the kernel panics! Why is
+that? Because every single entry in ip_protox[] has to be initialized to point
+to the (first) IP(raw) protosw struct. And with a good reason:
+if the kernel doesn't know how to handle a protocol (there is no other
+registered handler for it) it passes it to the default entry handler that is
+SOCK_RAW - IPPROTO_RAW (default_RAW).
+Such is the importance of its existence in all contemporary kernels.
+Of course, all ip_protox[] entries that *do* have a handler for the protocol
+number specified are defined to point to the actual inetsw[] entry, thus
+overwritting the pointing to the default entry. But all those who don't have,
+base their (not official) existence on IP(raw).
+
+Knowing this informantion, ip_input after doing all checks that have to be
+done, (for example, to see if the checksum of the datagram is correct) can
+finally call the higher-level protocol handler.
+Note: The higher level protocol doesn't necessarily have to be transport level,
+since IP can hand datagrams to ICMP, IGMP which are *not* transport protocols
+but are considered to be part of the network layer.
+
+
+/usr/src/sys/netinet/ip_input.c:
+
+/*
+ * Ip input routine.  Checksum and byte swap header.  If fragmented
+ * try to reassemble.  Process options.  Pass to next level.
+ */
+void
+ip_input(struct mbuf *m)
+{
+    struct ip *ip = NULL;
+    struct in_ifaddr *ia = NULL;
+    struct ifaddr *ifa;
+    int    checkif, hlen = 0;
+    u_short sum;
+    int dchg = 0;               /* dest changed after fw */
+    struct in_addr odst;            /* original dst address */
+
+    /* ... */
+
+    /*
+     * Switch out to protocol's input routine.
+     */
+    ipstat.ips_delivered++;
+
+    (*inetsw[ip_protox[ip->ip_p]].pr_input)(m, hlen);
+    return;
+bad:
+    m_freem(m);
+}
+
+
+Suppose now that ip->ip_p  (the Protocol field in the ip header) is something
+that *does not* have a registered handler in the kernel.
+What will the following line from ip_input() call ?
+
+    (*inetsw[ip_protox[ip->ip_p]].pr_input)(m, hlen);
+
+You guessed right. pr_input of inetsw[default_RAW] (SOCK_RAW - IPPROTO_RAW).
+Time to analyse rip_input().
+
+/usr/src/sys/netinet/raw_ip.c:
+
+/*
+ * Setup generic address and protocol structures
+ * for raw_input routine, then pass them along with
+ * mbuf chain.
+ */
+void
+rip_input(struct mbuf *m, int off)
+{
+    struct ip *ip = mtod(m, struct ip *);
+    int proto = ip->ip_p;
+    struct inpcb *inp, *last;
+
+    INP_INFO_RLOCK(&ripcbinfo);
+    ripsrc.sin_addr = ip->ip_src;
+    last = NULL;
+    LIST_FOREACH(inp, &ripcb, inp_list) {
+        INP_LOCK(inp);
+        if (inp->inp_ip_p && inp->inp_ip_p != proto) {
+    docontinue:
+            INP_UNLOCK(inp);
+            continue;
+        }
+#ifdef INET6
+        if ((inp->inp_vflag & INP_IPV4) == 0)
+            goto docontinue;
+#endif
+        if (inp->inp_laddr.s_addr &&
+            inp->inp_laddr.s_addr != ip->ip_dst.s_addr)
+            goto docontinue;
+        if (inp->inp_faddr.s_addr &&
+            inp->inp_faddr.s_addr != ip->ip_src.s_addr)
+            goto docontinue;
+        if (jailed(inp->inp_socket->so_cred))
+            if (htonl(prison_getip(inp->inp_socket->so_cred)) !=
+                ip->ip_dst.s_addr)
+                goto docontinue;
+        if (last) {
+            struct mbuf *n;
+
+            n = m_copy(m, 0, (int)M_COPYALL);
+            if (n != NULL)
+                (void) raw_append(last, ip, n);
+            /* XXX count dropped packet */
+            INP_UNLOCK(last);
+        }
+        last = inp;
+    }
+    if (last != NULL) {
+        if (raw_append(last, ip, m) != 0)
+            ipstat.ips_delivered--;
+        INP_UNLOCK(last);
+    } else {
+        m_freem(m);
+        ipstat.ips_noproto++;
+        ipstat.ips_delivered--;
+    }
+    INP_INFO_RUNLOCK(&ripcbinfo);
+}
+
+
+Upon reading the above source code, we can discern the following points:
+
+1) If a raw socket (type SOCK_RAW) is created with a protocol value of 0 then:
+
+    a) if the process has called bind() and the address specified matches
+    the destination address in the datagram then *ALL* such datagrams which
+    the kernel doesn't know how to handle, are passed to its raw socket
+
+    b) if the process has called connect() and the address specified
+    matches the foreign address in the datagram then *ALL* such datagrams
+    which the kernel doesn't know how to handle, are passed to its raw
+    socket.
+
+    c) if the process hasn't called bind() and connect(), then *ALL*
+    datagrams which the kernel doesn't know how to handle, are passed
+    to its raw socket.
+
+    d) any combination from a or b that fails its check means that the
+    datagram is not passed to the application.
+
+
+2) If a raw socket (type SOCK_RAW) is created with a protocol value of non-
+zero then we have the following cases:
+
+    a) if the protocol value specified has a registered protocol handler
+    in the kernel, the application does *not* receive any datagram
+    (exception are ICMP, IGMP but follow another mechanism not discussed
+    here).
+
+    b) if the protocol value specified doesn't have a registed protocol
+    handler in the kernel, the application receives *only* the datagrams
+    which have this protocol value specified in the IP header.
+
+The above can be deduced from the following code snippet:
+
+        if (inp->inp_ip_p && inp->inp_ip_p != proto) {
+    docontinue:
+            INP_UNLOCK(inp);
+            continue;
+        }
+        if (inp->inp_laddr.s_addr &&
+            inp->inp_laddr.s_addr != ip->ip_dst.s_addr)
+            goto docontinue;
+        if (inp->inp_faddr.s_addr &&
+            inp->inp_faddr.s_addr != ip->ip_src.s_addr)
+            goto docontinue;
+
+
+Using reverse logic, the first check ignores any datagram that has a non-zero
+protocol value and the raw socket that is checked doesn't have this protocol
+specifed. This means that any raw socket that has specified a protocol value
+of 0 will pass this check and will not be ignored. The same goes for any raw
+socket that has a non-zero protocol value but has the same protocol value as
+the one in datagram checked.
+The same applies to the two checks that follow the first, that test the local
+and foreign addresses (in case bind() or/and connect() was called).
+Of course the case where the application does not receive any datagram although
+it has created a raw socket (but with a protocol which is registered) comes
+from the fact that rip_input() will not be called in that case at all.
+
+A small parenthesis here to comment on something from the *BSD man pages.
+In particular man 4 ip mentions that:
+Raw IP sockets
+"If proto is 0, the default protocol IPPROTO_RAW is used for outgoing packets,
+and only incoming destined for that protocol are received."
+
+This is partially confusing, since it sounds like creating a raw socket with
+a protocol value of 0 would result in only packets destined for IPPROTO_RAW
+(as in 255) received and nothing else. This is not true however, and the man
+pages author wants to say that every IP datagram that has a protocol value that
+*results in the IP demultiplexing done by ip_protox[] to point to a IPPROTO_RAW
+entry* (remember that all unknown protocols point to that default entry) then
+the socket will receive these datagrams. By this definition, it is correct.
+
+The funny thing is that specifying a protocol of IPPROTO_RAW when creating a
+raw socket will *normally* result in the socket not receiving *any* datagram
+based on the logic above. Normally, because datagrams with such a protocol
+number do/shound not appear on the wire.
+Of course this doesn't mean that a process can't forge a packet with such a
+protocol number and send it. It's another case of the fundamental difference
+between shouldn't and can't. In addition to that not all packet-forging
+programs have the desire to always communicate... (as in two-way communication)
+On Linux, the same would happen, since raw_v4_input() is called every time and
+will check if a raw socket with protocol number IPPROTO_RAW existed in the
+user space.
+
+The following two small programs demonstrate the above functionality of
+IPPROTO_RAW on Linux. Remember from part 0x3. IP_HDRINCL that the Linux
+kernel sets the IP_HDRINCL by default when creating a socket with IPPROTO_RAW
+so we will have to create our own header lest we want to send garbage on the
+wire. The demonstration uses the loopback device but will have the same effects
+on any real ethernet device.
+Both programs run on FreeBSD/OpenBSD too, although crafting our own IP header
+is not necessary (then netinet/in.h should be used in place of netinet/ip.h)
+
+
+/*** IPPROTO_RAW receiver ***/
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/ip.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+int main(void)
+{
+    int s;
+    struct sockaddr_in saddr;
+    char packet[50];
+
+    if ((s = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) < 0) {
+        perror("error:");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(packet, 0, sizeof(packet));
+    socklen_t *len = (socklen_t *)sizeof(saddr);
+    int fromlen = sizeof(saddr);
+
+    while(1) {
+        if (recvfrom(s, (char *)&packet, sizeof(packet), 0,
+            (struct sockaddr *)&saddr, &fromlen) < 0)
+            perror("packet receive error:");
+
+        int i = sizeof(struct iphdr);   /* print the payload */
+        while (i < sizeof(packet)) {
+            fprintf(stderr, "%c", packet[i]);
+            i++;
+        }
+        printf("\n");
+    }
+    exit(EXIT_SUCCESS);
+}
+
+
+/*** IPPROTO_RAW sender ***/
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/ip.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define DEST "127.0.0.1"
+
+int main(void)
+{
+
+    int s;
+    struct sockaddr_in daddr;
+    char packet[50];
+    /* point the iphdr to the beginning of the packet */
+    struct iphdr *ip = (struct iphdr *)packet;
+
+    if ((s = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) < 0) {
+        perror("error:");
+        exit(EXIT_FAILURE);
+    }
+
+    daddr.sin_family = AF_INET;
+    daddr.sin_port = 0; /* not needed in SOCK_RAW */
+    inet_pton(AF_INET, DEST, (struct in_addr *)&daddr.sin_addr.s_addr);
+    memset(daddr.sin_zero, 0, sizeof(daddr.sin_zero));
+    memset(packet, 'A', sizeof(packet));   /* payload will be all As */
+
+    ip->ihl = 5;
+    ip->version = 4;
+    ip->tos = 0;
+    ip->tot_len = htons(40);    /* 16 byte value */
+    ip->frag_off = 0;       /* no fragment */
+    ip->ttl = 64;           /* default value */
+    ip->protocol = IPPROTO_RAW; /* protocol at L4 */
+    ip->check = 0;          /* not needed in iphdr */
+    ip->saddr = daddr.sin_addr.s_addr;
+    ip->daddr = daddr.sin_addr.s_addr;
+
+    while(1) {
+        sleep(1);
+        if (sendto(s, (char *)packet, sizeof(packet), 0,
+            (struct sockaddr *)&daddr, (socklen_t)sizeof(daddr)) < 0)
+            perror("packet send error:");
+    }
+    exit(EXIT_SUCCESS);
+}
+
+Running them will result in their perfect valid communication since no one
+stops them from using IPPROTO_RAW(255) as an L4 protocol.
+
+#./send
+
+#tcpdump -i lo -X -vv
+
+19:49:27.048431 IP (tos 0x0, ttl 64, id 16705, offset 0, flags [none],
+proto unknown (255), length 50) localhost.localdomain > localhost.localdomain:
+ip-proto-255 30
+        0x0000:  4500 0032 4141 0000 40ff 3a8a 7f00 0001  E..2AA..@.:.....
+        0x0010:  7f00 0001 4141 4141 4141 4141 4141 4141  ....AAAAAAAAAAAA
+        0x0020:  4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA
+        0x0030:  4141                                     AA
+19:49:28.048466 IP (tos 0x0, ttl 64, id 16705, offset 0, flags [none],
+proto unknown (255), length 50) localhost.localdomain > localhost.localdomain:
+ip-proto-255 30
+        0x0000:  4500 0032 4141 0000 40ff 3a8a 7f00 0001  E..2AA..@.:.....
+        0x0010:  7f00 0001 4141 4141 4141 4141 4141 4141  ....AAAAAAAAAAAA
+        0x0020:  4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA
+        0x0030:  4141
+
+#./recv
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+
+Further on with the rip_input() analysis:
+
+Like Linux uses skb_clone to make a copy of the datagram, FreeBSD uses m_copy
+( mbuf instead of sk_buff struct ). Of course, a copy is made only when deemed
+necessary - that is a matching raw socket (that is not ignored for one of the
+reasons mentioned above) is found during the for loop search. m_copy() is quite
+an expensive operation since it includes actual memory copying, not just moving
+pointers around. For that reason, FreeBSD uses a smart way to avoid doing this
+operation if only one application needs the datagram. This is accomplished
+with the use of the last variable which points to the last socket found to need
+the datagram. For completeness' sake we are going to discuss the logic:
+
+last first points to NULL. If a socket is considered viable to have the current
+datagram , which means it passed all the ignore-checks, on say iteration i,
+then last will point to it but the if condition will fail (the first time). On
+iteration i+N, where N is the socket after socket i which was also deemed
+viable to receive the datagram, the m_copy() will take place since the if
+condition will now be true. Then raw_append() will be called, which will be
+responsible to pass the datagram to the application by calling
+sbappendaddr_locked() (see raw_append() code). This mechanism will continue to
+happen until the entire raw socket list is traversed. The if condition which
+is outside the LIST_FOREACH loop, is needed to pass a copy of the datagram to
+the last raw socket that needs it. If no socket needs it, then no copy is made.
+
+    last = NULL;
+    LIST_FOREACH(inp, &ripcb, inp_list) {
+
+    /* which-sockets-to-ignore logic */
+    /* ... */
+
+        if (last) {
+            struct mbuf *n;
+
+            n = m_copy(m, 0, (int)M_COPYALL);
+            if (n != NULL)
+                (void) raw_append(last, ip, n);
+            /* XXX count dropped packet */
+            INP_UNLOCK(last);
+        }
+        last = inp;
+    }
+
+    if (last != NULL) {
+        if (raw_append(last, ip, m) != 0)
+            ipstat.ips_delivered--;
+        INP_UNLOCK(last);
+    } else {
+        m_freem(m);
+        ipstat.ips_noproto++;
+        ipstat.ips_delivered--;
+    }
+    INP_INFO_RUNLOCK(&ripcbinfo);
+
+
+Note that Linux has to always make at least one copy even if only one raw
+socket needs the datagram. This happens because as we said before, Linux uses
+the raw socket mechanism as a man-in-the-middle, meaning that it may have
+to pass the datagram to a normal application along with a raw-sockets-using
+one.
+FreeBSD passes the whole IP datagram (along with the IP header) to the
+application like Linux.
+
+
+
+0x5. raw output
+===============
+
+Having analysed how incoming raw datagrams are processed, we are ready to move
+on with the details of the raw output mechanism. What we are going to inspect
+here is what values of the IP header are written by default by each kernel and
+for which ones we have the responsibility to fill in our own. This of course
+only applies in case the IP_HDRINCL option is on (either set by us or the
+kernel by default [Linux - IPPROTO_RAW]).
+
+
+a. Linux
+********
+
+The main raw socket output handler is raw_sendmsg() which is defined in
+/usr/src/linux.2.6*/net/ipv4/raw.c:
+
+static int raw_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
+               size_t len)
+{
+    struct inet_sock *inet = inet_sk(sk);
+    struct ipcm_cookie ipc;
+    struct rtable *rt = NULL;
+    /* ... */
+    if (inet->hdrincl)
+        err = raw_send_hdrinc(sk, msg->msg_iov, len,
+                    rt, msg->msg_flags);
+
+    /* ... */
+
+}
+
+
+If IP_HDRINCL has been set then raw_send_hdrinc() is called (defined in the
+same file):
+
+static int raw_send_hdrinc(struct sock *sk, void *from, size_t length,
+            struct rtable *rt,
+            unsigned int flags)
+{
+    /* ... */
+    if (length > rt->u.dst.dev->mtu) {
+        ip_local_error(sk, EMSGSIZE, rt->rt_dst, inet->dport,
+                   rt->u.dst.dev->mtu);
+        return -EMSGSIZE;
+    }
+
+
+    /* We don't modify invalid header */
+    iphlen = iph->ihl * 4;
+    if (iphlen >= sizeof(*iph) && iphlen <= length) {
+        if (!iph->saddr)
+            iph->saddr = rt->rt_src;
+        iph->check   = 0;
+        iph->tot_len = htons(length);
+        if (!iph->id)
+            ip_select_ident(iph, &rt->u.dst, NULL);
+
+        iph->check = ip_fast_csum((unsigned char *)iph, iph->ihl);
+    }
+    if (iph->protocol == IPPROTO_ICMP)
+        icmp_out_count(((struct icmphdr *)
+            skb_transport_header(skb))->type);
+
+    err = NF_HOOK(PF_INET, NF_IP_LOCAL_OUT, skb, NULL, rt->u.dst.dev,
+              dst_output);
+
+    /* ... */
+}
+
+The code here is fairly obvious. If the application hasn't defined the IP
+source address then it is filled in. The same goes for the IP identification
+number. The two fields that are always filled in are: the IP checksum
+(hopefully for us - it saves us the trouble) and the total length,
+iph->tot_len, of the datagram (no corruption let here). The above are confirmed
+by man 7 raw:
+
+              +---------------------------------------------------+
+              |IP Header fields modified on sending by IP_HDRINCL |
+              +----------------------+----------------------------+
+              |IP Checksum           |Always filled in.           |
+              +----------------------+----------------------------+
+              |Source Address        |Filled in when zero.        |
+              +----------------------+----------------------------+
+              |Packet Id             |Filled in when zero.        |
+              +----------------------+----------------------------+
+              |Total Length          |Always filled in.           |
+              +----------------------+----------------------------+
+
+Notice that in the end, the function dst_output() is called and the IP layer
+isn't involved at all. This has one negative effect in result (although in
+performance it's better): no IP fragmentation will take place if needed. This
+means that a raw packet larger than the MTU of the interface will probably
+be discarded. Instead ip_local_error(), which does general sk_buff cleaning,
+is called and an error EMSGSIZE is returned. On the other hand, normal raw
+socket fragmentation takes place when we do not include our own IP header.
+
+
+
+b. FreeBSD
+**********
+
+Raw output on FreeBSD is handled by rip_output(). A chain of kernel functions
+are called before we reach rip_output() however.
+
+First sosend_generic() which is defined in /usr/src/sys/kern/uipc_socket.c
+accesses the pr_usrreqs (user request) struct and issues call like this:
+
+    *so->so_proto->pr_usrreqs->pru_send(...)
+
+where so is type struct socket *so.
+
+so_proto is a struct protosw * pointer and points to the protocol of the
+socket. pr_usrreqs is a struct whose members are pointers to functions
+which are used by the protocol to service requests coming from the socket
+layer (usually issued by system calls on the application level).
+
+For the RAW protocol pr_usrreqs is called rip_usrreqs and is defined in
+/usr/src/sys/kern/raw_ip.c just before the end of the file:
+
+struct pr_usrreqs rip_usrreqs = {
+    .pru_abort =        rip_abort,
+    .pru_attach =       rip_attach,
+    .pru_bind =     rip_bind,
+    .pru_connect =      rip_connect,
+    .pru_control =      in_control,
+    .pru_detach =       rip_detach,
+    .pru_disconnect =   rip_disconnect,
+    .pru_peeraddr =     in_getpeeraddr,
+    .pru_send =     rip_send,
+    .pru_shutdown =     rip_shutdown,
+    .pru_sockaddr =     in_getsockaddr,
+    .pru_sosetlabel =   in_pcbsosetlabel,
+};
+
+This means that calling *so->so_proto->pr_usrreqs->pru_send(...) on a raw
+socket, will call rip_send() which is defined in raw_ip.c and calls
+rip_output() with which we are going to occupy ourselves now.
+
+static int
+rip_send(struct socket *so, int flags, struct mbuf *m, struct sockaddr *nam,
+    struct mbuf *control, struct thread *td)
+{
+    struct inpcb *inp;
+    u_long dst;
+
+    /* ... */
+    return rip_output(m, so, dst);
+}
+
+
+rip_output() will either partially construct the IP header before handing it
+to the IP layer, or in case we have set the IP_HDRINCL option mark the packet
+as not-to-be-altered by setting the IP_RAWOUTPUT flag. In the end, it calls
+ip_output() and rests in peace(rip) for the moment.
+
+/*
+ * Generate IP header and pass packet to ip_output.
+ * Tack on options user may have setup with control call.
+ */
+int
+rip_output(struct mbuf *m, struct socket *so, u_long dst)
+{
+    struct ip *ip;
+    int error;
+    struct inpcb *inp = sotoinpcb(so);
+    int flags = ((so->so_options & SO_DONTROUTE) ? IP_ROUTETOIF : 0) |
+        IP_ALLOWBROADCAST;
+
+    /*
+     * If the user handed us a complete IP packet, use it.
+     * Otherwise, allocate an mbuf for a header and fill it in.
+     */
+    if ((inp->inp_flags & INP_HDRINCL) == 0) {
+        if (m->m_pkthdr.len + sizeof(struct ip) > IP_MAXPACKET) {
+            m_freem(m);
+            return(EMSGSIZE);
+        }
+        M_PREPEND(m, sizeof(struct ip), M_DONTWAIT);
+        if (m == NULL)
+            return(ENOBUFS);
+
+        INP_LOCK(inp);
+        ip = mtod(m, struct ip *);
+        ip->ip_tos = inp->inp_ip_tos;
+        if (inp->inp_flags & INP_DONTFRAG)
+            ip->ip_off = IP_DF;
+        else
+            ip->ip_off = 0;
+        ip->ip_p = inp->inp_ip_p;   /* write XXX protocol value mentioned
+                        in socket(AF_INET, SOCK_RAW , XXX) */
+        ip->ip_len = m->m_pkthdr.len;
+        if (jailed(inp->inp_socket->so_cred))
+            ip->ip_src.s_addr =
+                htonl(prison_getip(inp->inp_socket->so_cred));
+        else
+            ip->ip_src = inp->inp_laddr;
+        ip->ip_dst.s_addr = dst;
+        ip->ip_ttl = inp->inp_ip_ttl;
+    } else {
+        /* checks */
+        /* ... */
+
+        /* don't allow both user specified and setsockopt options,
+           and don't allow packet length sizes that will crash */
+        if (((ip->ip_hl != (sizeof (*ip) >> 2))
+             && inp->inp_options)
+            || (ip->ip_len > m->m_pkthdr.len)
+            || (ip->ip_len < (ip->ip_hl << 2))) {
+            INP_UNLOCK(inp);
+            m_freem(m);
+            return EINVAL;
+        }
+        if (ip->ip_id == 0)
+            ip->ip_id = ip_newid();
+        /* XXX prevent ip_output from overwriting header fields */
+        flags |= IP_RAWOUTPUT;
+        ipstat.ips_rawout++;
+    }
+
+    /* ... */
+
+    error = ip_output(m, inp->inp_options, NULL, flags,
+        inp->inp_moptions, inp);
+    INP_UNLOCK(inp);
+    return error;
+}
+
+
+As far as the case when the kernel prepends its own header, it is worth our
+time to mention that the Protocol field of the IP header is assigned the value
+mentioned in the socket(AF_INET, SOCK_RAW, XXX) and *not* IPPROTO_RAW even if
+the default_RAW entry is actually its handler.
+The case which interests us is the one shown below the else condition, (case
+where user handed complete IP packet header included). Well, in the old days
+a packet with a big length could potentially crash some things down since the
+checks on ip_len (which is the total length of the datagram) weren't there.
+Another interesting thing here is that the kernel will use a random value to
+set the ip_id (identification number - used in fragmentation) if it has been
+left with a 0 value. Next thing is the flag IP_RAWOUTPUT which we mentioned
+just earlier. We are going to see how this is going to influence ip_output()
+which is defined in the same name .c file in /usr/src/sys/netinet/ip_output.c:
+
+
+int
+ip_output(struct mbuf *m, struct mbuf *opt, struct route *ro, int flags,
+    struct ip_moptions *imo, struct inpcb *inp)
+{
+
+    /* ... */
+
+    if ((flags & (IP_FORWARDING|IP_RAWOUTPUT)) == 0) {
+        ip->ip_v = IPVERSION;
+        ip->ip_hl = hlen >> 2;
+        ip->ip_id = ip_newid();
+        ipstat.ips_localout++;
+    } else {
+        hlen = ip->ip_hl << 2;
+    }
+
+    /* ... */
+
+    /*
+     * If small enough for interface, or the interface will take
+     * care of the fragmentation for us, we can just send directly.
+     */
+
+    /* ... */
+    ip->ip_sum = 0;
+    if (sw_csum & CSUM_DELAY_IP)
+        ip->ip_sum = in_cksum(m, hlen);
+
+    /* ... */
+    /*
+     * If the source address is not specified yet, use the address
+     * of the outoing interface.
+     */
+    if (ip->ip_src.s_addr == INADDR_ANY) {
+        /* Interface may have no addresses. */
+        if (ia != NULL) {
+            ip->ip_src = IA_SIN(ia)->sin_addr;
+        }
+    }
+    /* ... */
+}
+
+As we can easily see here if the packet is marked with the flag IP_RAWOUTPUT
+then (nearly) no field is taken care by the kernel. *Only* the IP checksum is
+always computed for us. In addition to that, if the application hasn't
+specified any source ip address, then the address of the outgoing interface is
+used. In general, the user has full control over the IP header.
+After ip_output() finishes processing the packet, it is handed out to the more
+low level function if_output() whose internals is beyond the scope of this
+text. In contrast with Linux, raw packets on FreeBSD will always (even if we
+include our own IP header that is) be fragmented if needed, giving the user
+more flexibility on crafting large packets.
+
+
+
+
+0x6. Summary
+============
+
+The research results of the current paper can be summarized in the following
+points:
+
+
+a. Linux
+********
+
+socket(AF_INET, SOCK_RAW, 0); --> EPPROTONOSUPPORT
+-----------------------------
+
+socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
+---------------------------------------
+    |           |
+    |                   |
+     ---------           ----------
+     | input |               | output |
+     ---------               ----------
+    only datagrams  IP_HDRINCL  : protocol: (user specified)
+    with a procotol (it is by default set)
+    field: 255
+    (IPPROTO_RAW)
+
+
+socket(AF_INET, SOCK_RAW, XXX);
+-------------------------------
+    |       |
+    |               |
+     ---------       ----------
+     | input |       | output |
+     ---------       ----------
+    only datagrams  IP_HDRINCL  : protocol: (user specified)
+    with a procotol !IP_HDRINCL : protocol: XXX
+    field: XXX
+    (whatever that
+    may be)
+
+
+
+b. FreeBSD
+**********
+
+socket(AF_INET, SOCK_RAW, 0);
+---------------------------------------
+    |           |
+    |                   |
+     ---------           ----------
+     | input |               | output |
+     ---------               ----------
+    all raw datagrams   IP_HDRINCL  : protocol: (user specified)
+                !IP_HDRINCL : 0
+
+
+
+socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
+---------------------------------------
+    |           |
+    |                   |
+     ---------           ----------
+     | input |               | output |
+     ---------               ----------
+    only datagrams  IP_HDRINCL: protocol: (user specified)
+    with a procotol !IP_HDRINCL : IPPROTO_RAW
+    field: 255
+    (IPPROTO_RAW)
+
+
+socket(AF_INET, SOCK_RAW, XXX);
+-------------------------------
+    |       |
+    |               |
+     ---------       ----------
+     | input |       | output |
+     ---------       ----------
+    only datagrams  IP_HDRINCL  : protocol: (user specified)
+    with a procotol !IP_HDRINCL : protocol: XXX
+    field: XXX
+    and only
+    *unregistered*
+    protocols
+
+
+
+0x7. Conclusion
+===============
+
+It is beyond doubt that SOCK_RAW is a powerful socket type that deserves
+anyone's, that is seriously interested in low level network programming,
+attention. What we have discussed in this paper is just a glimpse at the
+complex network internals that take place in two of the most popular network
+stacks with regard to raw sockets. The raw sockets mechanism implementation may
+sound complex but can actually provide a good starting point for anyone wishing
+to delve into the details of what comprise of today's internet's foundations.
+I hope this text will provide a comprehensible guide on it's own, but I
+strongly advice anyone who has a keen interest on this stuff to get his hands
+on all the books mentioned in References. They have been proven invaluable and
+explain in detail many of the things that someone usually takes for granted.
+
+For the future, I hope to write a more security oriented text that goes far
+beyond the basic stuff discussed here and is going to deal with some of the
+uncommon end cases that lurk in the corners of the net int sources.
+
+
+
+0x8. References
+===============
+
+1. TCP/IP Illustrated Vol.2 The Implementation
+2. Unix Network Programming - The Sockets Networking API
+3. Understanding Linux Network Internals
+4. kernel sources of Linux.2.6.24 and FreeBSD-7.0
+
+------
+
+From: http://sock-raw.org/papers/sock_raw
