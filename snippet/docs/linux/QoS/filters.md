@@ -57,16 +57,48 @@ U32 过滤器最简单的形式就是一系列记录,每条记录包含两个部
 用来配置过滤器的 tc 命令行由三部分组成：过滤器说明、选择器和动作。
 
 一个过滤器可以如下定义:
-```
-# tc filter add dev IF [ protocol PROTO ]
-                       [ (preference|priority) PRIO ]
-                       [ parent CBQ ]
-```
-上面行中, protocol 字段描述了过滤器要匹配的协议。我们将只讨论 IP 协议的情况。preference 字段(也可以用 priority 代替)设置该过滤器的优先权。这非常重要, 因为你可能有几条拥有不同优先权的过滤器。每个过滤器列表都按照输入的顺序被扫描一遍,然后优先权值低(更高的偏好值)的列表优先被处理。“parent”字段定义了过滤器所属的 CBQ 的顶部(如 1:0)。
+```shell
+tc filter [add | del | change | replace | show] dev ETH_STR [pre PRIO] protocol PROTO
+          [estimator INTERVAL TIME_CONSTANT] [root | classid CLASSID] [handle FILTERID]
+          [[FILTER_TYPE] [help | OPTIONS]]
+tc filter show [dev ETH_STR] [root | parent CLASSID]
 
-上面描述的选项适用于所有过滤器,而不仅仅适用于 U32。
+FILTER_TYPE := { rsvp | u32 | fw | route | etc. }
+FILTERID := ... format depends on classifier, see there
+OPTIONS := ... try tc filter add <desired FILTER_KIND> help
+```
+
+### FW 分类器
+```shell
+$ tc filter add fw help 
+Usage: ... fw [ classid CLASSID ] [ police POLICE_SPEC ]
+       POLICE_SPEC := ... look at TBF
+       CLASSID := X:Y
+
+NOTE: CLASSID is parsed as hexadecimal input.
+```
+
+此时，`tc filter ... handle NUM fw classid CLASSID`中的 `NUM` 为 iptables 中 `--set-mark`，如：
+```shell
+iptables -t mangle -A POSTROUTING -d 192.168.1.0/24 -j MARK --set-mark 1
+```
 
 ### U32 选择器
+
+```shell
+$ tc filter add u32 help
+Usage: ... u32 [ match SELECTOR ... ] [ link HTID ] [ classid CLASSID ]
+               [ police POLICE_SPEC ] [ offset OFFSET_SPEC ]
+               [ ht HTID ] [ hashkey HASHKEY_SPEC ]
+               [ sample SAMPLE ]
+or         u32 divisor DIVISOR
+
+Where: SELECTOR := SAMPLE SAMPLE ...
+       SAMPLE := { ip | ip6 | udp | tcp | icmp | u{32|16|8} | mark } SAMPLE_ARGS [divisor DIVISOR]
+       FILTERID := X:Y:Z
+
+NOTE: CLASSID is parsed at hexadecimal input.
+```
 
 u32 选择器包含了能够对当前通过的数据包进行匹配的特征定义。它其实只是定义了 IP 包头中某些位的匹配而已,但这种看似简单的方法却非常有效。让我们看看这个从实际应用的系统中抄来的例子:
 ```
@@ -86,7 +118,7 @@ match c0a80100 ffffff00 at 16
 ```
 表示了：匹配从 IP 头开始数的第 17 个字节到第 19 个字节。这个选择器将匹配所有去往 192.168.1.0/24 的数据包。成功分析完上面这个例子后,我们就已经掌 握 u32 选择器了。
 
-### 普通选择器
+#### 普通选择器
 
 普通选择器定义了要对数据包进行匹配的特征、掩码和偏移量。使用普通选择器, 你实际上可以匹配 IP(或者上层协议)头部的任意一个 bit, 虽然这样的选择器比特殊选择器难读和难写。
 
@@ -137,11 +169,34 @@ match [ u32 | u16 | u8 ] PATTERN MASK [ at OFFSET | nexthdr+OFFSET]
             flowid 1:3
 ```
 
-### 特殊选择器
+#### 特殊选择器
 
-下面的表收入了本节文档的作者从 tc 程序的源代码中找出的所有特殊选择器。它们能够让你更容易、更可靠地配置过滤器。
+下表是从 tc 程序的源代码中找出的特殊选择器。
 
-一些范例:
+##### ip or ip6
+```
+match [ip | ip6] src IPV4_ADDR/SUBNET_MASK
+match [ip | ip6] dst IPV4_ADDR/SUBNET_MASK
+match [ip | ip6] protocol NUMBER            # INT_NUM is the protocol number of `tcp` or `udp`.
+match [ip | ip6] dport NUMBER               # NUMBER is the destination port of `tcp` or `udp`, etc.
+match [ip | ip6] sport NUMBER               # NUMBER is the source port of `tcp` or `udp`, etc.
+match [ip | ip6] icmp_type NUMBER           # NUMBER is the type of `ICMP`.
+match [ip | ip6] icmp_code NUMBER           # NUMBER is the code of `ICMP`.
+```
+
+##### tcp or udp
+```
+match [tcp | udp] src PORT_NUM
+match [tcp | udp] dst PROT_NUM
+```
+
+##### icmp
+```
+match icmp type NUMBER
+match icmp code NUMBER
+```
+
+#### 一些范例
 ```
 # tc filter add dev ppp0 parent 1:0 prio 10 u32 match ip tos 0x10 0xff flowid 1:4
 ```

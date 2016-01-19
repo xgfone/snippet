@@ -24,31 +24,57 @@ Linux采用了基于对象的实现方法，qos还能保证对不同接口采用
 
 ### 命令格式
 ```
-# tc qdisc [ add | change | replace | link ] dev DEV [ parent qdisc-id | root ] [ handle qdisc-id ] qdisc [ qdisc specific parameters ]
+tc [ OPTIONS ] OBJECT { COMMAND | help }
+tc [-force] -batch filename
 
-# tc class [ add | change | replace ] dev DEV parent qdisc-id [ classid class-id ] qdisc [ qdisc specific parameters ]
-
-# tc filter [ add | change | replace ] dev DEV [ parent qdisc-id | root ] protocol protocol prio priority filtertype [ filtertype specific parameters ] flowid flow-id
-
-# tc [-s | -d ] qdisc show [ dev DEV ]
-
-# tc [-s | -d ] class show dev DEV tc filter show dev DEV
+OBJECT := { qdisc | class | filter | action | monitor }
+OPTIONS := { -s[tatistics] | -d[etails] | -r[aw] | -p[retty] | -b[atch] [filename] }
 ```
 
-##### add
-在一个节点里加入一个QDisc、类或者过滤器。添加时，需要传递一个祖先作为参数，传递参数时既可以使用ID也可以直接传递设备的根。如果要建立一个 QDisc或者过滤器，可以使用句柄(handle)来命名；如果要建立一个类，可以使用类识别符(classid)来命名。
+#### Qdisc
+```shell
+tc qdisc [add | del | replace | change | show] dev ETH_STR [handle QHANDLE]
+         [root | ingress parent CLASSID] [estimator INTERVAL TIME_CONSTANT]
+         [stab [help | STAB_OPTIONS]] [[QDISC_KIND] [help | OPTIONS]]
+tc qdisc show [dev ETH_STR] [ingress]
 
-##### remove
-删除有某个句柄(handle)指定的QDisc，根QDisc(root)也可以删除。被删除QDisc上的所有子类以及附属于各个类的过滤器都会被自动删除。
+QDISC_KIND := { [p|b]fifo | tbf | prio | cbq | red | htb | etc. }
+OPTIONS := ... try tc qdisc add <desired QDISC_KIND> help
+STAB_OPTIONS := ... try tc qdisc add stab help
+```
 
-##### change
-以替代的方式修改某些条目。除了句柄(handle)和祖先不能修改以外，change命令的语法和add命令相同。换句话说，change命令不能一定节点的位置。
+#### Class
+```shell
+tc class [add | del | change | replace | show] dev ETH_STR [classid CLASSID]
+         [root | parent CLASSID] [[QDISC_KIND] [help | OPTIONS]]
+tc class show [ dev STRING ] [ root | parent CLASSID ]
 
-##### replace
-对一个现有节点进行近于原子操作的删除／添加。如果节点不存在，这个命令就会建立节点。
+QDISC_KIND := { prio | cbq | htb | etc. }
+OPTIONS := ... try tc class add <desired QDISC_KIND> help
+```
 
-##### link
-只适用于DQisc，替代一个现有的节点。
+#### Filter
+```shell
+tc filter [add | del | change | replace | show] dev ETH_STR [pre PRIO] protocol PROTO
+          [estimator INTERVAL TIME_CONSTANT] [root | classid CLASSID] [handle FILTERID]
+          [[FILTER_TYPE] [help | OPTIONS]]
+tc filter show [dev ETH_STR] [root | parent CLASSID]
+
+FILTER_TYPE := { rsvp | u32 | fw | route | etc. }
+FILTERID := ... format depends on classifier, see there
+OPTIONS := ... try tc filter add <desired FILTER_KIND> help
+```
+关于 `filter`，请参见[`QoS Filter`](./qos-filter.md)
+ 
+#### Monitor  
+```shell
+tc monitor
+```
+
+#### 说明
+如果要建立一个 `QDisc` 或者 `过滤器`，可以使用 `句柄(handle)` 来命名；如果要建立一个 `类`，可以使用`类识别符(classid)`来命名。
+
+当一个QDisc被删除时，其上的所有子类以及附属于各个子类的过滤器都会被自动删除。
 
 ### 全名规则
 所有的QDisc、类和过滤器都有ID。ID可以手工设置，也可以有内核自动分配。ID由一个主序列号和一个从序列号组成，两个数字用一个冒号分开。
@@ -99,11 +125,6 @@ Linux流量控制主要分为**`建立队列`**、**`建立分类`**和**`建立
     (2) 在该队列上建立分类class；
     (3) 为每一分类建立一个基于路由的过滤器filter；
     (4) 最后与过滤器相配合，建立特定的路由表等
-
-### tc 命令的基本用法
-查看 `tc help` 或者 `man tc`。
-
-不同的策略算法，有不同的参数配置。
 
 ### 无分类qdisc 和 分类qdisc
 
