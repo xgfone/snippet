@@ -1,0 +1,44 @@
+Virtual Devices
+---------------
+
+Virtual devices are implemented in software.  Examples are tunnels
+and the loop back device.  The other type of device is called a
+"physical device".  Physical devices have hardware associated with
+them, like an Ethernet card.  In almost every way virtual devices
+and physical devices are treated identically by the traffic control
+engine.  Nonetheless there is one but small, but crucial, difference
+between the two.
+
+The rate a physical device can send packets is determined by its
+underlying hardware.  For example a PPP connection over an ISDN
+device can transmit data at 64kbit per second.  If packets arrive
+faster than that they are placed in the PPP connections input
+queue.  Contrast this to a virtual device, which processes
+packets given to it instantly.  This is because typically all a
+virtual device has to do is modify the packet then pass it onto
+another device to send.  Since packets are processed instantly
+the virtual device's input queue will always be empty when a
+packet arrives.
+
+Now look at how this effects a queuing discipline.  Take for example
+the default queuing discipline, pfifo_fast.  pfifo_fast ensures that
+when several packets are waiting in a devices input queue the higher
+priority ones are always sent first.  But for a virtual device there
+will never be more one packet in the input queue, so the pfifo_fast
+queuing discipline has no effect on the order the virtual device
+send packets.
+
+This is true in general for all queuing disciplines that simply
+reorder waiting packets.  So queuing disciplines such as unbounded
+cbq, sfq, prio, etc will not work when attached to a virtual
+device.  On the other hand queuing disciplines that alter the rate
+at which packets are sent, such as tbf and bounded cbq, will work
+and are often so are useful with virtual devices.
+
+Now back to my original comment that virtual devices and physical
+devices are treated identically in _almost_ every way by the traffic
+control engine.  The almost refers to the queuing discipline
+attached to the device when it is first created.  Physical devices
+have the pfifo_fast queuing discipline attached to them when they
+are created.  Virtual devices have the noqueue queuing discipline
+attached to them when they are created.

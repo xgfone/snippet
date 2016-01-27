@@ -1,0 +1,76 @@
+Estimators
+----------
+
+An estimator tells us has fast data is flowing.  Typically it
+is reported in bytes or bites or bits per second.  Queuing
+disciplines use estimators to calculate how much data is flowing
+through the link.  Policing options on filters can do the same
+thing.
+
+Although the concept is intuitively simple it is not the easiest
+thing to calculate, particularly when the traffic is bursty.  To
+calculate it the traffic control engine uses a "Exponential
+Weighted Moving Average", or EWMA.  Fortunately it is not as
+complicated as that name makes it sound.
+
+The syntax for an estimator is:
+
+  estimator <INTERVAL> <DECAY_PERIOD>
+
+Both <INTERVAL> and <DECAY_PERIOD> are time intervals.  During
+each <INTERVAL> the estimator takes a measurement of how much data
+was sent during the interval.  So after a while the estimator ends
+up with a string of measurements like this: M[T], M[T-1], M[T-2],
+M[T-3] and so on.  Here M[T] is the estimate for the last interval
+and M[T-1] is the estimate for the previous interval, and so on.
+Once you have a string of these estimates you could just average
+them, but that takes too much storage and time.  Instead what
+happens is each interval is decayed.  It has a half life, in just
+the same way a radio active material has a half life.  Lets say
+the half life is equal to the <INTERVAL>.  What we would end up
+with is a series like this:
+
+    M[T] + M[T-1]/2 + M[T-2]/4 + M[T-3]/8 + M[T-4]/16 + ...
+
+Notice that as a measurement ages it rapidly looses its effect
+on the final figure.  This figure can then be scaled appropriately
+to yield a estimate for the flow rate.
+
+Despite the long looking formulas the choosing an appropriate
+<INTERVAL> and half life is relatively easy.  Lets say you had a
+bursty data source, so you wanted to get the average rate in any
+6 second period.  Choose a half life slightly smaller than the
+period you want to measure, 4 seconds say.  Then choose an
+interval that gives you a few samples in that period.  4 is a
+good number of samples, so the <INTERVAL> would be 1sec.  Simple
+really.  OK, now for the icky details.
+
+<INTERVAL>
+  You don't get much a choice here.  It can be one of 250msec,
+  500msec, 1sec, 2sec, 4sec or 8sec.  You can enter other values,
+  but they will be "rounded" back to one of these.
+
+<DECAY_PERIOD>
+  This is twice what I called the half life above.  The minimum
+  value is the double the <INTERVAL>, and it goes up in powers of 2
+  from there.  So if you had a <INTERVAL> of 250msec values for the
+  <DECAY_PERIOD> could be 500ms, 1sec, 2sec, 4sec, 8sec, 16sec, ...
+  Again you can enter other values but they will be "rounded" to one
+  of these.
+
+There are places (notably the cbq queuing discipline) that get you
+to enter a half life in a different form.  This time the half life
+is expressed as the value representing the number of intervals the
+half life spans.  For example, if your interval is 2 seconds and
+your half life is 16 seconds, then the half life spans 8 intervals.
+Being allowed to enter 8 would be nice, but you aren't.  Instead
+you must enter the log to base 2 of that number, plus 1.
+log_base_2(8) is 3 (because 2**3 equals 8), so you would have
+enter 4 (3+1) in this example.  I did say it was icky.
+
+An estimator is added at the start of the "tc filer" command line,
+like this:
+
+  # tc filter add dev MYDEVICE parent 1:0 protocol ip prio 1 handle 1 \
+      estimator 1sec 8sec fw \
+      classid 1:1

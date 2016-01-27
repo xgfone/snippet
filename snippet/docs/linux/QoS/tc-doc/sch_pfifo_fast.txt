@@ -1,0 +1,120 @@
+The pfifo_fast queuing discipline
+---------------------------------
+
+Parameters.
+  
+  The pfifo_fast queuing discipline has no parameters.
+
+Classes.  pfifo_fast has three internal classes, numbered 1, 2
+and 3.  In other documentation the classes are referred to as
+bands.  Unlike other queuing disciplines pfifo_fast does not
+allow you to change queuing discipline used by its classes.
+
+Scheduling.  pfifo_fast reorders packets.  Packets waiting in
+class 1 are unconditionally sent before packets waiting in class 2
+and 3, and packets waiting in class 2 are unconditionally sent
+before packets waiting in class 3.  Within a particular class
+packets are sent in the order they arrived.  pfifo_fast does not
+delay packets - it sends them at the speed the device can accept
+them.
+
+Policing.  The "qlen" parameter printed by "ip link list" for a
+device is used as the maximum queue length for each class.
+Attempting to add a packet that already has "qlen" packets waiting
+to be sent on it will cause that packet to be discarded.
+pfifo_fast's policing can not be changed.  
+
+Rate limiting.  The pfifo_fast queuing discipline does not rate
+limit traffic.
+
+Classifier.  You can not change the classifier for pfifo_fast.
+It is uses the :priority: of the packet is assign it to a
+class.  The class each priority is assigned to is shown in this
+table:
+
+Linux Packet		Linux
+Priority	Class	Prio Name
+-------------	-----	---------
+0		2	TC_PRIO_BESTEFFORT
+1		3	TC_PRIO_FILLER
+2		3	TC_PRIO_BULK
+3		3	-
+4		2	TC_PRIO_INTERACTIVE_BULK
+5		3	-
+6		1	TC_PRIO_INTERACTIVE
+7		1	TC_PRIO_CONTROL
+8		2	-
+9		2	-
+10		2	-
+11		2	-
+12		2	-
+13		2	-
+14		2	-
+15		2	-
+
+IP TOS values are translated to priorities as described :here:.
+The result is this:
+
+IP TOS			IP TOS
+Value		Class	Name
+-------		-----	---------
+0x00		2	None
+0x02		3	Cheap
+0x04		3	Reliable
+0x06		3	Reliable + Cheap
+0x08		3	High Throughput
+0x0A		3	High Throughput + Cheap
+0x0C		3	High Throughput + Reliable
+0x0E		3	High Throughput + Reliable + Cheap
+0x10		1	Interactive
+0x12		3	Interactive + Cheap
+0x14		1	Interactive + Reliable
+0x16		3	Interactive + Reliable + Cheap
+0x18		1	Interactive + High Throughput
+0x1A		3	Interactive + High Throughput + Cheap
+0x1C		1	Interactive + High Throughput + Reliable
+0x1E		3	Interactive + High Throughput + Reliable + Cheap
+
+In words this means:
+
+  1.  Interactive traffic will be sent before any other traffic.
+  2.  Traffic that has no TOS set (meaning the TOS is 0) will be
+      sent before all non interactive traffic.
+  3.  Non-interactive traffic that is marked as "Reliable" or
+      "High Throughput" is sent after everything else.  (In particular
+      this means requesting "High Throughput" will cause the packet
+      to be sent at the lowest priority.)
+  4.  Setting the Cheap bit in the TOS will cause the packet to be
+      sent at lowest priority, even if it is interactive.
+
+Comments.
+
+- pfifo_fast is the queuing discipline that is used by default
+  for :physical: devices and classes, meaning it is the queuing
+  discipline installed when a physical device or a class is
+  first created.  It is also the queuing discipline used after
+  you "tc qdisc del" another queuing discipline from a physical
+  device.
+  
+- You can _not_ manually change a queuing discipline for a
+  device or class to pfifo_fast using "tc qdisc add pfifo_fast".
+  You can get around this for physical devices by deleting their
+  queuing discipline, and for classes by deleting and
+  re-creating the class.  It is not possible to assign the
+  pfifo_fast queuing discipline to :virtual: devices.
+
+- Notice that if the link is carrying more high priority traffic
+  than the link can handle no low priority traffic is sent.  This
+  is worse than having a simple FIFO queue as far as TCP is
+  concerned.  A simple FIFO queue will drop packets in a semi
+  random fashion when the link is overloaded.  TCP responds to
+  dropped packets by slowing down its transmission.  Since
+  packets are dropped randomly all connections slow down, so
+  no connection will starve for bandwidth and consequently die.
+  pfifo_fast will starve lower priority connections if there is
+  too much high priority traffic, and thus will cause lower
+  priority connections to die under those conditions.  This is
+  generally not what you want.
+
+- The :prio queuing discipline: is very similar to pfifo_fast,
+  but allows classes and classifier to be customised.

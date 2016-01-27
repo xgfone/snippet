@@ -1,0 +1,84 @@
+The route classifier
+--------------------
+
+Handles.
+
+  The route classifiers handle's are opaque 32 bit numbers
+  specified in decimal.  The route classifier will allocate
+  them for you as you add filter items.  You are not allowed
+  to add two filter items with exactly the same conditions.
+  They will have duplicate handles.
+
+Execution.
+
+  The route filter looks for a filter item whose 'to', 'from'
+  and 'fromif' match the packet.  If it finds such a filter
+  item it classifies the packet, otherwise it fails to do so.
+  
+  The search condition may contain wild cards because the 'to'
+  or 'from' realm/link can be left unspecified.  This means
+  several filter items may match the packet.  This is how the
+  ambiguity is resolved:
+
+  1.  If a filter item with no wild parts matches it is used,
+      otherwise,
+  2.  If a filter item with a wild 'from' part matches it is
+      used, otherwise,
+  3.  If a filter item with a wild 'to' part matches it  is
+      used, otherwise,
+  4.  If the filter with both 'to' and 'from' parts wild is
+      used if present, otherwise
+  5.  The packet is not classified.
+
+Options.
+
+  classid :<classify-spec>: | flowid :<classify-spec>:
+    This is required.  It :classifies: the packet.
+
+  from realm
+    If specified the packets from realm, as set with the
+    "ip route" and "ip rule" commands, must match this
+    value.  The value must lie between 1 and 255.  You can
+    not specify this and the fromif option in the same
+    filter item.
+
+  fromif link
+    If specified the packets must come from this link, as
+    listed by the "ip link" command.  You can not specify
+    this and the from option in the same filter item.  Note:
+    in iproute2 2.2.4 there is a bug in tc which prevents "tc"
+    from recognising the link name.  If you fix the bug there
+    is another bug which causes the "tc filter list" command to
+    get a memory fault when displaying a filter item that uses
+    fromif.
+
+  police :<police-spec>:
+    :Police: the packet.
+
+  to realm
+    If specified the packets to realm, as set with the "ip
+    route" and "ip rule" commands, must match this value.
+    The value must lie between 1 and 255.
+
+Comments.
+
+- The realms are set by the router, ie the 'ip route' and 'ip rule'
+  commands.  There are several ways the router can set the realms,
+  they are listed below in order of preference.  The first rule that
+  sets each realm is used.  This is done independently for the from
+  and to realms.
+
+    a.  The from realm is set from the "ip route" that applied
+        to the outgoing packet.
+    b.  The from realm is set to the from realm in the "ip rule"
+	that applies to the outgoing packet.  The to realm is set
+	to realm in the "ip rule".
+    c.  A reverse route lookup is done.  A reverse route lookup
+        means the packet has its source and destination IP's
+	swapped, then the routing table is looked up.  The to
+	realm is set from the "ip route" that matched the
+	reversed route.
+    d.  The from realm is set to the to realm in "ip rule" that
+        matches the reversed route.  The to realm is set to the
+	from realm in the "ip rule" that matched the reversed
+	route.

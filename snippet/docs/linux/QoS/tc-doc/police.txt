@@ -1,0 +1,208 @@
+Policing
+--------
+
+Overview
+========
+
+  In this document the term policing means to discard packets that
+  exceed preset traffic limits.  Several queuing disciples have
+  built-in policing policies, while some will allow a filter to
+  determine the policing policy, and others allow a policy to be
+  set per class.  The latter options are what is discussed here
+  - how to use a policing policy for a filter or class.
+
+  A warning before proceeding.  Although every filter can return
+  policing policy, currently only one queuing discipline described
+  here takes any notice of what the filter says.  That is cbq.  It
+  is also the only queuing discipline that allows a policing
+  policy to be attached to a class.  All other queuing disciplines
+  treat a filters attempt to police the packet as though the filter
+  failed to classify the packet.
+
+  In concept how policing works is very simple.  When a filter item
+  matches the packet it typically classifies it.  But classifying
+  the packet is just one policing policy.  The filter can return
+  any one of four policing policies:
+
+    ok or pass   - Classify the packet.
+    continue     - Return the packet unclassified.
+    drop or shot - Discard the packet.
+    reclassify   - Re-classify the packet as low priority.
+
+  "Continue" is identical to the filter not finding a filter item
+  that classifies the packet.  Queuing disciplines that don't
+  implement policing treat cases "drop" and "reclassify" the same
+  as "continue".
+
+  Policing policies attached to classes look at the packet when
+  it is assigned to a class.  In that case "continue" is generally
+  treated like "ok", but it depends on the queuing discipline.
+
+  If you add a policing option to a filter item it is checked when
+  the filter has matched and then classifies the packet.  If
+  the filter matches but does not try to classify the packet no
+  policing is done.
+  
+  The check the policing option does is very simple.  It asks: does
+  the amount of traffic matched by the filter item or assigned to
+  the class exceed some preset limit?  The answer is a simple
+  yes/no.  You get to determine what policy is returned for both
+  the yes and no cases.
+
+  The policing option allows you to choose from 4 ways of
+  determining the if flow rate of traffic exceeds your limits.
+  The traffic is deemed to exceed the policed limit if any of
+  these 3 ways says it does.  This command adds a filter line that
+  uses all four ways:
+
+    # tc filter add dev MYDEVICE parent 1:0 protocol ip prio 1 handle 1 \
+	estimator 1sec 8sec fw \
+	classid 1:1 \
+	police rate 8kbit burst 5kb peakrate 12kbit mpu 64 mtu 1464 avrate 14kbit drop
+
+  It is the fourth line we are interested in.  I have used the fw
+  filter in this example - the syntax is identical for all filters.
+
+  The first way the traffic is policed is to check if the packet
+  size exceeds the size set by the mtu option.  It will be used
+  only if the mtu option appears.
+
+  The second way flow rate calculation can be checked is using a
+  Exponential Weighted Moving Average, which is discussed :here:.
+  It will be used if the avrate option appears.  The avrate is the
+  thresh hold flow rate.  A packet sent while the traffic meets
+  or exceeds this rate is deemed to exceeded the policing spec.
+  If you use this method you must provide an estimator, although
+  nothing will complain if you don't.  It just won't police any
+  packets.
+
+  The second and third ways the traffic flow can be monitored are
+  identical except that one will allow a burst to occur and the
+  other does not.  Imagine the flow we are trying to police is
+  water coming out of a hose.  We monitor it by using a bucket
+  with a tap at the bottom.  The tap allows the water to drain
+  at a set rate.  This rate is given by the rate option, which
+  is 8k bits per second in the example above.  The size of the
+  bucket is given by the burst option, which is 5k bytes in the
+  example.  If a packet is added that would cause the bucket to
+  overflow it is deemed to exceeding the policing specification.
+  The minimum size of a packet is given by the mpu option, which
+  is 64 in the example.  64 is the minimum packet size sent by
+  Ethernet.  Packets less than that the mpu are expanded to the
+  mpu before being added to the bucket.
+
+  As I said there are actually two buckets.  The second bucket
+  has the flow rate controlled by the peakrate option.  Its bucket
+  size is fixed at the amount set by the mtu option, or 2047
+  bytes if that is not specified.  Peakrate is used to cap how
+  fast traffic can flow during a burst.
+
+
+Reference
+=========
+
+  Here are the options that can follow the police keyword on a
+  command line.
+
+  action <OK>/<POLICED>
+    This option says what to do with the packet.  The <OK>
+    part is required and says what to do with the packet
+    if it is not policed.  If "/<POLICED>" part is optional,
+    and says what to do with the packet if it is policed.
+    Both parts can be one of "reclassify", "drop", "shot",
+    "pass", "continue", or "ok".  "ok" means the same as
+    "pass", and is the default action if the packet is not
+    policed.
+
+  avrate <AVRATE>
+    If this option is present the flow rate will be policed
+    is it exceeds the :Exponential Weighted Moving Average:
+    specified by <AVRATE>.  If you use this option you must
+    supply an :estimator: on the command line as well.
+
+  burst <BURST>/<CELL> | buffer <BURST>/<CELL> | maxburst <BURST>/<CELL>
+    The sets the size of the bucket used by the rate option.  The
+    "/<CELL>" is optional.  The bucket filter calculates how long
+    it will take to send a packet by looking up the packet size
+    in a table.  The number of entries in the table is given by
+    the mtu divided by <CELL>.  That figure must not exceed 255.
+    If the mtu option is not given 2047 bytes is assumed.  <CELL>
+    must be a power of 2 and greater than 0  If you do not specify
+    <CELL> the smallest acceptable value is used.
+
+  continue
+    If the packet is policed this option will cause it to be
+    processed by the next filter item, if there is one,  but
+    the exact meaning of this is determined by the queueing
+    discipline.  A class will usually consider this means
+    the same as "pass".
+
+  drop | shot
+    If the packet is policed this option will cause it to be
+    dropped.  The exact meaning of this is determined by
+    the queueing discipline.  Typically, queuing disciplines
+    that implement policing will discard the packet.  Queuing
+    disciplines that do not implement policing will consider
+    the packet unclassified.
+
+  index <INDEX>
+    Each police item is assigned a handle.  If you want to
+    re-use and existing police item you can specify its handle
+    using this option.  You should not add any other options
+    in this case.  The police item will base its flow rates
+    on all flow rates on all packets passed to it by the
+    filters and classes it is attached to.  It is possible
+    to add a packet to the flow more than once if you are not
+    careful.
+
+  peakrate <PEAKRATE>
+    If this is present the flow rate will be policed using
+    a second bucket filter.  The option specifies how fast
+    the data will leave the second bucket.  If adding the
+    packet passed to the policing specification will cause
+    the bucket to overflow the packet will be policed.  The
+    bucket size is set by the mtu option.  If you use this
+    option you must also use the rate option and mtu options.
+
+  mpu <MPU>
+    This option specifies the minimum packet size in bytes.
+    If a packet's size is smaller than this figure its size
+    will assumed to be the <MPU> when adding it to either of
+    the two buckets.
+
+  mtu <MTU>/<CELL> | minburst <MTU>/<CELL>
+    This sets the maximum size of a packet that can be policed
+    by either of the two bucket filters.  It also sets the
+    bucket size for the bucket filter added by the peakrate
+    option.  The "/<CELL>" is optional.  The peakrate bucket
+    filter calculates how long it will take to send a packet by
+    looking up the packet size in a table.  The number of entries
+    in the table is given by the mtu divided by <CELL>.  That
+    figure must not exceed 255.  If the mtu option is not given
+    2047 bytes is assumed.  <CELL> must be a power of 2 and
+    greater than 0  If you do not specify <CELL> the smallest
+    allowable value is used.
+
+  pass
+    If the packet is policed this option will cause it to
+    treated as though it was not policed.
+
+  rate <RATE>
+    If this is present the flow rate will be policed in two
+    ways.  This first uses a bucket filter.  This option specifies
+    how fast the data will leave the bucket.  If adding the packet
+    passed to the policing specification will cause the bucket to
+    overflow the packet will be policed.  If you use this option you
+    must set the bucket size using the burst option.  The second
+    way this polices traffic is to verify the packets size does
+    not exceed that amount set by the mtu option.  If the mtu
+    option is not present the packet must not exceed 2047 bytes.
+
+  reclassify
+    If the packet is policed this option will cause it to be
+    reclassified.  The exact meaning of this is determined by
+    the queueing discipline.  Typically, queuing disciplines
+    that implement policing will put the packet in a low
+    priority class.  Queuing disciplines that do not implement
+    policing will consider the packet unclassified.  This is the
+    default action if the packet is policed.

@@ -1,0 +1,36 @@
+The bfifo queuing discipline
+----------------------------
+
+Parameters.
+
+  limit NUMBER
+    This is maximum number of bytes that can be on this queue.
+    Enqueuing a packet when the queue is at or above this limit
+    causes the packet to be dropped.  A packet will be sent 
+    provided it is enqueued when the queue is below this limit,
+    even if adding the packet will take the queue above this
+    limit.  If not specified this parameter defaults to the queue
+    length of the underlying device multiplied by the maximum
+    transmission unit for the device.  These are the qlen and mtu
+    parameters printed by "ip link list".
+
+Classes.  The bfifo queuing discipline does not have classes.
+The packets are sent in the order they are received.
+
+Scheduling.  The bfifo queuing discipline has not have a scheduler.
+
+Policing.  Enqueuing a packet when the queue already contains, or
+has more than, the number of bytes defined by the limit parameter
+will cause the packet to be dropped.
+
+Rate limiting.  The bfifo queuing discipline does not rate limit
+traffic.
+
+Classifier.  The bfifo queuing discipline does not classify packets.
+
+
+Comments.
+
+- bfifo polices the length of the queue, ensuring it does not grow
+  beyond the maximum limit defined by it parameter.  That is all it
+  does.

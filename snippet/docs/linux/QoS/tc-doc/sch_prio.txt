@@ -1,0 +1,82 @@
+The prio queuing discipline
+---------------------------
+
+Parameters:
+
+    bands NUMBER
+      The number of classes this priority queue has.  It must be
+      between 2 and 16.  The classes generated have handles (aka
+      classid's) N:1 .. N:NUMBER, where N:0 is the handle of the
+      queueing discipline.  If not specified the number of classes
+      defaults to 3.
+
+    priomap classForPrio_0 classForPrio_1 ... classForPrio_15
+      This option defines a table which is used to assign a packet
+      to a class based on its :priority:.  It is only used if the
+      packet is not assigned a class by a classifier.  There is
+      one entry in the table per packet priority, so the table
+      has 16 entries.  The first entry in the table contains the
+      class number for priority 0 packets, the second entry contains
+      the class number for priority 1 packets, and so on.  Class
+      number 0 means classid N:1, class number 1 means classid N:2,
+      etc.  The "priomap" option must be the last one in the command
+      line.  The "priomap" keyword is followed by the class numbers
+      for each priority in ascending priority number order.  If not
+      specified this default priomap is used:
+
+	priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1
+
+      If you supply less than 16 class numbers the ones you do supply
+      are used to fill in the first entries in the table.  The default
+      map is used for the remaining entries.
+
+Classes.  The classes used by the prio queuing discipline is specified
+by the "bands" parameter.  In other documentation the "bands" are
+usually called "classes".  When a class is created it uses the
+pfifo_fast queuing discipline to store its packets, but you can use
+the "tc class" command to change that.
+
+Scheduling.  Packets waiting in local numbered classid's are
+unconditionally sent before packets waiting in high numbered
+classid's.  Thus packets sitting in classid N:1 are sent before
+all packets waiting in any other class, and packets waiting
+in the highest numbered class will only be sent when the are
+no packets waiting to be sent in any other class.
+
+Policing.  The prio queuing discipline does not do any policing.
+If a classifier says the packet has violated the policing policy
+the priority map (specified by the priomap option) is to choose
+the class.  The queuing discipline used by each class can do
+policing of course, and the default queuing discipline, pfifo_fast,
+does.
+
+Rate limiting.  The prio queuing discipline does not rate limit
+traffic.
+
+Classifier.  The prio queuing discipline allows filters to be
+attached to it using the "tc filter" command.  If no filter
+classifies the packet then it is classified using the "priomap"
+option described above.  Filters can not be attached to prio's
+classes.
+
+Comments.
+
+- A prio queuing discipline created with the default arguments is
+  functionally identical to a :pfifo_fast: queuing discipline.
+  
+- You can not create a prio queue with 2 classes using the default
+  priomap, so you must specify the priomap option if you only want
+  only two classes.  This is true even if you don't intend to use
+  the default priomap.  It fails because the default priomap attempts
+  to put packets in classid N:3, which does not exist when you have
+  only 2 classes.
+
+- Like its brother pfifo_fast the prio queuing discipline can cause
+  TCP connections to fail if there is too much high priority traffic.
+  (See the comments in :pfifo_fast: for more details.)  However you
+  can fix this when using prio by using a rate limiting queuing
+  discipline (eg tbf) for the higher priority classes to ensure the
+  lower priority ones are never completely starved.
+
+- As of iproute2 2.2.4 there is a bug in "tc" which causes is to 
+  memory fault when dumping prio queues.

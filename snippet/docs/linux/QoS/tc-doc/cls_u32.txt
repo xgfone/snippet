@@ -1,0 +1,864 @@
+The u32 filter
+--------------
+
+Overview
+========
+
+  The u32 filter allows you to match on any bit field within a
+  packet, so it is in some ways the most powerful filter provided
+  by the Linux traffic control engine.  It is also the most complex,
+  and by far the hardest to use.  To explain it I will start with a
+  bit of a tutorial.
+
+  Matching
+  --------
+
+  The base operation of the u32 filter is actually very simple.  
+  It extracts a bit field from a 32 bit word in the packet,
+  and if it is equal to a value supplied by you it has a match.
+  The 32 bit word must lie at a 32 bit boundary.  The syntax
+  in tc is:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:1 \
+	match u32 0xc0a80800 0xffffff00 at 12
+
+  The first line uses the same syntax shared by all filters, so I 
+  will ignore it for now.  The second line just says that if the
+  filter matches assign the packet to class 1:1.  The third line is
+  the interesting one; this is what it means:
+
+    match u32   This keyword introduces a match condition.  The u32
+    		is the type of match.  It must be followed by a value
+		and mask.  A u32 match extracts a 32 bit word out of
+		the header, masks it and compares the result to the
+		supplied value.  This is in fact the only type of
+		match the kernel can do.  Tc "compiles" all other
+		types of matches into this one.
+
+    0xc0a80800	This is the value to compare the masked 32 bit word
+    		to.  If it is equal to the masked word the match is
+		successful.
+
+    0xffffff00	This is the mask.  The word extracted from the
+    		packet is bit-wise and'ed with this mask before
+		comparison.
+
+    at 12	This keyword tells the kernel where the 32 bit word
+    		lives in the packet.  It is an offset, in bytes,
+		from the start of the packet.  So in this case
+		we are loading the 32 bit word that is 12 bytes from
+		the start of the packet.  The offset is optional.
+		If not supplied it defaults to 0 which is generally
+		not what you want.
+
+  Now if you look at rfc791 you will see that the source address is
+  stored at offset 12 in an IP packet.  So the match condition could
+  be read as: "match if the packet was sent from the network
+  192.168.8.0/24".  To use the u32 filter you do have to be familiar
+  with the fields in IP and TCP, UDP and ICMP headers.  But you don't
+  have to remember the offsets of the individual fields - tc has some
+  syntactic sugar for that.  This command has does the same thing as
+  the one above.  The syntax is different, but the filter submitted
+  to the kernel is identical:
+    
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:1 \
+	match ip src 192.168.8.0/24
+
+  A u32 filter item can logically "and" several matches together,
+  succeeding if only if all matches succeed.  This example will
+  succeed only if the packet was sent from network 192.168.8.0/24,
+  and has a TOS of 10 hex:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:1 \
+	match ip src 192.168.8.0/24 \
+	match ip tos 0x10 1e
+
+  You can have as many match conditions on the one line as you want.
+  All must be successful for the filter item to score a match.
+
+  If you enter several tc filter commands the filters are tried in
+  turn until one matches.  For example:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:1 \
+	match ip src 192.168.8.0/24 \
+	match ip tos 0x10 1e
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:2 \
+	match ip src 192.168.4.0/24 \
+	match ip tos 0x08 1e
+
+  The first filter item checks if the packet is from network
+  192.16.8.0/24 and has a TOS of 10 hex.  If so the packet is
+  assigned to class 1:1.  If not the second filter item is tried.
+  It checks if the packet is from network 192.168.0.4/24 and has a
+  TOS of 08 hex and if so it will assign to packet to class 1:2.  If
+  not the next filter item would be tried.  But there is none, so
+  u32 filter fails to classify the packet.
+
+  Now it is time to discuss u32 handles.  A u32 handle is actually
+  3 numbers, written like this: 800:0:3.  They are all in hex.
+  For now we are only interested in the last one.  This last number
+  identifies the filter items we have been adding.  Because we did
+  not specify it the kernel allocated one for us.  In fact it
+  allocated the handles 800:0:800 and 800:0:801.  The handle it
+  generates is one bigger than the largest handle used so far, with
+  a minimum value of 800 hex.  Valid filter item handles range from 1
+  to ffe hex.  Like all filter handles, the complete handle (as in
+  800:0:801) must be unique.  We can force a particular handle to be
+  used for a filter item by using the "handle" option of "tc filter",
+  like this:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:1 \
+	match ip src 192.168.8.0/24 \
+	match ip tos 0x10 1e
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 handle ::1 u32 \
+        classid 1:2 \
+	match ip src 192.168.4.0/24 \
+	match ip tos 0x08 1e
+
+  These tc commands are almost identical to the previous example.  In
+  fact the tc command creating the first item is identical, so it
+  will be allocated the same handle as before, 800:0:800.  The
+  second command only differs from the previous example in that it
+  specifies item handle 1 is to be used.  (The rest of the numbers
+  in the handle are not specified, so the defaults are used.)  The
+  full handle created for the second filter item will be 800:0:1.
+  The kernel evaluates filter items in handle order, with lower
+  handle numbers being checked first.  So the impact of doing this
+  will be to reverse the order they two filter items are evaluated
+  by the kernel, compared to the previous example.
+
+  Linking
+  -------
+
+  Before proceeding we need a new concept.  In effect filter items
+  that share the same prefix in their handle (800:0 in the above
+  examples) form a numbered list.  The number is the filter item
+  number, ie the last number is the handle.  In the last example
+  above we had a two item list with these handles:
+
+    list 800:0:
+      1   [src=192.168.4.0/24, tos=0x08] -> return classid 1:2
+      800 [src=192.168.8.0/24, tos=0x10] -> return classid 1:1
+
+  I will call this a u32 filter list, or just a filter list for
+  short.  The prefix (800:0 in this case) can be used as a handle to
+  identify the list.  In the section above I described how the kernel
+  "executes" such a list.  To recap it does this by running through
+  the list in filter item number order, checking each filter item in
+  turn to see if it matches.  If a filter item matches it can
+  classify the packet, in which case the u32 filter stops and
+  returns the classified packet.  But when a u32 filter item matches
+  a packet there is one other thing it can do besides classifying
+  the packet.  It can "link" to another u32 filter list.  For
+  example:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        link 1:0: \
+	match ip src 192.168.8.0/24
+
+  If this filter item matches it will "link" to filter list 1:0:,
+  meaning the kernel will now execute filter list 1:0:.  If a filter
+  item in that list matches and classifies a packet then the u32
+  stops and returns classified packet.  If that does not happen, ie
+  if no filter item in the list classifies the packet then the kernel
+  resumes executing the original list.  Execution continues at the
+  next filter item in the original list, ie the one after the filter
+  item that did the "link".  A linked list can in turn link to other
+  lists.  You can nest up to 7 link commands.
+
+  If you specify a "link" command for a filter item any attempt to
+  classify a packet in the same filter item will be ignored.
+  Another way of saying this is the "classid" option and its aliases
+  won't work if you put "link" on the command line.
+
+  This linking is not in itself very useful.  It is usually faster
+  to use one big list, and it always easier to do it that way.  But
+  there are two commands you can combine with the "link" command,
+  and in fact neither can be used without it.
+
+  Hashing
+  -------
+
+  The filter lists we have been discussing are actually part of much
+  larger structures called hash tables.  A hash table is just a array
+  of things that I will call buckets.  A bucket contains one thing: a
+  filter list.  This will all become clear shortly, I hope.
+  
+  We can now look at the meanings of the other two numbers in a u32
+  filter handle.  One handle in the examples above was 800:0:1.
+  Well, the 800 identifies the hash table, and the 0 is the bucket
+  within that hash table.  So 10:20:30 means:
+    filter item 30,
+    which is located in bucket 20,
+    which is located in hash table 10.
+
+  Hash table 800 is special.  It is called the root.  When you create
+  a u32 filter the root hash table gets created for you automatically.
+  It always has exactly one bucket, numbered 0.  This means the root
+  hash table also exactly one filter list associated with it.  When
+  the u32 filter starts execution it always executes this filter
+  list.  In other words a u32 filter does its thing by executing
+  filter list 800:0.  If filter list 800:0 does not classify the
+  packet (implying that none of the lists it linked to classified it
+  either) then the u32 filter returns the packet unclassified.
+
+  Not unsurprisingly you can't delete the root hash table.  Actually
+  you can't delete any other hash table either (as of 2.4.9), but
+  that is because of a bug in the in the kernel u32 filter's
+  reference counting code.  The only way to get rid of a hash table
+  in 2.4.9 or earlier is to delete the entire u32 filter.
+
+  Hash tables other than the root must be created before you can add
+  filter items that link to them.  Use this tc command to create hash
+  table:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 handle 1: u32 \
+        divisor 256
+
+  This creates a hash table with 256 buckets.  The buckets are
+  numbered 0 through to 255.  So we have effectively created 256
+  filter lists with handles 1:0, 1:1, ... 1:255.  A hash table can
+  have 1, 2, 4, 8, 16, 32, 64, 128 or 256 buckets.  Other values are
+  possible but can be very inefficient.  The kernel has a bug that
+  will allow you to have 257 buckets, but doing that may cause an
+  oops.
+
+  If you omit the "handle" option the kernel will allocate you a new
+  handle.  Currently (2.4.9) the kernel has a bug - the handle
+  allocation routing will go infinite rather than return failure in
+  the very unlikely circumstance that all hash table handles are in
+  use.
+
+  The way the tc "link" option is written it might appear that you
+  can link to any bucket.  You can't.  The link option only allows
+  you to specify bucket 0 (implying that "link 1:1" is illegal).
+  To select a bucket other than 0 you must use the "hashkey" option:
+  
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        link 1: hashkey mask ffffff00 at 12 \
+	match ip src 192.168.8.0/24
+  
+  The hashkey option causes the kernel to calculate the bucket number
+  of the filter list to link to from data in the packet.  You get to
+  specify what data.  This operation is usually called a hashing.
+  In this case the hash it is a particularly fast but primitive one.
+  In the example above this is what happens, in detail, if the match
+  succeeds:
+    - The kernel reads the 32 bit word at offset 12 of the
+      packet being sent.
+    - This word is masked with ffffff00
+    - The word is left shifted by 8 bits, and them masked with
+      0xff.  The amount of left shift is calculated from the
+      mask - it is the number of bits the mask has to be shifted
+      so the first 1 bit appears in the least significant bit.
+      This is the "hashing function".  It changed between 2.4 and
+      2.6.  In 2.4 the 4 bytes in the word are xor'ed together.
+      From what I have seen, the 2.4 version did a better job on
+      real data.
+    - The result of the hash, which is a number in the range
+      0..255, is then masked with (number of buckets - 1).
+    - The result is a bucket number, which is then combined with
+      the hash table in the link option to form a filter list
+      handle.
+    - That filter list is then executed.
+
+  If you look at rfc791 you will see the hash in the example is
+  selecting the senders network address.  Tc offers no syntactic
+  sugar to help you this time, ie there is no "hashkey ip src
+  0.0.0.0/24" or similar.  You to do it the hard way and look up the
+  RFC's.
+
+  Why would you hash on the source network rather than testing
+  for it in a match option?  Its only useful if you want to classify
+  a packet based on a lot of different source networks.  If there is
+  only one or two source networks you are better off using match
+  as doing a couple of matches is faster than doing a hash.  But, the
+  amount of time required to test all the matches will grow as number
+  of source networks grows.  Hashing on the other hand takes a fixed
+  amount of time regardless whether there is 1 or 100 source
+  networks, so if there are thousand's of source networks hashing is
+  going to be literally 100's of times faster than testing them one
+  by one using matching.
+
+  I mention this because there is an example from Alexey's
+  "README.iproute2+tc" that selected the TCP protocol (among others)
+  using hashing.  As an example of how to use hashing it is good,
+  but it has been cut and pasted by every man + dog, altered to only
+  select the TCP protocol, and then quoted as the way to do it.
+  Wrong.  A simple "link" without hashing would be better in that
+  case.
+  
+  We have dealt with one side of hashing - how the filter list to
+  be executed (hash table, bucket) is selected.  There is a second
+  side to it - adding items to the selected filter list.  The
+  problem is really quite simple - which one is it?  You know the
+  hash table number, it is the bucket number that is the problem.
+  You could use the description of the hashing algorithm above and
+  manually calculate the bucket number.  That is a bad option for
+  two reasons.  Firstly, its hard work in the general case.  Secondly
+  its fragile, because the hashing algorithm in the kernel can and
+  has changed.  Tc can calculate the hash for you, and it is better
+  and easier to let it do so.  Letting Tc do this does not effect
+  time it takes the kernel to execute the filter.  Here is how you
+  do it:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+	classid 1:2 \
+        ht 1: sample ip src 192.168.8.0/8 \
+	match ip src 192.168.8.0/8 \
+	match ip tos 0x08 1e
+
+  Caveat: as of 07/Feb/2006, the hashing algorithm in tc is still
+  at the 2.4 version(!).  Ergo, for 2.6 tc ends up with the wrong
+  answer, so this example above won't work until this bug is
+  fixed.
+
+  The line in question is the third one - the rest we have seen
+  before.  The "ht 1:" says the filter item is to be inserted into
+  hash table 1::.  The "sample ..." says what value we want to
+  calculate has bucket number for, ie we want that value to be
+  hashed.  Tc will apply the same hashing algorithm used by the
+  kernel to calculate the bucket number.  The "..." can be anything
+  that could legally follow a "match" option, so all the syntactic
+  sugar for calculating IP offsets is available to you.
+
+  There is, unfortunately, three bugs in the current version of
+  "tc" (ie tc up until CVS 2006-02-09), which render "sample"
+  useless.  Firstly, "sample" assumes the target hash table has
+  256 buckets.  If it doesn't, you are out of luck - you must use
+  the "ht" option instead.  Secondly, the "sample" option always
+  uses the 2.4 kernel hashing function.  Ie, it doesn't work on
+  2.6 kernels.  Finally, the "sample" parsing code in "tc" has a
+  bug (a missing memset()), which causes tc to get segmentation
+  violations.  This last bug renders it completely useless.
+
+  Now for some random points.  First of all, why did I not use the
+  "handle" option of tc to specify the hash table, as is done
+  everywhere else?  Answer: because you must give the "ht" option.
+  You can also give the "handle" option, but if you do the hash
+  table number in it must be blank, (as in ::1), or be equal to the
+  hash table given in the "ht" option.  Is there a good reason
+  why tc and the kernel work like this?  No, not that I can see.
+
+  Secondly, why is the fourth line required in the command?  First
+  of all, perhaps isn't obvious why it may not be required.
+  It may not be needed because the "sample" option has already
+  selected the filter list for this source network.  If no other
+  source networks hash this this same bucket there is indeed no
+  reason to for the match command.  But if several source networks
+  hash to the same bucket it is required - the filter won't work
+  without it.  If you are hashing for a good reason, ie to speed
+  up the process of selecting among many possibilities, and you are
+  being conservative, ie you assume you don't know the internals of
+  the hashing algorithm, then you can never be sure that each bucket
+  will only have one filter item.  So this match line should always
+  be present.
+
+  Thirdly, there are many examples on the net that hash on the IP
+  protocol, then selects protocol 6 directly using "ht 1:6:"
+  rather than using the "sample" option.  Should I copy that?
+  Answer:  No.  This example should sound familiar.  It is the
+  same cut & paste (aka hack, because they always try to improve
+  the example) from Alexey's "README.iproute2+tc" file I referred
+  to earlier.  In that example Alexey assumed he knew how the hashing
+  algorithm worked.  It probably sounded like a reasonable
+  assumption to him - he designed and coded the algorithm.  But it
+  is not a good assumption for the rest of us.  He did this because
+  under the current hashing algorithm the value is trivial to
+  calculate under some circumstances.  If you are selecting one byte
+  from the packet on a byte boundary, and use a hash table 256
+  elements long, then the byte always hashes to itself.  The IP
+  protocol byte meets those conditions.
+
+  Fourthly, should I allocate my own handles to filter items in a
+  hash bucket?  Answer: Avoid it if possible.  You can manually
+  allocate filter item numbers using the handle option, as in
+  "handle ::1".  If you do so be sure to allocate a unique filter
+  item number to each filter item _in the hash table_ (as opposed
+  to unique to just the bucket the filter item lives it).  You have
+  to do this if you assume (as you should) that you don't know what
+  bucket the filter item is going to hash to.  But, as I said
+  earlier, avoid it if possible.  You would not be hashing if there
+  weren't a lot of filter items to choose from.  And if there are
+  a lot of them doing your own filter item numbering will be
+  painful.
+
+  Header Offsets
+  --------------
+
+  The IP header (and other headers) are variable length.  This
+  creates a problem if you are trying to use "match" to look at
+  a value in a header that follows - you don't know where it is.
+  It is not an impossible problem because every header in an IP
+  packet contains a length field.  The "header offsets" feature of
+  u32 allows you to extract that length from the packet, and then
+  add it to the offset specified in the "match" option.
+
+  Here is how it works.  Recall that the match option looks like
+  this:
+  
+    match u32 VALUE MASK at OFFSET
+
+  I said earlier that OFFSET tells the kernel which word in the
+  packet to compare to VALUE.  That statement was a simplification.
+  Two other values can be added to OFFSET to determine which word
+  to use.  Both those values start off as 0, but they can be modified
+  when a "link" option calls another filter list.  Any modification
+  made only applies while called filter list is being executed as
+  the old values are restored if the called filter list fails to
+  classify the packet.  Here are the two values and the names I
+  call them:
+
+    permoff     This value is unconditionally added to every OFFSET
+    		that is done in the destination link, ie that one
+		that is called.  This includes calculations of new
+		permoff's and tempoff's.  Permoff's are cumulative
+		in that if the destination link calls another link
+		and calculates a new permoff, the result is added to
+		this one.
+
+    tempoff	A "match" option in the destination link can
+    		optionally add this value its OFFSET.  Tempoff's are
+		temporary, in that it does not apply to any links the
+		destination link calls.  It also does not effect the
+		calculation of OFFSET's for new permoff's and
+		tempoff's.
+
+  Time for an example.  Consider this command:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        link 1: offset at 0 mask 0f00 shift 6 plus 0 eat \
+	match ip protocol 6 ff
+
+  The match expression selects tcp packets (which is IP protocol 6).
+  If we have protocol 6 we execute filter 1:0.  Now for the rest of
+  it:
+
+    offset	This signals that we want to modify permoff or tempoff
+    		if the link is executed.  If this is not present,
+		neither permoff nor tempoff are effected - in other
+		words the target of the link inherits the current
+		permoff and tempoff.
+
+    at 0	This says the 16 bit word that contains the value we
+    		are going to use to calculate permoff or tempoff lives
+		offset 0 the IP packet - ie at the start of the packet.
+		This offset must be even.  If not specified 0 is used.
+
+    mask 0f00	This mask (which is in hex) is bit-wise anded with the
+    		16 bit word extracted from the packet header.  It
+		isolates the header length from the rest of the
+		information in the word.  If not specified 0 is used
+		for the extracted value.
+
+    shift 6	This says the word extracted is to be divided by 64
+    		after being masked.  If not present the value is not
+		shifted.
+
+    plus 0	After extracting the word, masking it and dividing it by
+    		64, this value is now added to it.  If not present is
+		assumed to be 0.
+
+    eat		If this is present we are calculating permoff, and the
+    		result of the calculation above is added to it.  Tempoff
+		is set to 0 in this case.  If this is not present we are
+		calculating tempoff, and the result of the calculation
+		becomes tempoff's new value.  Permoff is not altered in
+		this case.
+
+  If you don't understand this then accept at face value that it
+  does calculate the position of the second header in an IP packet.
+  Copy & paste it into your scripts.  I am not going to try and
+  explain it further.  You should of course dig out rfc791 and
+  verify it for yourself.  That way you will be able to apply it to
+  headers beyond the second one.
+
+  Having calculated your offset you can now add entries to the
+  destination filter list that depend on it.  Here is an example
+  entry:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:4 \
+	ht 1:0 \
+	match u32 0x140000 ffff0000 at nexthdr+0
+
+  We have see almost all of this before.  "ht 1:0" inserts this
+  filter item into hash table 1, bucket 0.  "classid 1:4" classifies
+  the packet if the filter matches.  The "match" selects protocol 14
+  hex (which is 20 decimal - ftp).  The "at nexthdr+0" is the only
+  new bit, or at least the "nexthdr+" is new.  The "0" sort of means
+  the same thing as it always did - that the 32 bit word that
+  contains the TCP port is at offset 0.  But it is offset 0 from
+  the TCP header, because either permoff of tempoff has been set to
+  point to that header.  As for "nexthdr+", recall that adding
+  "tempoff" was optional.  If you add "nexthdr+" it gets added.
+  If you don't it doesn't.
+
+  Tc does supply syntactic sugar for this as well.  I could have
+  written this way, and generated an identical filter item:
+
+    # tc filter add dev eth0 parent 999:0 protocol ip prio 99 u32 \
+        classid 1:4 \
+	ht 1:0 \
+	match tcp protocol 6 ff
+
+  Recall that I said modification made to permoff and tempoff only
+  applies while called filter list is being executed as the old
+  values are restored if the called filter list fails to
+  classify the packet.  This was a lie.  Permoff is restored, but
+  tempoff isn't.  This can make for subtle surprises in the way a
+  U32 filter executes, because you tend to assume that during the
+  execution of a filter list permoff and tempoff never change.  But
+  if you link to another list tempoff may change.  I recommend
+  always using permoff's (ie, always specify "eat", and never use
+  "nexthdr+") to avoid this.
+
+
+Reference
+=========
+
+Handles.
+
+  The u32 filter uses 3 numbers for its handle.  These numbers
+  are written: H:B:I, eg 1:1:2.  All are in hex.  The first number,
+  H, identifies a hash table.  The second number, B, identifies a
+  bucket within the hash table, and the third number, I, identifies
+  the filter item within the bucket.  The combination must be unique.
+
+  Hash table numbers must lie between 001 and fff hex.  The traffic
+  control engine will generate a hash table number for you if you
+  don't supply one.  Generated numbers are 800 or above.  The hash
+  table number in the handle is not used when creating or changing
+  a hash table item.  Instead the hash table specified by the "ht"
+  option is used, and the hash table in the handle must be not
+  specified, 0, or equal to the hash table in the "ht" option.
+
+  A bucket number can range from 0 to 1 less than then number of
+  buckets in the parent hash table.  If no bucket is specified
+  (as in 1::2), then 0 is assumed.
+
+  Filter Item numbers must lie between 001 and fff hex.  The
+  traffic control engine will generate a filter item number for
+  you if you don't supply one.  The generated number is the
+  larger of 800 and one bigger than the current largest item
+  number in the bucket.
+
+Execution.
+
+  Each "tc filter add ... u32" item adds either a hash table, or
+  adds a filter item to a bucket within a hash table.  When a u32
+  filter is created the root hash table, whose handle is 800::, is
+  automatically created.  It has one bucket.  The u32 starts by
+  checking each filter item in bucket 0 of the root hash table. 
+  Filter items within a bucket are always checked in filter item
+  number order.  As soon as a filter item classifies the packet the
+  u32 filter stops execution.  Filter items may use the "link"
+  option to execute a filter item list held by a bucket in another
+  hash table.
+
+Options.
+
+  classid :<classify-spec>: | flowid :<classify-spec>:
+    If all the match options succeed then this will :classify:
+    the packet and the u32 filter will stop execution.  Ignored
+    if "link" option is given.
+  
+  divisor <NUMBER>
+    If supplied this parameter must appear on its own, without
+    any other arguments.  It creates a new hash table.  <NUMBER>
+    specifies the number of buckets in the hash table.  It can
+    range from 1 to 256, and should be a power of 2.  The hash
+    table number is taken from the handle supplied.  If no handle
+    is supplied a new hash table number is generated.
+
+  hashkey mask <MASK> at <AT>
+    If the link specified by the "link" option is taken then this
+    option specifies the bucket within the hash table to use.  This
+    is how the bucket number is calculated:
+    1.  The 32 bit work at offset <AT> is read from the packet.
+    2.  The 32 word is masked with <MASK>.  <MASK> is in hex.
+    3.  The 4 bytes in the result are xor'ed together.
+    4.  The result is bit-wise anded with the value (number of
+        buckets in the hash tabled linked to - 1).
+
+  ht <HASHTABLE-HANDLE>
+    This option specifies the handle of a filter item being added
+    or changed.  The filter item in <HASHTABLE-HANDLE> must be
+    unspecified or 0 - it can only be specified by the "handle"
+    option.  The bucket specified may be overridden by the "sample"
+    option.
+    
+  link <HASHTABLE-HANDLE>
+    If all match options succeed in this filter item the "link"
+    option causes the filter items in another hash table's bucket to
+    be checked.  If none of the filter items in the linked to bucket
+    classify the item then u32 filter continues checking filter
+    items in the current bucket.  The "link"ed to bucket may link to
+    yet another bucket, to a maximum level of 7 such calls (in 2.4.9
+    .. 2.6.15).  The <HASHTABLE-HANDLE> specifies the hash table to
+    link to.  The bucket and filter item numbers in that handle must
+    both be unspecified or blank.  Bucket 0 will be used unless
+    overridden by the "hashkey" option.  The "offset" option can be
+    used to alter packet offsets in the linked to bucket.
+
+  match <selector>
+    This option checks if a field in the packet has a particular
+    value.  A filter item may contain more than one "match" option.
+    All match options must be satisfied before the filter item
+    considers it has a match.  What the filter item does when it
+    has a match is specified by the "link", "classid"/"flowid", and
+    "police" options.  If none are specified the filter item does
+    nothing when it matches.  Selectors are described below.
+
+  offset mask <MASK> at <AT> shift <SHIFT> plus <PLUS> eat
+    If the link specified by the "link" option is taken then the
+    position of the values extracted from the packet by the hash
+    table linked to will be offset by this specification.  This is
+    how the offset is evaluated & implemented:
+    1.  The 16 bit word at offset <AT> is read from the packet.  If
+        <AT> is not present the 16 bit work is read from offset 0.
+    2.  The 16 bit word is masked with <MASK>.  If no masked is
+        specified 0 is assumed.
+    3.  The masked 16 bit word is divided by (2**<SHIFT>).
+    4.  The resulting value has <PLUS> added to it.  If not specified
+        <PLUS> defaults to 0.
+    5.  If none of <MASK>, <AT>, <SHIFT>, nor <PLUS> are specified
+        then the current temporary offset is used.
+    6.  If "eat" is specified the offset is permanent, and is added
+        to the current permanent offset.  The permanent offset is
+	unconditionally added to the <AT> value in "match", "offset"
+	and "hashkey" options in the hash table linked to, and any
+	nested links.  If "eat" is not specified the offset is
+	temporary.  Temporary offsets any added to the "at
+	nexthdr+<AT>" values in "match" options, but do not effect
+	any other <AT> values.
+    7.  If then specified does not classify the packet, and hence
+        execution resumes at the next filter item, then the permanent
+	offset calculated here is discarded.  The temporary offset,
+	however, remains in effect.
+    8.  When the u32 filter starts executing both the permanent and
+        temporary offset are initialised to 0.
+
+  police <police-spec>
+    If all the match options succeed then this will :police: the
+    packet and the u32 filter will stop execution.  Ignored if "link"
+    option is given.
+
+  sample <selector>
+    This option computes the bucket for the filter item being or
+    changed from the <selector> passed.  The packet offset and
+    mask parts of the selector are ignored if given.  When
+    calculating the hash bucket, the divisor in the target hash
+    bucket is assumed to be 256.  There is no way of altering
+    this.  If the divisor isn't 256, use the "ht" option instead.
+    Selectors are described below.
+
+Selectors.
+
+  Selectors are used by the match option to extract information
+  from the packet and compare it to a value.  All selectors compile
+  to the one format which is accepted by the kernel.  This format
+  reads a 32 value from the supplied offset within the packet.  The
+  offset must be on a 32 bit boundary.  The value read is bit wise
+  anded with the supplied mask.  If match succeeds if the result is
+  equal to the supplied value.  In C:
+
+    if ((*(u32*)((char*)packet+offset+permoff) & mask) == value)
+      match();
+
+  The "permoff" variable in this statement is calculated by the
+  "offset" option that executed this filter list.
+
+  Here are some conventions which won't be repeated below for
+  brevity:
+
+    at nexthdr+<OFFSET>
+      Except where noted this can be appended to all selectors to
+      override the default position of the field in the packet.  The
+      <OFFSET> is the offset within the packet where the field can
+      be found.  If an 16 bit value is being compared the <OFFSET>
+      should be on a 16 bit boundary, and if a 32 bit value is being
+      compared if should be on a 32 bit boundary.  The <OFFSET> is
+      given in decimal; prefix with 0x to enter it in hex.  If
+      "nexthdr+" is present any temporary offset calculated by the
+      "offset" option is added to <OFFSET>.  The current permanent
+      offset calculated by the "offset" optional is unconditionally
+      added to <OFFSET>.  It is unlikely you will want to specify
+      the "at" option with anything other than u32, u16 and u8
+      selectors.
+
+    <IP6ADDR>/<CIDR>
+      This specifies set of up to 4 32 bit masks and values that
+      will match a 128 bit IPv6 address.  The combined values equal
+      the IPv6 address supplied, which may be in any IPv6 address
+      format.  The combined masks are derived from the <CIDR>
+      portion - it is a 128 bit word with the upper <CIDR> bits
+      set to 1's, the rest are 0's.  If the HOST is not given the
+      host is all 1's.  The IP address must be numeric.
+
+    <IPADDR>/<CIDR>
+      This specifies a mask and value.  The value is equal to the
+      IPv4 address supplied.  The mask is derived from the
+      <CIDR> portion - it is a 32 bit word with the upper
+      <CIDR> bits set to 1's, the rest are 0's.  If <CIDR>
+      is not given the mask is all 1's.  The IP address must be
+      numeric.  For example, 192.168.10.0/24 would yield a value
+      of c0a80a00 hex and a mask of ffffff00 hex.
+
+    <MASK>
+      This specifies a mask value the field will be bit wise anded
+      with before being compared to <VALUE>.  It is given in hex.
+
+    <VALUE>
+      This specifies the value the field extracted from the packet
+      must equal, after being anded with the <MASK>.  It is decimal,
+      unless prefixed with 0x, in which case it is hex.  Ie 0x10 and
+      16 both mean the same thing.
+
+  Here are the selectors that can follow a "match" or "sample"
+  option:
+
+  icmp code <VALUE> <MASK>
+    Match the 8 bit code field an icmp packet.  This must be in a
+    hash table that is "link"ed to by a filter item which contains
+    an "offset" option that skips the IP header.
+
+  icmp type <VALUE> <MASK>
+    Match the 8 bit type field an icmp packet.  This must be in a
+    hash table that is "link"ed to by a filter item which contains
+    an "offset" option that skips the IP header.
+
+  ip df
+    Matches if the IPv4 packet has the "don't fragment" bit set.
+    May not be followed by an "at" option.
+
+  ip dport <VALUE> <MASK>
+    Matches the 16 bit destination port in a tcp or udp IPv4 packet.
+    This only works if the ip header contains no options.  Use the
+    "link" and "match tcp dst" or "match udp dst" option if you can
+    not be sure of that.
+
+  ip dst <IPADDR>/<CIDR>
+    Matches the destination IP address of an IPv4 packet.
+
+  ip firstfrag
+    Matches if this IPv4 packet is not fragmented, or it the first
+    first fragment.
+
+  ip icmp_code <VALUE> <MASK>
+    Matches the 8 bit code field in icmp IPv4 packet.  This only
+    works if the ip header contains no options.  Use the "link"
+    and "match icmp code" options if you can not be sure of that.
+
+  ip icmp_type <VALUE> <MASK>
+    Matches the 8 bit type field in ICMP IPv4 packet.  This only
+    works if the ip header contains no options.  Use the "link"
+    and "match ip icmp" options if you can not be sure of that.
+
+  ip ihl <VALUE> <MASK>
+    Matches the 8 bit ip version + header length byte in the IPv4
+    header.
+
+  ip mf
+    Matches if the IPv4 packet is there are more fragments from the
+    same packet to follow this one.  May not be followed by an "at"
+    option.
+
+  ip nofrag
+    Matches if this is not a fragmented IPv4 packet.  May not be
+    followed by an "at" option.
+
+  ip protocol <VALUE> <MASK>
+    Matches the 8 bit protocol byte in the IPv4 header.  You can
+    not use symbolic protocol names (eg "tcp" or "udp").
+
+  ip sport <VALUE> <MASK>
+    Matches the 16 bit source port in a TCP or UDP IPv4 packet.
+    This only works if the ip header contains no options.  Use the
+    "link" and "match tcp src" or "match udp src" options if you
+    can not be sure of that.
+
+  ip src <IPADDR>/<CIDR>
+    Matches the source IP address of an IPv4 packet.
+
+  ip tos <VALUE> <MASK> | ip precedence <VALUE> <MASK>
+    Matches the 8 bit TOS byte in the IPv4 header.
+
+  ip6 dport <VALUE> <MASK>
+    Matches the 16 bit destination port in a TCP or UDP IPv6 packet.
+    This only works if the ip header contains no options.  Use the
+    "link" and "match ip tcp" or "match ip udp" options if you can
+    not be sure of that.
+
+  ip6 dst <IP6ADDR>/<CIDR>
+    Matches the destination IP address of an IPv6 packet.
+
+  ip6 icmp_code <VALUE> <MASK>
+    Matches the 8 bit code field in ICMP IPv6 packet.  This only
+    works if the ip header contains no options.  Use the "link" and
+    "match icmp" options if you can not be sure of that.
+
+  ip6 icmp_type <VALUE> <MASK>
+    Matches the 8 bit type field in an ICMP IPv4 packet.  This only
+    works if the ip header contains no options.  Use the "link" and
+    "match icmp" options if you can not be sure of that.
+
+  ip6 flowlabel <VALUE> <MASK>
+    Matches the 32 bit flowlabel in the IPv6 header.
+
+  ip6 priority <VALUE> <MASK>
+    Matches the 8 bit priority byte in the IPv6 header.
+
+  ip6 protocol <VALUE> <MASK>
+    Matches the 8 bit protocol byte in the IPv6 header.  You can
+    not use symbolic protocol names (eg "tcp" or "udp").
+
+  ip6 sport <VALUE> <MASK>
+    Matches the 16 bit source port in a TCP or UDP IPv6.  This only
+    works if the ip header contains no options.  Use the "link" and
+    "match tcp src" or "match udp src" options if you can not be sure
+    of that.
+
+  ip6 src <IP6ADDR>/<CIDR>
+    Matches the src IP address in an IPv6 packet.
+
+  tcp dst <VALUE> <MASK>
+    Match the 16 bit destination port in the tcp packet.  This must
+    be in a hash table is "link"ed to by a filter item which contains
+    an "offset" option that skips the IP header.
+
+  tcp src <VALUE> <MASK>
+    Match the 16 bit source port in the tcp packet.  This must be
+    in a hash table is "link"ed to by a filter item which contains
+    an "offset" option that skips the IP header.
+
+  u16 <VALUE> <MASK>
+    Match a 16 bit value in the packet.  The offset defaults to 0
+    which is usually not want you want, at append the "at" option
+    to give the correct value.
+
+  u32 <VALUE> <MASK>
+    Match a 32 bit value in the packet.  The offset defaults to 0
+    which is usually not want you want, at append the "at" option
+    to give the correct value.
+
+  u8 <VALUE> <MASK>
+    Match a 8 bit value in the packet.  The offset defaults to 0
+    which is usually not want you want, at append the "at" option
+    to give the correct value.
+
+  udp dst <VALUE> <MASK>
+    Match the 16 bit destination port in the udp packet.  This must
+    be in a hash table that is "link"ed to by a filter item which
+    contains an "offset" option that skips the IP header.
+
+  udp src <VALUE> <MASK>
+    Match the 16 bit source port in the udp packet.  This must be
+    in a hash table that is "link"ed to by a filter item which
+    contains an "offset" option that skips the IP header.

@@ -1,0 +1,162 @@
+The rsvp classifier
+-------------------
+
+Handles.
+
+  The rsvp classifiers handle's are opaque 32 bit numbers
+  specified in decimal.  The rsvp classifier will allocate
+  them for you as you add filter items.
+
+Execution.
+
+  The rsvp filter looks for a filter item whose options match
+  the incoming packet.  When a filter item matches you can
+  do one of two things.  You can classify the packet.  Or,
+  if the packet contains another IP packet (ie a tunnelled
+  packet), you can invoke the rsvp filter again on the
+  packet being tunnelled.
+
+  The rsvp filter allows you to match on both the information
+  relating to the receiver (via the session option) and the
+  sender (via the sender / flowspec option).  You must
+  specify the receivers IP address at minimum; specifying
+  information about the sender is optional.  If no information
+  about the sender is given the filter item will match any
+  sender.  However a filter item that does match information
+  from the sender will be used in preference to one that does
+  not.  Even with this disambiguating rule applied it is still
+  possible to add two different filter items that will
+  match the same packet.  If you do that one that is
+  actually used is undefined.
+
+Options.
+
+  classid :<classify-spec>: | flowid :<classify-spec>:
+    This option can not be specified with the tunnel option.
+    If present it and the filter item matches it :classifies:
+    the packet.
+
+  ipproto <IPPROTO>
+    This rsvp filter item will match the packet only if the IP
+    protocol of the current IP header matches <IPPROTO>.
+    <IPPROTO> is a decimal number, but can be entered in hex
+    by prefixing it with 0x.  Typically this header is tcp, udp,
+    ah, esp, gre or icmp.  The current header starts off being
+    the one following the main IP header, but this can be changed
+    by using the tunnel option.
+
+  police :<police-spec>:
+    :Police: the packet.
+
+  sender <packet-info> | flowspec <packet-info>
+    Allows you to specify the destination IP address and the
+    contents of the secondary header (tcp, udp, ah, esp, etc).
+    If not specified the filter item will match packets sent to
+    any destination.
+
+  session <packet-info>
+    Allows you to specify the senders IP address and the contents
+    of the secondary header (tcp, udp, ah, esp, etc).  This option
+    is required.
+
+  tunnel <CATEGORY> skip <SKIP>
+    This option is used to examine tunneled packets.  It is acted
+    only if this filter item matches the packet.  It causes the
+    first <SKIP> bytes of the packet to be stripped.  These bytes
+    should be the headers from the tunneling protocol, and removing
+    them should expose the tunneled packet.  This must be a valid IP
+    packet (with a IP header followed by a secondary header).  The
+    rvsp filter then tries to find a filter item to match the data in
+    the tunnelled packet.  The category of filter items used to
+    match the packet is specified by <CATEGORY>.  If no filter item 
+    matches the packet remains unclassified.  This option can not
+    be specified with the classid / flowid option.
+
+  tunnelid <CATEGORY>
+    A rsvp filter may consist of several categories of filter
+    items.  This option says which category this filter item
+    belongs to.  It is a number between 0 and 255, and if not
+    specified defaults to 0.  When the rsvp filter examines a
+    packet it only looks at filter items in the current category.
+    When the rsvp filter first starts examining a packet the
+    current category is 0.  The current category is changed by
+    the "tunnel" option.
+
+Packet-info.
+
+  This syntax is used by the session and sender / flowspec options
+  to check on information in the packet.  It can take on one
+  of the forms shown below.  All forms contain an <IPADDR> which
+  is an IP address given in the usual form (eg 192.168.10.4 for
+  IPv4).  When used in the session option the <IPADDR> must equal
+  the destination IP address for the filter item to match.  When
+  used from the sender / flowspec option the filter item will
+  match only if it equals the senders IP address.
+
+  <IPADDR>/<PORT>
+    This is used to match the source or destination port of a
+    higher level protocol (typically tcp of udp). The protocol
+    must be specified with the ipproto option.  The filter item
+    checks the destination port if used from the session option,
+    otherwise when used from the sender / flowspec option it
+    checks the source port.
+
+  <IPADDR> flowlabel <FLOW>
+    This is used to match the 20 bit flow label field in a
+    IPv6 header.  The filter item will match only if the flow label
+    is equal to <FLOW>.  <FLOW> is a decimal number, but may be
+    specified in hex by proceeding in with 0x.
+
+  <IPADDR> spi/ah <SPI> | <IPADDR> gpi/ah <SPI>
+    This is used to match a IP Authentication Header.  The filter
+    item will only match if the 32 bit security parameters index
+    field of the Authentication Header contains <SPI>.  <SPI> is a
+    decimal number, but can be entered in hex by prefixing it with
+    0x.  If the IP protocol has not been set earlier by the
+    ipproto option or another <packet-info> it will be set to the
+    number for the IP Authentication Header protocol, which is 51.
+
+  <IPADDR> spi/esp <SPI> | <IPADDR> gpi/esp <SPI>
+    This is used to match a IP Encapsulated Security Payload header.
+    The filter item will only match if the 32 bit security parameters
+    index field of the Encapsulated Security Header contains <SPI>.
+    <SPI> is a decimal number, but can be entered in hex by prefixing
+    it with 0x.  If the IP protocol has not been set earlier by the
+    ipproto option or another <packet-info> it will be set to the
+    number for the IP Encapsulated Security Header protocol, which is
+    50.
+
+  <IPADDR> u16 <VALUE> mask <MASK> at <AT>
+    This can be used to match any 16 bit field within the
+    secondary IP header.  The 16 bit word at offset <AT> is
+    extracted.  <AT> must lie on a 2 byte boundary.  It is
+    specified in decimal, but can be prefixed with 0x to make
+    it hex.  The word extracted is bit wise anded with <MASK>.
+    <MASK> must be given in hex.  If <MASK> is not given it
+    defaults to all 1's which effectively leaves the word
+    extracted unaltered.  The filter will match is the end result
+    equals <VALUE>.  <VALUE> is a decimal number with can be
+    given in hex by prefixing it with 0x.
+
+  <IPADDR> u32 <VALUE> mask <MASK> at <AT>
+    This can be used to match any 32 bit field within the
+    secondary IP header.  The 32 bit word at offset <AT> is
+    extracted.  <AT> must lie on a 4 byte boundary.  It is
+    specified in decimal, but can be prefixed with 0x to make
+    it hex.  The word extracted is bit wise anded with <MASK>.
+    <MASK> must be given in hex.  If <MASK> is not given it
+    defaults to all 1's which effectively leaves the word
+    extracted unaltered.  The filter will match is the end result
+    equals <VALUE>.  <VALUE> is a decimal number with can be
+    given in hex by prefixing it with 0x.
+
+  <IPADDR> u8 <VALUE> mask <MASK> at <AT>
+    This can be used to match any 8 bit byte within the
+    secondary IP header.  The 8 bit byte at offset <AT> is
+    extracted.  <AT> is specified in decimal, but can be prefixed
+    with 0x to make it hex.  The word extracted is bit wise anded
+    with <MASK>.  <MASK> must be given in hex.  If <MASK> is not
+    given it defaults to all 1's which effectively leaves the word
+    extracted unaltered.  The filter will match is the end result
+    equals <VALUE>.  <VALUE> is a decimal number with can be
+    given in hex by prefixing it with 0x.

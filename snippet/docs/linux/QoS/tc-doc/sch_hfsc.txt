@@ -1,0 +1,630 @@
+Tutorial
+========
+
+  HFSC stands for Hierarchical Fair Service Curve.  Unlike its
+  cousins CBQ and HTB it has a rigorous mathematical foundation that
+  delivers a guaranteed outcome.  In practice that means it does a
+  better job than either CBQ or HTB, both of which are essentially
+  best effort guesses at solving what is a surprisingly complex
+  problem.  Both of them get it wrong in subtle ways which show up
+  as them not meeting their bandwidth and latency guarantees.
+
+
+  The Service Curve
+  -----------------
+
+  Like CBQ and HTB, HFSC assumes the user has defined classes of
+  traffic.  One class might be "telnet traffic from customer A"
+  which will be assured low latency, assuming it uses a low total
+  bandwidth.  HFSC expects you to use one of filters tc provides to
+  decide which class each packet belongs to.
+
+  HFSC provides three types of service to each class, or to put it
+  another way HFSC provides three knobs you can use to define the
+  behaviour of each class:
+
+    rt  Real time.  This gives a class hard guarantees on the
+        maximum delay until a packet is sent.
+
+    ls  Link share.  If the link is saturated (aka backlogged, i.e.
+        has packets waiting to be sent), link share says what
+	proportion of the available capacity shall be used by each
+	class.  Every class must have a real time or link share
+	definition, and can have both.
+    
+    ul  Upper limit.  The maximum speed link share can send at.  It
+        can only be used if the class has a link share defined.
+        
+  The two letter codes above - "rt", "ls" and "ul" - is how you
+  identify these three types of service to the tc command.  There is
+  a fourth one: "sc".  "sc" is a shorthand for setting both "rt" and
+  "ls" to the same thing.
+
+  The speed allocated to each service is specified as a normal speed
+  and an optional burst speed:
+
+    SERVICE [m1 BPS d SEC] m2 BPS
+
+  Where:
+
+    SERVICE     "ls", "rt", "ul" - ie whether this specifies the link
+                sharing, real time or upper limit service.
+
+    m2 BPS      This is the steady state speed, eg "m2 10kbps" means
+                the steady state allowance for this service class is
+                10 kilo bytes/sec.
+
+    m1 BPS d SEC
+                The burst speed.  "m1 20kbps d 10ms" means this class
+                is allowed a burst speed of 20kbps for 10ms, then it
+                must run at its steady state speed.
+
+  The specification and tc call this a "service curve".  It is a
+  curve in the same sense that any mathematical function can be
+  plotted as a curve.  In the paper this curve is used as the basis
+  for mathematical proofs about the performance of the scheduler.
+  Unless you also want to do mathematical proofs avoid thinking of
+  the specification as a curve.  It is a speed with an optional
+  latency specification - nothing more.
+
+  (There is another syntax supported which is documented in the
+  reference section below - "umax BYTES dmax SEC rate BPS".
+  "rate BPS" is identical in meaning to "m2 BPS".  The definition of
+  "umax BYTES dmax SEC" does *not* always express a burst rate and
+  time.  I have not found any other documentation of what it can
+  yield, probably because it is so complex to explain.  Such
+  complexity is best avoided - don't use "umax ... dmax ...".  The
+  original terms came from the paper, but tc didn't follow the
+  paper's definitions of them to the letter.)
+
+
+  Burst and Latency
+  -----------------
+
+  The term "burst" hides more than it reveals.  Yes, it specifies
+  bursts, but it is not used to control bursts of data.  It is used
+  to control latency.  This is not some minor quibble about naming
+  conventions.  Wrapping your head around this is fundamental to
+  understanding HFSC.
+
+  But before going on, there is an even more important corollary to
+  it being about latency.  Most traffic doesn't care about latency.
+  Web traffic doesn't, email doesn't.  The two classes of traffic it
+  might matter to are real time (like VOIP and NTP), and interactive
+  traffic (like telnet, ssh, VNC, RDP and gaming).  If you don't care
+  about these do yourself a favour: don't use burst and skip this
+  section entirely.
+
+  And a caveat.  Any effort to control latency will fail abysmally
+  (as in be a complete and utter waste of your time and your CPU's
+  cycles) unless class doing the controlling is the slowest link in
+  the chain.  The moment any hop between source and destination
+  starts buffering packets HFSC's efforts to constrain latency will
+  be overwhelmed by delays caused by the buffering.  In case it
+  isn't obvious this means you can never control ingress latency,
+  as the bandwidth between the network adapter and the application's
+  socket is hopefully higher than everything else before it.
+
+  To see how the burst speed affects latency, imagine we have two
+  classes, say ssh and web, and we are happy to devote 50% of the
+  link to each over the long term.  When the link is idle the HFSC
+  scheduler is given a 1499 byte web packet and a 1500 byte ssh
+  packet to send.  HFSC must decide which one to send first, and
+  while it sends it the other packet will become backlogged, awaiting
+  it's turn to be sent.  The bust speed only comes into play when
+  the link is backlogged (at all other times the steady state speed is
+  used), and even then it is only for a short while - the length of
+  time being specified by the SEC in "m1 BPS d SEC".  In effect all
+  it does is determine which of these packets get sent first.  And
+  that is how we get to latency - because whichever is sent first,
+  ssh or web, will be perceived to have the lower latency.
+
+  To figure out which packet to send first HFSC calculates how long
+  each will take to send, and then sends the one that will finish
+  sending first.  The twist is it doesn't use the link's raw speed
+  to calculate this time, it uses the speed for the service.  All
+  three services (link share, real time and upper limit) do their
+  calculations independently.
+  
+  Some examples will hopefully make this clear.  Lets allocate web to
+  classid 1:1, and ssh to classid 1:2, and say we have a 1mbps link.
+
+  Example 1.
+
+      tc class add dev eth0 parent 1:0 classid 1:1 hfsc \
+        ls m2 500kbps                                           # web
+      tc class add dev eth0 parent 1:0 classid 1:2 hfsc \
+        ls m2 500kbps                                           # ssh
+
+    We haven't set a burst speed, so the time it takes to send the
+    packets is:
+
+      web       1499 / 500000 = 0.002998 sec
+      ssh       1500 / 500000 = 0.003000 sec
+
+    In this example web takes the shortest time to send, so it will
+    be sent first and have the lower latency.
+
+  Example 2.
+
+    Many would prefer ssh traffic to have lower latency than web.
+    This will achieve it:
+
+      tc class add dev eth0 parent 1:0 classid 1:1 hfsc \
+        ls m1 100kbps d 1.5ms m2 500kbps                        # web
+      tc class add dev eth0 parent 1:0 classid 1:2 hfsc \
+        ls m1 900kbps d 1.5ms m2 500kbps                        # ssh
+
+    Since this is the start of a backlog period it also marks the
+    start of a bust period, so the bust speed is in effect.  Thus
+    we do the same calculation as in Example 1, but with burst
+    speeds:
+
+      web     1499 / 100000 = 0.014990 sec
+      ssh     1500 / 900000 = 0.001667 sec
+
+    In this scenario ssh will be sent first and thus appear to have
+    the lower latency, which is what we wanted.  In fact it is
+    because of the ratios chosen (100kbps for web versus 900kbps for
+    ssh) an ssh packet would have to be 10 times larger than a web
+    packet to be sent second.
+
+    The burst must be long enough to send the entire packet.  That is
+    what determined the 1.5ms above.  Our link runs at 1mbps, so it
+    takes (1500 / 1000000 = 1.5ms) to send a Maximum Transmit Unit
+    (MTU) sized packet, assuming the MTU is 1500 bytes.
+
+    Also notice the burst speed for web doesn't look like a "burst"
+    at all. It is far slower than the steady state speed web normally
+    receives.  This is because it really *is* being used to control
+    latency, not to specify a burst.
+
+  Example 3.
+
+    That worked, but not as well as you hoped.  You recall TCP can
+    send multiple packets before waiting for a reply and you would
+    like them all sent before web gets to send it's first packet.
+    You also estimate you have 10 concurrent users all doing the same
+    thing.  From a packet capture you decide sending 4 packets before
+    waiting for a reply is typical.
+
+    10 users by 4 packets each means 40 MTU sized packets.  Thus you
+    must adjust the burst speed, so ssh gets 40 times the speed of
+    web and you must allow for 40 MTU sized packets in the burst
+    time:
+
+      tc class add dev eth0 parent 1:0 classid 1:1 hfsc \
+        ls m1  24kbps d 60ms m2 500kbps                         # web
+      tc class add dev eth0 parent 1:0 classid 1:2 hfsc \
+        ls m1 975kbps d 60ms m2 500kbps                         # ssh
+
+    Note that 975:24 is 40:1, and (40 * 1500 / 1mbps = 60).
+
+  If a class's burst speed is truly a burst (ie allowed to send
+  faster than its normal steady state speed), it will only be
+  allowed to do it if it has been sending at less than its steady
+  state speed for long enough to accrue the headroom required for the
+  burst.  To put it another way, a class will not be allowed a burst
+  if over the long term it would mean it is running over its steady
+  state speed.
+
+  On the other hand if a class's "burst" is really a "go slow" than
+  (like web's) it can have its bandwidth pinched at any time by a
+  class (like ssh) that is allowed a burst, thus giving it truly bad
+  latency.  In this sense ssh's good latency doesn't come for free.
+  It gains it at the expense of web having bad latency.  This will
+  always be true, and is conceptually no different to the trade off
+  you make for bandwidth.  If you guarantee web good bandwidth over
+  the long term then some traffic (eg email) must be getting bad
+  bandwidth when web is using it.  Similarly web's latency will be
+  bad when ssh is making use of its latency advantage.  However,
+  because HFSC guarantees that ssh will not exceed its steady state
+  bandwidth over the long term web will still average at least the
+  bandwidth you allocated it.  In the HFSC paper, they say the
+  latency and bandwidth specifications are decoupled, meaning over
+  the long term one has no effect on the other.
+
+  Finally, since HFSC favours packets that can be sent quickly it
+  favours sending small packets before large ones.  By happy
+  coincidence this is generally what you want.  VOIP, DNS, NTP, TCP
+  start up and ACK's are all small.  Since the advantage you get from
+  giving a class a high burst is measured in milliseconds, not
+  seconds, specifying a burst for link sharing often isn't worth the
+  effort.
+
+
+  The meaning of "real time"
+  --------------------------
+
+  tc-hfsc's web page follows the terminology in the paper and says
+  "real time" gives guaranteed bandwidth.  Web pages talking about
+  HFSC take this to imply link share does not give guaranteed
+  bandwidth.  This is true, but misleading.  The "guarantees" given
+  by the alternatives (like CBQ and HTB) are no better than what
+  link share provides.
+
+  The real time curve gives you something nothing else does: a hard
+  deadline.  Link share's latency will on occasion be out by a 100's
+  of milliseconds, very occasionally seconds.  But notice we are
+  talking seconds and milliseconds here.  If you do not have traffic
+  that cares about millisecond delays then you don't care about real
+  time.  There are very few traffic classes that do care - only VOIP
+  and maybe NTP spring to mind.  In particular if you were a
+  satisfied user of HTB or CBQ, you don't care about real time.  If
+  you don't care about real time do yourself a favour: don't use it,
+  and stop reading this section.
+
+  Real time's guarantees do not come for free, nor are they what they
+  seem.
+  
+  The first issue is, in order to give hard real time guarantees the
+  real time service must take into account all data a class has sent
+  since the link was brought up.  If the class has exceeded its real
+  time steady state speed in the past (probably by using bandwidth
+  when no one else wanted it) then it can be denied *any* bandwidth
+  by the real time class until it gets under its long term steady
+  state speed.  In practice this probably won't be an issue, but
+  being penalised for using bandwidth no one else wanted it is
+  usually thought of as "unfair" (yes this is a well defined term
+  when dealing with quality of service), and thus real time is an
+  unfair allocator of bandwidth.
+
+  The second issue is, in order to provide its latency guarantees,
+  real time may have to keep the link idle in case a high priority
+  packet needs to be sent.  Ergo there may be times when a packet is
+  waiting to be sent, but the link is idle, thus the link will be
+  artificially constrained to below its rated capacity.  A service
+  that always takes advantage of the link's rated capacity is called
+  work preserving.  Link share is work preserving.  Real time isn't.
+  There is a corollary to this.  Real time measures its delays using
+  the kernel's timers, so if they are coarse it won't be able to do a
+  good job.  For example, if your hardware + kernel only supports a
+  100Hz timer, the best latency resolution you can get is 10
+  milliseconds.  On a 100mbit link 83 MTU sized packets should be
+  scheduled over that 10 milliseconds, so forcing rt to average it's
+  decisions over 83 packets means you are going to get some very poor
+  outcomes. Common modern hardware provides very accurate timers but
+  it's worth your while checking if you are taking the road less
+  travelled.
+
+  The third issue is real time provides a hard latency guarantee in
+  the sense that latency is bounded to an absolute maximum.  However
+  that absolute maximum isn't necessarily what you specified when you
+  said "m1 12500 d 2ms".  You might expect that guarantees a 250 
+  byte packet will be sent within 2ms.  It doesn't, unless you do not
+  use link share or put any other qdisc between HFSC and the device.
+  Recall that real time will deliberately hold the line idle in order
+  to give it's guarantee.  The issue is link share will sneak in and
+  send a packet over that idle link while real time isn't watching.
+  In practice this means real time's latency guarantees can be out by
+  the time it takes to send one MTU sized packet.  So the guarantee
+  isn't 2ms.  It's (2ms + time to send MTU sized packet).  You can of
+  course compensate for this by specifying the time as (2ms - time to
+  send MTU sized packet), provided your link is fast enough to send
+  MTU sized packet + 250 bytes within 2ms.
+
+  The fourth issue is real time says nothing about what to do with
+  the links spare capacity.  If you don't use link share as well,
+  the guaranteed minimum also becomes a maximum.
+
+  The fifth issue is unlike link share, the bandwidths you give
+  to the real time classes must be accurate, and their sum must be
+  below the links capacity.  This means the sum of the burst speeds
+  must be below the links capacity, and the sum of the steady state
+  speeds must also be below the links capacity.  Ensuring this if
+  don't you use the same value for "d" or "dmax" in every class
+  requires solving multiple linear equations.
+
+  The sixth issue is if you use up all your bandwidth with real time
+  guarantees, then when the link is backlogged link share will get
+  no share, as in will never send a packet and all that goes along
+  with that - like TCP connections timing out and dying.
+
+  In summary, real time is good for one thing: guaranteeing hard
+  latencies.  Since burst speed determines latency using "rt" without
+  a burst speed is a waste of time.  The converse is also true: real
+  time is useless for anything but guaranteeing hard latencies.
+  Everything else is better done using link share.
+  
+
+  Using link share and upper limit
+  --------------------------------
+
+  Under link share the speed a backlogged class can send depends on
+  ratio of its speed to other backlogged classes.  (If a class isn't
+  backlogged then by definition it's sending packets as fast as it
+  wants, so link share doesn't need to arbitrate on it's behalf.)
+  Link share does one thing: when the underlying device says its
+  ready to send a packet, it looks at what classes that is furtherest
+  away from the proportion of the link it should have, and sends its
+  packet.
+
+  An example. Lets say we have classes A, B and C, who have link
+  share specifications of:
+  
+    class A:    hfsc ls rate 10kbps
+    class B:    hfsc ls rate 20kbps
+    class C:    hfsc ls rate 30kbps
+
+  A and B are sending packets as fast as they can, so they will be
+  backlogged.  C is idle.  The ratio of the speeds ratio of the
+  backlogged classes, A and B, is 10 to 20, ie 1 to 2.  So link share
+  ensures for every byte A sends, B sends 2.
+
+  It's so simple it's important to note what this calculation doesn't
+  depend on:
+  
+  A.  It doesn't depend on the speed of the underlying link.  Link
+      share doesn't need to know what that speed is, and the numbers
+      you give it need have no relationship to that speed.   Only the
+      ratios matter.
+
+  B.  This implies link share is immune to link speed changing during
+      the day, as real internet connections often do.
+
+  C.  Link share doesn't care who sends the packets - it or real
+      time.  They are all counted the same way.
+
+  There are some complications as well:
+
+  A.  Link share will not give a class more than the upper limit.
+      Real time does not respect upper limit, but since link share
+      counts what real time sends going over the upper limit using
+      real time will be penalised later by link share.
+
+  B.  Link share only gets what's left over after real time sends
+      it's packets.  To link share the bandwidth used by real time
+      looks like the link speed varying a bit faster than it would
+      otherwise.
+
+  C.  A class is allowed to exceed its steady state speed by using
+      its burst speed when it first becomes backlogged.  Once the
+      burst allowance is exhausted it can not exceed the steady state
+      speed until the backlog has been completely cleared.
+
+  And there is one negative.  Link share will send packets as fast as
+  the underlying device will let it.  If the underlying device isn't
+  the slowest thing between it and the destination link share won't
+  be the thing controlling what packet gets sent next - it will
+  be whatever scheduler is running on the slowest device.  Typically
+  on a Linux box the device HFSC is controlling is an Ethernet NIC
+  that runs at Giggabits per second.  The slowest thing is probably
+  the thing it is connected to - the modem, so unless do something
+  the modem will managing traffic, not HFSC.  If your Linux box isn't
+  controlling an Ethernet NIC its most likely attempting to schedule
+  traffic on a virtual device.  Under Linux virtual network devices
+  like tunnels, ifb (used for ingress scheduling), and tun/tap
+  devices process their packets as soon as they receive them.  To a
+  scheduler they appear to be infinitely fast.  This means on a
+  typical Linux setup not only will link share have absolutely no
+  effect on the outgoing traffic, it's propensity to flood the link
+  will destroys any chance real time had at controlling latency.
+
+  To fix this you must limit the rate link share can send using
+  upper limit.  Remember, for link share to be effective the limit
+  must be lower than the slowest link between the source and
+  destination.  Upper limit has one other use - constraining a
+  customer to the bandwidth they paid for.
+
+  Finally, link share can't give hard latency guarantees.  So its
+  burst numbers don't mean "send an ssh packet within 10
+  milliseconds".  Instead they mean "if ssh has been quiet for a
+  while, briefly increase the ratio at which ssh can send packets,
+  so it gets better latency than competing classes".  That said,
+  if you follow these rules link share will get reasonably close
+  to the latency you ask for:
+
+      a.  For classes that use real time, you use exactly the same
+          link share specification.  Recall "sc" does this.
+
+      b.  The total bandwidth you allocate for link share doesn't
+          exceed the links capacity or upper limit.  This must be
+          true for both burst and steady state speeds.
+
+
+  The Class Hierarchy
+  -------------------
+
+  Like HTB and CBQ, HFSC allows you to create a hierarchy of classes.
+  This is an example:
+
+                         +1:0---------+
+                         |    qdisc   |
+                         |  1500kbit  |
+                         +------------+
+                        /              \
+                  +-1:10------+  +-1:20------+
+                  |  User A   |  |  User B   |
+                  | 50% share |  | 50% share |
+                  | Unlimited |  | 1000kbit  |
+                  +-----------+  +-----------+
+                 /             \
+         +-1:11-------+  +-1:12---------+
+         |     Web    |  |     VOIP     |
+         | 100% share |  | 20ms Latency |
+         | Unlimited  |  |   100kbit    |
+         +------------+  +--------------+
+
+  Intuitively this does the following:
+
+    - The link has a capacity of 1500kbit.
+    - User A can saturate the link if B isn't using it.
+    - User B on the other hand can use a maximum of 1000kbit.
+    - If the link is saturated A & B are guaranteed 50% each.
+    - User A has VOIP which must have low latency.
+    - User A's remaining spare bandwidth goes towards web browsing.
+
+  Up till now we have been discussing the leaf nodes sharing a common
+  parent (inner node) interact.  This is how the hierarchy effects
+  each type of HFSC service:
+
+    ls  A parent enforces its link sharing allocation on its
+        children.  In other words the siblings get to fight over
+        the proportion of the shared bandwidth allocated to their
+        parent, and the parent and it's siblings get to fight over
+        whatever their ancestors link sharing allocations are.
+
+    rt  The hierarchy does not effect the bandwidth allocated by the
+        real time service any way.  rt specifications for inner nodes
+        (non-leaf nodes, ie ones with links to nodes lower in the
+	diagram) are ignored.
+
+    ul  A parent enforces its upper limit allocation on its children.
+        In other words the sum of the bandwidth used by children's
+        link sharing service will never exceed any of their ancestors
+        upper limits.
+
+  In practice, for most devices, you will need one class enforcing an
+  upper limit so link share doesn't flood the link and thus destroy
+  HFSC's ability to schedule.  That class will be the root, of
+  course.
+
+  With those definitions in hand this is how the above hierarchy can
+  be implemented:
+
+    #
+    # Save typing when creating classes.
+    #
+    ca() {
+      par=$1; class=$2; shift 2
+      tc class add dev eth0 parent 1:$par classid 1:$class hfsc "$@"
+    }
+    #
+    # Create the qdisc.  Send unclassified traffic to 1:11.
+    # If "default" isn't given unclassified traffic is dropped.
+    #
+    tc qdisc add dev eth0 root handle 1:0 hfsc default 11
+    ca 0 1 ls m2 1500kbit ul m2 1500kbit        # Stop link flooding
+    #
+    # Create classes representing each user.
+    #
+    ca 1 10 ls m2 750kbit                       # User A
+    ca 1 20 ls m2 750kbit ul m2 1000kbit        # User B
+    #
+    # User A's web traffic.
+    #
+    ca 10 11 ls m2 1500kbit                     # User A web
+    #
+    # VOIP.  We said VOIP uses 100kbit, and required 20ms latency.
+    # We also know that HFSC can break its rt latency guarantees
+    # by one MTU packet.  Assuming MTU is 1500 bytes, it takes:
+    #
+    #   1500 [byte] * 8 [bits/byte] / 100000 [bits/sec] = 12 msec
+    #
+    # to send an MTU sized packet.  That means we must send the
+    # VOIP packet within 8ms (= 20ms - 12ms) to meet the latency
+    # requirements.
+    #
+    # The requirements didn't say how big a VOIP packet is, but given
+    # it has to send a new packet every 20ms the biggest it could be
+    # is:
+    #   100000 [bit/sec] / 8 [bit/byte] * 0.02 [sec/pkt] = 250 byte/pkt
+    # So, we have 8ms to send 250 bytes, which works out to be:
+    #   250 [bytes] * 8 [bit/byte] / 0.008 [sec] = 250kbit
+    #
+    ca 10 12 rt m1 250kbit d 8ms m2 100kbit     # User A VOIP
+
+
+
+Reference
+=========
+
+  Qdisc Parameters
+  ----------------
+
+    default <CLASSID>
+      Send unclassified packets to <classid>.  If not supplied
+      unclassified packets are dropped.
+
+  Class Parameters
+  ----------------
+    
+    ls <SERVICE-CURVE>
+      Apportions how much of a backlogged link's spare capacity
+      should be allocated to this class and its children if a packet
+      isn't being sent under the rt <SERVICE-CURVE>.  The bandwidth
+      allocated by <SERVICE-CURVE> of all sibling classes wanting to
+      share the excess capacity is summed, then the ratio of the
+      links capacity after real time to the total bandwidth consumed
+      this class and all it's offspring is equal to the ratio the
+      classes <SERVICE-CURVE> bandwidth to the sum.  When calculating
+      <SERVICE-CURVE>, <BURST-SEC> is measured from the last time
+      this class was backlogged, ie had packets waiting to be
+      transmitted.  Every leaf class must have a ls or rt (or both)
+      <SERVICE-CURVE> specified.  Every inner class must be given an
+      ls <SERVICE-CURVE>.
+      
+    rt <SERVICE-CURVE>
+      <SERVICE-CURVE> sets the amount of bandwidth a leaf class is
+      guaranteed. rt is ignored for inner classes.  This amount of
+      bandwidth is always available to it regardless of the other
+      classes use of the link or the maximum bandwidth allowed by
+      this class or its parents.  When calculating <SERVICE-CURVE>,
+      the calculation of the start time of <BURST-BPS> is complex.
+      Roughly, it is the last time the class was backlogged and was
+      under the guaranteed rate.  Every leaf class must have a ls or
+      rt <SERVICE-CURVE> specified.  
+
+    ul <SERVICE-CURVE>
+      For classes with a ls curve, set the maximum bandwidth this
+      class and its children are permitted to use.  This only effects
+      sending packets under the ls <SERVICE-CURVE>, but packets set
+      under the rt curve are included in the bandwidth calculation.
+      When calculating <SERVICE-CURVE>, <BURST-SEC> is measured from
+      the last time this class was backlogged, ie had packets waiting
+      to be transmitted.
+
+  <SERVICE-CURVE>
+  ---------------
+
+  A service curve specifies how much bandwidth a class can use.  It
+  has an optional initial burst rate, followed by a steady state.
+  The start time of the burst depends on the service type (rt, ul or
+  ls).  The are two syntaxes available for describing a service
+  curve.  In both you use the usual tc units to designate speed,
+  data size and time.
+
+  [m1 <BURST-SPEED> d <BURST-SEC>] m2 <STEADY-SPEED>
+    <BURST-SPEED> is the speed of the burst, and <BURST-SEC> is the
+    length.  Thereafter the class sends at <STEADY-SPEED>.
+
+  [umax <BURST-BYTES> dmax <BURST-DSEC>] rate <STEADY-SPEED>
+    "rate" has an identical meaning to "m2" above, so it specifies
+    the long term speed the class is entitled to.  To determine what
+    "umax ... dmax ..." means, an implied burst speed is calculated
+    using "<BURST-BYTES> / <BURST-DSEC>".  If this burst speed larger
+    than <STEADY-SPEED> then this syntax is equivalent to "m1
+    (<BURST-BYTES> / <BURST-DESC>) d <BURST-DSEC> m2 <STEADY-SPEED>"
+    where the stuff in (...) is calculated.  If the implied burst
+    speed is not greater than <STEADY-SPEED> then during the burst
+    period effective specification becomes "m1 0 d (<BURST-DSEC> -
+    <BURST-BYTES> / <STEADY-SPEED>) m2 <STEADY-SPEED>".  This means
+    the class is not allowed to send any data at all during the
+    burst period.  The burst period is the time left over after
+    if <BURST-BYTES> were sent at <STEADY-SPEED>.
+
+
+Classes.  Traffic is assigned to HFSC classes using a filter.
+
+Scheduling.  The HFSC scheduler sends packets required to meet
+guaranteed bandwidth specified by rt, but only if those requirements
+would be broken by not sending them.  In that case it sends the
+packet that will complete sending closest to its deadline.  If not
+forced to send packets required by rt it will send a packet according
+to the ls criteria, choosing the packet that will complete sending
+closest to its deadline.  For both rt and ls, time is measured with a
+clock running at one tick per bit per second of bandwidth allocated
+by the <SERVICE-CURVE>.  Thus specifications with higher bandwidth
+appear to have their deadlines arrive sooner, and packets appear to
+be waiting longer and thus are sent sooner in actual time.
+
+Policing.  HFSC discard packets that aren't classified unless
+the default classid is specified to the qdisc.
+
+Rate Limiting.  HFSC restricts classes to the rate limit imposed by
+the ul specification, and the rate limit imposed by its ancestor
+classes on their children.  Classes that have exceeded their
+real time <SERVICE-CURVE> in the past may be rate limited during if
+they don't also have a link share and the link is backlogged.
+
+Classifier.  The HFSC queuing discipline does not classify packets.

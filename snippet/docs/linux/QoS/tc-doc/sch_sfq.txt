@@ -1,0 +1,59 @@
+The sfq queuing discipline
+--------------------------
+
+Parameters.
+
+  quantum <QUANTUM>
+    This is how many bytes a class gets to send before the
+    scheduler starts sending from the next class with packets
+    waiting.  Must be no smaller than the devices maximum
+    transmission unit, as printed by the mtu option in "ip 
+    link list".  It defaults to the devices maximum
+    transmission unit.
+
+  perturb <PERTURB>
+    If present this extends the time between randomisations
+    of the classifier.  If not specified the time between
+    randomisations is 10msec.  This is the number of 10msec
+    units to extend that time by.
+
+
+Classes.  The sfq queuing discipline allocates each different
+tcp, udp and esp connection to a class.  Other literature calls
+these classes flows.  Sfq does not allow you to configure its
+classes manually.
+
+Scheduling.  The scheduler sends packets from each class in a
+round robin fashion.  The maximum number of bytes each class
+can send in a single round is set by the quantum parameter.
+
+Policing.  Attempting to enqueuing a packet when the queue already
+contains 128 packets will cause the packet to be dropped.
+
+Rate limiting.  The sfq queuing discipline does not rate limit
+traffic.
+
+Classifier.  A hashing function is used to determine the class
+for a connection, so each class may contain several connections.
+This hashing function changes in a random way at regular intervals.
+This interval configured by the perturb parameter.  Sfq does not
+allow you to alter its classification system.
+
+Comments.
+
+- The sqf queuing discipline allocates bandwidth fairly to each
+  of its classes.  As the classes roughly correspond to a single
+  tcp or udp connection this means sfq ensures no single
+  connection hogs the bandwidth of a device.  It does this very
+  well, with (uncharacteristically for the traffic control engine)
+  almost no setup and very little CPU overhead.
+
+- As a side comment, sfq would be much more useful if it allowed
+  you to configure what a class is.  Currently a class corresponds
+  to a connection.  But imagine you are trying to allocate bandwidth
+  to a class room of PC's.  The students would rapidly discover
+  that they could get around this by creating many TCP connections.
+  If you could configure sfq to use the senders IP, or perhaps their
+  MAC address, the creative little darlings would be thwarted.  If
+  you are trying to allocate bandwidth among departments a senders
+  network might be a better way to classify a packet.

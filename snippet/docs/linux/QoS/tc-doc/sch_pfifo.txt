@@ -1,0 +1,31 @@
+The pfifo queuing discipline
+----------------------------
+
+Parameters.
+
+  limit NUMBER
+    This is maximum number of packets that can be on this queue.
+    Enqueuing a packet when the queue is at this limit causes the
+    packet to be dropped.  If not specified this parameter defaults
+    to the queue length of the underlying device.  This is the qlen
+    parameter printed by "ip link list".
+
+Classes.  The pfifo queuing discipline does not have classes.
+
+Scheduling.  The pfifo queuing discipline has not have a scheduler.
+The packets are sent in the order they are received.
+
+Policing.  Enqueuing a packet when the queue already contains the
+number of packets defined by the limit parameter will cause the
+packet to be dropped.
+
+Classifier.  The pfifo queuing discipline does not classify packets.
+
+Rate limiting.  The pfifo queuing discipline does not rate limit
+traffic.
+
+Comments.
+
+- pfifo polices the length of the queue, ensuring it does not grow
+  beyond the maximum limit defined by it parameter.  That is all it
+  does.

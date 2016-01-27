@@ -1,0 +1,33 @@
+The noop queuing discipline
+---------------------------
+
+Parameters.
+  None.
+
+Classes.  The noop queuing discipline does not have classes.
+
+Scheduling.  The noop queuing discipline has not have a scheduler.
+
+Policing.  The noop queuing discipline drops all packets queued onto
+it.
+
+Rate limiting.  The noop queuing discipline does not rate limit
+traffic.
+
+Classifier.  The noop queuing discipline does not classify packets.
+
+
+Comments.
+
+- The noop queuing discipline is used internally by the traffic control
+  engine.  It is not possible to manually assign the noop queuing
+  discipline to a device or class.
+
+- The noop queuing discipline is assigned to all devices when they are
+  created and the device's link state (as printed by "ip link list")
+  is down.  When the link state is changed to up the noop queuing
+  discipline, if still present, is replaced by a pfifo_fast or noqueue
+  queuing discipline.
+
+- Yes, the noop queuing discipline really does drop, delete and discard
+  all packets queued onto it.

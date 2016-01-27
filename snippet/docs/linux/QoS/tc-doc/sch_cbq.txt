@@ -1,0 +1,88 @@
+The cbq queuing discipline
+--------------------------
+
+Tutorial
+========
+
+Cbq stands for Class Based Queuing.  The overall concept is simple
+and I explain it below.  But I will not go in the gory details -
+mainly because I don't know them.  Indeed I am not sure who does. 
+Alexey, the main author of the cbq kernel module wrote "It seems
+that cbq-2.0 is not very accurate. At least, I cannot interpret
+some places, which look like wrong translations from NS."  If you
+want more detail than is provided here I suggest you read the
+original paper by want more detail then is provided here look at
+the original papers by Sally Floyd and friends titled
+"Link-sharing and Resource Management Models for Packet Networks".
+Last time I looked you could find a link to it here:
+"http://www.aciri.org/floyd/cbq.html".
+
+The role of classes in cbq
+--------------------------
+
+The classes in cbq form a tree, like this:
+
+                     +-----------+
+	             |    Root   |
+	             |   10Mbit  |
+	             +-----------+
+                           |
+		           |
+              +-------------------------+
+	      |                         |
+       +------------+            +------------+
+       | Customer 1 |            | Customer 2 |
+       |    8Mbit   |            |    2Mbit   |
+       +------------+            +------------+
+             |                          |
+       +-----------+             +------------+
+       |           |             |            |
+   +--------+  +-------+    +---------+  +---------+
+   | Telnet |  | Other |    |   WWW   |  |  Mail   |
+   | 6Mbit  |  | 2Mbit |    | 1.5Mbit |  | 0.5Mbit |
+   +--------+  +-------+    +---------+  +---------+
+
+This tree tells us how the available bandwidth is to be divided
+up.  For example, we see that Customer 1 has the bulk of the available
+10Mbit allocated to him, most of which he gives to telnet traffic.
+Now for some points:
+
+- Unless you specify otherwise, nothing happens until the link
+  is overloaded.  In other words if the total traffic is less
+  that 10Mbit cbq does not "do anything".  So, even though
+  customer 2's mail is only allocated 0.5Mbit it can use the
+  entire 10Mbit if no one else is using the link.
+
+- When the link is overloaded cbq will take bandwidth from classes
+  that are exceeding their allotment and distribute it to classes
+  that are under their allotment and need more.  Under these
+  circumstances cbq does not do rate limiting, it is just
+  re-ordering packets.
+
+- When you allow unrestricted borrowing of bandwidth between classes
+  there is no need to have a multi-level hierarchy.  You just need
+  two levels.
+
+- The are two ways you can prevent borrowing of bandwidth among
+  classes.  One way it to say a class is "bounded".  That means it
+  is not allowed to borrow bandwidth from other classes.  For example
+  if Customer 2 was bounded it would not be able to exceed its 2Mbit
+  allotment.  However the classes under Customer 2 can still share
+  amongst each other.
+
+- The other way to prevent borrowing of bandwidth is to say a class
+  is "restricted".  That means other classes can not borrow bandwidth
+  from it.  In our example saying Customer 1 is restricted is
+  identical to saying Customer 2 is bounded.  Notice that this 
+  means Customer 1 can still borrow Customer 2's bandwidth if it
+  is unused.
+
+- If you don't allow unrestricted borrowing cbq may be forced to do
+  rate limiting.
+
+- When you prevent borrowing the multi-level class hierarchy becomes
+  useful.
+
+How cbq classifies packets
+--------------------------
+

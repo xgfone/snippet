@@ -1,0 +1,90 @@
+Linux Packet Priority
+=====================
+
+Some of the schedulers supplied with Linux Traffic Control allow you to
+manipulate a packet based on its priority.  At first sight this seems to
+mean that you can manipulate a IP packet based on its TOS, but it turns
+out it is not so straight forward.
+
+The networking code within Linux handles many protocols besides IP, so
+in order to handle the priority of a packet in a generic way it is
+translated to a generic "Linux Priority".  The Linux priority of a
+packet is a number from 0 to 15, high numbers meaning a higher priority
+packet.  Not all of the 16 priorities are named in the kernel.  Here
+are the ones that are named in 2.4.9:
+
+Linux Priority Name		Value
+------------------------	-----
+TC_PRIO_BESTEFFORT		0
+TC_PRIO_FILLER			1
+TC_PRIO_BULK			2
+TC_PRIO_INTERACTIVE_BULK	4
+TC_PRIO_INTERACTIVE		6
+TC_PRIO_CONTROL			7
+TC_PRIO_MAX			15
+
+When documentation for the Linux's Traffic Control engine mentions
+a packets priority this is the number they are referring to.  On
+the other hand if the documentation specifically refers to a TOS
+or "Type of Service" it probably means bits 4..1 of the TOS field in
+the IP packet header.
+
+When a packet passes through the networking code the IP TOS field
+is translated to a Linux priority.  This table shows how the
+translation is done:
+					IP TOS				Priority
+IP TOS Name				Value	Linux Priority Name	Value
+------------------------------		-------	-------------------     --------
+(Not Set)				0x00	TC_PRIO_BESTEFFORT	    0
+Cheap					0x02	TC_PRIO_FILLER		    1
+Reliable				0x04	TC_PRIO_BESTEFFORT	    0
+Reliable+Cheap				0x06	TC_PRIO_FILLER		    1
+High Throughput				0x08	TC_PRIO_BULK		    2
+High Throughput+Cheap			0x0A	TC_PRIO_FILLER		    1
+High Throughput+Reliable		0x0C	TC_PRIO_BULK		    2
+High Throughput+Reliable+Cheap		0x0E	TC_PRIO_FILLER		    1
+Interactive				0x10	TC_PRIO_INTERACTIVE	    6
+Interactive+Cheap			0x12	TC_PRIO_FILLER		    1
+Interactive+Reliable			0x14	TC_PRIO_INTERACTIVE	    6
+Interactive+Reliable+Cheap		0x16	TC_PRIO_FILLER		    1
+Interactive+High Throughput		0x18	TC_PRIO_INTERACTIVE_BULK    4
+Interactive+High Throughput+Cheap	0x1A	TC_PRIO_FILLER		    1
+Reliable+Interactive+High Throughput	0x1C	TC_PRIO_INTERACTIVE_BULK    4
+Rel+Interactive+High Throughput+Cheap	0x1E	TC_PRIO_FILLER		    1
+
+Now we can look at how this effects classifying packets based on
+their IP TOS value:
+
+- RFC-1349 does not allow more that one TOS bit to be set at one
+  time.  If you assume all packets adhere to RFC-1349 (not a bad
+  assumption) then the table reduces to 4 lines.  The extra
+  lines are there because rfc791 does allow you to set any
+  combination of TOS bits.
+
+- But, even if you assume all packets do adhere to RFC-1349,
+  there is still not a 1 to 1 mapping between IP TOS and Linux
+  priorities.  This is because both IP TOS values 0x00 and
+  0x04 map to Linux priority 0.
+
+- The inbuilt classifier of most queuing disciplines can classify
+  packets based on the Linux priority, with out the help of a
+  filter.  In particular CBQ and prio can do this - and it is
+  quick and convenient.  However, because there is not a 1 to 1
+  mapping of TOS values to Linux priorities you can not use
+  this inbuilt classifier to classify packets based on their
+  TOS value.  At least you can't when you want to classify
+  packets with a TOS value of 0x00 differently to packets with
+  a TOS value of 0x04.
+
+There is a second way a Linux priority can be encoded, meaning
+it can take on another range of values that is not 0..15.  The
+priority can contain a class handle.  (Note that a class handle
+has a non-zero value in the most significant 16 bits, so they
+are easily distinguishable from normal Unix priorities.)  The
+classifiers of some queuing disciplines check for this, and if
+the packet's priority contains the handle of one the classes
+owned by the queuing discipline it assigns the packet to that
+class immediately, by-passing all the normal classification
+checks.  This feature is not very useful for a number of
+reasons, so I suspect Alexey added it to make his testing
+easier.  I mention it here only for completeness.

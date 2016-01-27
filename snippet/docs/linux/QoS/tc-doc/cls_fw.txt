@@ -1,0 +1,36 @@
+The IPChains fwmark classifier
+------------------------------
+
+Handles.
+
+  The handle for the fwmark is the "fwmark" set by ipchains
+  or iptables.  Like all filter handles it must be unique.
+
+Execution.
+
+  The fwmark filter finds filter item whose handle equals
+  the "fwmark" value ipchains or iptables set for the packet.
+  If the filter item is found the packet is classified,
+  otherwise not.
+
+  Be warned that the fwmark currently (2.4.9) uses a primitive
+  hash table to do the searching.  The hash table is 256 bytes
+  long, and the "hash function" just extracts the eight least
+  significant bits.  So don't use fwmark's that differ by
+  largish powers of 2.
+
+Options.
+
+  classid :<classify-spec>: | flowid :<classify-spec>:
+    This is required.  It :classifies: the packet.
+
+  police :<police-spec>:
+    :Police: the packet.
+
+Comments.
+
+  IPChains is the most powerful packet recognition engine
+  available in the kernel, and using it to set "fwmark" is a
+  relatively straight forward job.  "fwmark" is the easiest
+  classifier to use by far.  It is a unique combination - use
+  it where you can.

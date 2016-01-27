@@ -1,0 +1,179 @@
+Token Bucket Filter
+-------------------
+
+Overview
+========
+
+  Picture a bucket with tokens being added to it at a fixed rate.
+  Before a packet can be sent it must collect enough tokens from
+  the bucket to pay the toll man, which in this case is the token
+  bucket filter.  The toll man demands a fee based on the packets
+  size.  If there are not enough tokens in the bucket the packet
+  must wait for some more to be added to it.
+
+  So, if packets are arriving slower than tokens are being put
+  into the bucket the toll man lets them pass unhindered.  But if
+  packets arrive consistently faster than tokens are being added
+  to the bucket then they will be forced to wait.  They will then
+  pass though the toll gate at the same speed tokens are being
+  added to the bucket.
+
+  The bucket starts off full of tokens.  This means that if a lot
+  of packets arrive all at once, ie if there is a burst of
+  traffic, the first packets in it will be let through unhindered.
+  If the burst is less than the bucket size then again the no
+  packet has to wait.  But when the bucket is full tokens flowing
+  into are lost.  In effect this limits the size of the burst that
+  can pass through the toll gate unhindered.
+
+  The token bucket filter implemented by Linux has two toll gates,
+  each with its own bucket and associated paraphernalia.  To be sent
+  the packet must be able to pay both toll men.  The second bucket
+  can only hold one large packet, but typically allows packets to
+  flow through it much faster than the first.  The effect of this
+  is to limit the speed a burst of packets will be sent.
+
+  Now for an example:
+
+    # tc qdisc add dev MYDEVICE root handle 1:0 tbf \
+        rate 20kbit burst 5kb peakrate 28kbit mtu 1520 mpu 64 limit 100kb
+
+  The rate tells us how fast tokens enter the buffer.  On average
+  this queuing discipline will permit packets to flow out at no
+  more than 20k bits per second.  The burst tells us the bucket
+  size.  In this case if the bucket is full a burst of 5k bits can
+  be sent unhindered by the primary bucket.  But, the peakrate
+  tells us that there is a secondary bucket, and it will limit a
+  burst to 28k bits per second.  The mtu tells us the largest packet
+  size, which is 1520 bytes in this case.  This is how big the
+  secondary bucket is.
+  
+  There are two more options there.  The mpu is the smallest packet
+  size.  Its useful for networks like Ethernet.  If a packet less
+  than 64 bytes in size is sent over Ethernet it is padded to 64
+  bytes.  The second option is tells us how big the queue of packets
+  waiting to be sent can be.  If adding packet a packet would cause
+  the queue to exceed this length the packet is dropped.
+
+Reference
+=========
+
+  Parameters
+  ----------
+
+  burst <BURST>/<CELL> | buffer <BURST>/<CELL> | maxburst <BURST>/<CELL>
+    The sets the size of the bucket used by the rate option.  It
+    must no smaller than the maximum transmission unit accepted by
+    the device, as displayed by the "mtu" option of the "ip link"
+    command.  This option is required.  The "/<CELL>" is optional.
+    The bucket filter calculates how long it will take to send a
+    packet by looking up the packet size in a table.  The number
+    of entries in the table is given by the mtu divided by <CELL>.
+    That figure must not exceed 255.  If the mtu option is not
+    given 2047 bytes is assumed.  <CELL> must be a power of 2 and
+    greater than 0  If you do not specify <CELL> the smallest
+    acceptable value is used.
+
+  latency <LATENCY>
+    This is the maximum number of seconds a packet can be delayed by.
+    If a packet would have wait longer than this it will be dropped
+    when it is queued.  This can not be specified if the limit
+    option is given.
+
+  limit <LIMIT>
+    This is the maximum number of bytes that can be waiting in the
+    queue.  If adding packet a packet would cause the queue to exceed
+    this length the packet is dropped.  This can not be specified if
+    the latency option is given.
+
+  peakrate <PEAKRATE>
+    The option specifies how fast the data will leave the
+    second bucket.  The bucket size is set by the mtu option,
+    which must be present if peakrate is used.
+
+  mpu <MPU>
+    This option specifies the minimum packet size in bytes.
+    If a packet's size is smaller than this figure its size
+    will assumed to be the <MPU> when adding it to either of
+    the two buckets.
+
+  mtu <MTU>/<CELL> | minburst <MTU>/<CELL>
+    It also sets the bucket size for the bucket filter added by
+    the peakrate option.  The "/<CELL>" is optional.  The peakrate
+    bucket filter calculates how long it will take to send a packet
+    by looking up the packet size in a table.  The number of
+    entries in the table is given by the mtu divided by <CELL>.
+    That figure must not exceed 255.  If the mtu option is not given
+    2047 bytes is assumed.  <CELL> must be a power of 2 and
+    greater than 0  If you do not specify <CELL> the smallest
+    allowable value is used.
+
+  rate <RATE>
+    This option specifies how fast the data will leave the
+    primary bucket.
+
+Classes.  The tbf queuing discipline does not have classes.
+
+Scheduling.  The tbf queuing discipline has not have a scheduler.
+The packets are sent in the order they are received.
+
+Policing.  Enqueuing a packet when the queue already contains, or
+has more than, the number of bytes defined by the limit parameter
+will cause the packet to be dropped.  Enqueuing a packet that
+would be delayed by more than the latency parameter will cause
+the packet to be dropped.  Packets larger than the devices mtu
+are dropped.  If the peakrate parameter is given and the mtu
+parameter is unless than the devices mtu that will be used
+instead of the devices mtu to do the policing.
+
+Rate Limiting.  The token bucket filter has two bucket filters -
+the normal bucket and the peakrate bucket.  Usage of the peakrate
+bucket is optional.  The packet must satisfy both bucket filters,
+if used, before it will be sent.  The normal bucket filter has a
+flow rate specified by the rate parameter, and a size specified
+by the burst option.  The second bucket has a flow rate specified
+by the peakrate option and a size specified by the mtu option.
+
+Classifier.  The tbf queuing discipline does not classify packets.
+
+
+Comments.
+
+- The token buffer queuing discipline rate limits the traffic flow.
+  It does not divide the traffic into classes.
+
+- The normal bucket is used to limit the average rate data is sent
+  but allow bursts of traffic to go through.  The peakrate bucket
+  is used to limit the speed those bursts are sent.
+
+- If you give a mtu parameter that is substantially less than the
+  devices mtu and don't use the peakrate option the kernel will
+  index beyond the end of the normal bucket's rate calculation
+  array when a large packet comes through.  If you don't specify
+  a mtu it defaults to 2047.  If the devices mtu it much bigger
+  than that the same situation arises.  This is a bug, of course.
+  You can avoid it by always specifying a mtu that is not less
+  than the devices mtu.
+
+- When the token bucket decides the packets are being sent too fast
+  it will stop sending them.  It does this by waiting for a couple
+  of clock ticks, long enough for the right number of tokens to enter
+  the buckets.  The problem is that the clock under Linux on a
+  x86 "ticks" at 100 times per second, so the packet may have to wait
+  100th of a second before being sent, regardless of how many tokens
+  it needs.  The sounds fast, but on a 100Mbit Ethernet an empty
+  bucket would of accumulated enough tokens to send the largest packet
+  in about 100 millionth's of a second.  That means the packet has to
+  wait 100 times longer than it needs to!  For the normal bucket this
+  may not be a serious problem.  While the packet was waiting for the
+  clock tick the bucket was filling up with tokens, so the backlog of
+  packets will be sent in a burst.  Providing the bucket is enough to
+  hold the backlog the average rate will be unchanged.  (In our 100Mb
+  Ethernet packet that backlog will be 100 packets.)  But the
+  peakrate bucket is limited to 1 packet in size.  Now that is a real
+  problem.  If the average packet size 1000 bytes, and the clock is
+  ticking 100 times a second we will send 200 1000 bytes packets
+  every second, or 200k bytes per second.  (Why it is 200 packets
+  per second and not 100 is left an exercise!)  If the clock is
+  running at 1KHz you are limited to 2M bytes per second which is
+  still slower than 100Mb Ethernet.
