@@ -513,7 +513,7 @@ int  becomeDaemon(void)
 
 UNIX IPC 工具分类
 
-![3.png](./_static/3.png)
+![3.jpg](./_static/3.jpg)
 
 各种IPC工具的标识符和句柄
 
