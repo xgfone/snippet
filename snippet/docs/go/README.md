@@ -36,3 +36,10 @@ Go语言笔记
 	- [GO1.2](./go-version.md#go12)
 	- [GO1.3](./go-version.md#go13)
 	- [GO1.4](./go-version.md#go14)
+
+---
+
+- [Golang net.http标准库](./net-http.md)
+- [Golang HTML Template](./template.txt)
+- [Golang Packages](./packages.md)
+
