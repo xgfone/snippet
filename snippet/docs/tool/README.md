@@ -4,6 +4,12 @@
 
 ---
 
+##### [VIM脚本语法摘录](./vim-script-syntax.md)
+
+##### [VIM脚本编写第一部分：变量、值和表达式](./vim-write-script-first.md)
+
+---
+
 ##### [you-get](https://github.com/soimort/you-get)
     Dumb downloader that scrapes the web https://you-get.org/
 
