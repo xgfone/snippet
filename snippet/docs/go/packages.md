@@ -48,6 +48,15 @@
 ##### [log15](https://github.com/inconshreveable/log15)
     Powerful, composable logging for Go.
 
+##### [micro](https://github.com/micro/micro)
+    A microservice toolkit https://micro.github.io/micro/
+    
+##### [bitset](https://github.com/willf/bitset)
+    Go package implementing bitsets.
+
+##### [gomail](https://github.com/go-gomail/gomail)
+    The best way to send emails in Go.
+
 ##### [email](https://github.com/scorredoira/email)
      An easy way to send emails with attachments in Go.
 
