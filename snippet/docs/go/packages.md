@@ -125,3 +125,6 @@
     支持单机、服务端、客户端三种运行模式，拥有Web、GUI、命令行三种操作界面；规则简单灵活、
     批量任务并发、输出方式丰富（mysql/mongodb/csv/excel等）、有大量Demo共享；同时她还支持
     横纵向两种抓取模式，支持模拟登录和任务暂停、取消等一系列高级功能。
+
+##### [Goji](https://github.com/goji/goji)
+    Goji is a minimalistic and flexible HTTP request multiplexer for Go (golang) https://goji.io
