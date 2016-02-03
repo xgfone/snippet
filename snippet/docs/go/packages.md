@@ -128,3 +128,6 @@
 
 ##### [Goji](https://github.com/goji/goji)
     Goji is a minimalistic and flexible HTTP request multiplexer for Go (golang) https://goji.io
+
+##### [GORM](https://github.com/jinzhu/gorm)
+    The fantastic ORM library for Golang, aims to be developer friendly.
