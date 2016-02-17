@@ -10,6 +10,10 @@ DOCS
 ====
 
 - [Algorithm](./snippet/docs/algorithm)
+- [Architecture](./snippet/docs/architecture)
+    - [High Availability & Load Balance](./snippet/docs/architecture/ha-lb)
+        - [Keepalived](./snippet/docs/architecture/ha-lb/keepalived.md)
+        - [Keepalived Config](./snippet/docs/architecture/ha-lb/keepalived-conf.md)
 - [SQL](./snippet/docs/db/sql)
 - [Distributed](./snippet/docs/distributed)
 - [Doc](./snippet/docs/doc)
