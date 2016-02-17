@@ -1,4 +1,4 @@
-```
+```shell
 ####################全局配置信息########################
 #######参数是进程级的，通常和操作系统（OS）相关#########
 global
@@ -137,9 +137,11 @@ backend server_blog
 		cookie SERVERID #允许插入serverid到cookie中，serverid后面可以定义
 		option httpchk GET /index.html #心跳检测的文件
 		server blog1 192.168.16.2:80 cookie blog1 check inter 1500 rise 3 fall 3 weight 1
-		#服务器定义，cookie 1表示serverid为blog1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+		#服务器定义，cookie 1表示serverid为blog1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，
+		#fall 3是3次失败认为服务器不可用，weight代表权重
 		server blog2 192.168.16.3:80 cookie blog2 check inter 1500 rise 3 fall 3 weight 2
-		#服务器定义，cookie 1表示serverid为blog2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+		#服务器定义，cookie 1表示serverid为blog2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，
+		#fall 3是3次失败认为服务器不可用，weight代表权重
 
 ##################backend server_bbs########################
 backend server_bbs
@@ -148,7 +150,9 @@ backend server_bbs
 		cookie SERVERID #允许插入serverid到cookie中，serverid后面可以定义
 		option httpchk GET /index.html #心跳检测的文件
 		server bbs1 192.168.16.2:80 cookie bbs1 check inter 1500 rise 3 fall 3 weight 1
-		#服务器定义，cookie 1表示serverid为bbs1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+		#服务器定义，cookie 1表示serverid为bbs1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，
+		#fall 3是3次失败认为服务器不可用，weight代表权重
 		server bbs2 192.168.16.3:80 cookie bbs2 check inter 1500 rise 3 fall 3 weight 2
-		#服务器定义，cookie 1表示serverid为bbs2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+		#服务器定义，cookie 1表示serverid为bbs2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，
+		#fall 3是3次失败认为服务器不可用，weight代表权重
 ```
