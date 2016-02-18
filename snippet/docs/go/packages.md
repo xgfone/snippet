@@ -109,7 +109,7 @@
     Idiomatic HTTP Middleware for Golang.
 
 ##### [beego](https://github.com/astaxie/beego)
-    beego is an open-source, high-performance web framework for the Go programming language. http://beego.me.
+    beego is an open-source, high-performance web framework for the Go programming language.
 
 ##### [v8.go](https://github.com/lazytiger/go-v8)
     V8 JavaScript engine bindings for Go.
@@ -134,3 +134,7 @@
 
 ##### [go-redis](https://github.com/go-redis/redis)
     Redis client for Golang. http://godoc.org/gopkg.in/redis.v3
+
+##### [mgo](http://godoc.org/labix.org/v2/mgo)
+    MongoDB driver for the Go language that implements a rich and well tested selection of features
+    under a very simple API following standard Go idioms.
