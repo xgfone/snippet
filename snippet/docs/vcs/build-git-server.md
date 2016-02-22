@@ -96,7 +96,7 @@ Git 版本库服务使用 HTTP 协议时，其授权模式使用的是 HTTP 服�
 因此，关于这一节的配置，本人无法给出介绍。
 
 #### （2）读写授权
-在 `/etc/apache2/conf-enabled` 目录新一个新文件，名字可以随便起，但必须以 `.conf` 结尾（这里假设为 git.conf）；然后将下面的配置选项写入该文件中。
+在 `/etc/apache2/conf-enabled` 目录新建一个新文件，名字可以随便起，但必须以 `.conf` 结尾（这里假设为 git.conf）；然后将下面的配置选项写入该文件中。
 ```
 SetEnv GIT_PROJECT_ROOT /tmp/git   # Git 版本库仓库
 SetEnv GIT_HTTP_EXPORT_ALL         # 有这句，就不用在每个版本库中都创建一个 git-daemon-export-ok 文件
@@ -222,7 +222,7 @@ $ git pull                # 拉取远程版本库中的更新到本地版本库
 
 
 ## 使用SSH协议
-待写。
+参见 [**此处**](http://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8)。
 
 
 ## Gitolite服务器架设
