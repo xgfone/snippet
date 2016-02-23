@@ -49,6 +49,7 @@ DOCS
 - [Tool](./snippet/docs/tool)
     - [VIM脚本语法摘录](./snippet/docs/tool/vim-script-syntax.md)
     - [VIM脚本编写第一部分：变量、值和表达式](./snippet/docs/tool/vim-write-script-first.md)
+    - [VIM键盘映射(Map)](./snippet/docs/tool/vim-keyboard-map.md)
     - other tools
 - [Version Control System](./snippet/docs/vcs)
 - [Web](./snippet/docs/web)
