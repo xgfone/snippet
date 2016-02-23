@@ -44,6 +44,7 @@ DOCS
 - [Openstack](./snippet/docs/openstack)
 - [Package](./snippet/docs/package)
 - [Python](./snippet/docs/python)
+- [C & C++](./snippet/docs/c&c++)
 - [Shell](./snippet/docs/shell)
 - [Tool](./snippet/docs/tool)
 - [Version Control System](./snippet/docs/vcs)
