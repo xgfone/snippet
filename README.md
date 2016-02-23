@@ -47,5 +47,8 @@ DOCS
 - [C & C++](./snippet/docs/c&c++)
 - [Shell](./snippet/docs/shell)
 - [Tool](./snippet/docs/tool)
+    - [VIM脚本语法摘录](./snippet/docs/tool/vim-script-syntax.md)
+    - [VIM脚本编写第一部分：变量、值和表达式](./snippet/docs/tool/vim-write-script-first.md)
+    - other tools
 - [Version Control System](./snippet/docs/vcs)
 - [Web](./snippet/docs/web)
