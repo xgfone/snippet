@@ -1,5 +1,5 @@
+# encoding: utf8
 
-```python
 from oslo_config import cfg
 import oslo_messaging
 import time
@@ -55,4 +55,3 @@ except KeyboardInterrupt:
 
 server.stop()
 server.wait()
-```

@@ -1,5 +1,5 @@
+# encoding: utf8
 
-```python
 import oslo_messaging
 
 
@@ -24,4 +24,3 @@ try:
     client.prepare(retry=0).cast(ctxt, 'ping')
 except oslo_messaging.MessageDeliveryFailure:
     LOG.error("Failed to send ping message")
-```
