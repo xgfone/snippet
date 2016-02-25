@@ -3,5 +3,6 @@
 - [应用篇](./qos-use.md)
 - [过滤器](./qos-filter.md)
 - [HTB使用例子](./htb-example.md)
+- [HTB使用例子2](./htb-example2.md)
 - [HTB入队规则手册————用户向导](./htb-user-guide.md)
 - [其它资源](./link.md)
