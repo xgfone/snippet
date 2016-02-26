@@ -32,12 +32,13 @@ class TestEndpoint(object):
 
 # `Transport` is the capsulation of the Message Queue, such as RabbitMQ.
 # If no @url, it will use `CONF.transport_url`.
-# the specification of `url` is "transport://user:pass@host1:port[,hostN:portN]/virtual_host"
+# The specification of `url` is "transport://user:pass@host1:port[,userN:passN@hostN:portN]/virtual_host"
 #transport = oslo_messaging.get_transport(cfg.CONF, url="rabbit://me:passwd@host:5672/virtual_host")
 transport = oslo_messaging.get_transport(cfg.CONF)
 
 # This is used to create the exchange, the message queue, for example, the message queue based on topic, fanout, or direct.
-# It'll create two the topic message queue, whose routing_keys are "test" and "test.server1", and one the fanout queue, whose routing_key is "test".
+# It'll create two the topic message queue, whose routing_keys are "test" and "test.server1", and one the fanout queue,
+# whose routing_key is "test".
 target = oslo_messaging.Target(topic='test', server='server1')
 
 endpoints = [
