@@ -38,8 +38,10 @@ print(session.query(User).offset(1).limit(2).all())
 # SELECT users.id AS users_id, users.name AS users_name, users.fullname AS users_fullname, \
 # users.password AS users_password FROM users LIMIT 2 OFFSET 1
 
-for row in session.query(User, User.name).all():
-    print(row.User, row.name)
+_User = User
+for row in session.query(_User, _User.name).all():
+    #print("ROW:", row.User, row.name)
+    print("ROW:", row[0], row[1])
 
 #ed_user.name = "ed2"
 #session.commit()
