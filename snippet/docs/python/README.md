@@ -28,6 +28,7 @@ Python学习笔记摘要
 
 ---
 
+- [Python打包指南](./python-package-guide.md)
 - [Python内建模块](./builtin.md)
 - [Python日志系统Logging](./logging.md)
 - [SQLAlchemy分析](./sqlalchemy-analysis.md)
