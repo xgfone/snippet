@@ -72,6 +72,9 @@
 ##### [logrus](https://github.com/Sirupsen/logrus)
     Structured, pluggable logging for Go.
 
+##### [mxj](https://github.com/clbanning/mxj)
+    Decode / encode XML to/from map[string]interface{} (or JSON); extract values with dot-notation paths and wildcards. Replaces x2j and j2x packages.
+
 ##### [dom4g](https://github.com/donnie4w/dom4g)
     golang 的 xml 处理库
 
