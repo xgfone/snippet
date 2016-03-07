@@ -61,7 +61,7 @@ y[f()], ok = g(h(), i()+x[j()], <-c), k()
 
 （3）在“`类型推断`”中，`类型T` 即可以是`interface`，也可以是`非interface类型`。准确地说，
 
-    A. 如果 类型T 不是 interface类型，那么 x.(T)将认定 x 的动态类型标识化T类型，即 x 的 动态类型 和 T类型 有完全相同的标识化。
+    A. 如果类型T不是interface类型，那么x.(T)将认定 x 的动态类型标识化T类型，即 x 的动态类型和T类型有完全相同的标识化。
        在这种情况下，类型T 必须实现 x 的 interface类型，否则这个类型推断是无效的，因为x不能存储 类型T 的值。
     B. 如果类型T 是interface类型，那么x.(T) 将认定 x 的动态类型实现了 interface类型T。
 
@@ -123,3 +123,115 @@ var v, ok = a[x]
 其中，`ok` 是一个`boolean`值，如果`a`中存在键为`x`的键值对，则 `ok` 为 `true`；否则，`ok` 为`false`，并且 `v` 的值是`类型T`的`零值`。
 
 （10）如果给一个值为 `nil` 的 `Map` 变量添加键值对，将引发运行时`Panic`。 但是`获取是可以的`，`其值为相应类型的零值`。
+
+
+## 7、类型转换
+类型转换可以将一个非类型 T 的表达式 x 转换成T类型变量。语法为：`T(x)`。
+
+如果类型 T 以 **`*`** 或 **`<-`** 开头，或者以关键字`func`开头且没有结果列表，那么它必须放在`圆括号`中，以避免歧义。
+```go
+*Point(p)        // same as *(Point(p))
+(*Point)(p)      // p is converted to *Point
+<-chan int(c)    // same as <-(chan int(c))
+(<-chan int)(c)  // c is converted to <-chan int
+func()(x)        // function signature func() x
+(func())(x)      // x is converted to func()
+(func() int)(x)  // x is converted to func() int
+func() int(x)    // x is converted to func() int (unambiguous)
+```
+
+#### 常量值转换
+一个常量值 x 可以在以下情况下转换为类型T：
+
+    (1) x 可以被类型 T 的变量来表示。
+    (2) x 是一个浮点常量，T 是浮点类型，且 x 在根据IEEE754 round-to-even规则 Rounding 之后可被 T 类型的浮点类型来表示。
+    (3) x 是一个整数常量，T 是一个字符串类型，这和 x 是非常量时的转换规则一致。
+
+转换一个（未类型化untyped）常量值将产生一个类型化的(typed)的常量值。
+```go
+uint(iota)               // iota value of type uint
+float32(2.718281828)     // 2.718281828 of type float32
+complex128(1)            // 1.0 + 0.0i of type complex128
+float32(0.49999999)      // 0.5 of type float32
+float64(-1e-1000)        // 0.0 of type float64
+string('x')              // "x" of type string
+string(0x266c)           // "♬" of type string
+MyString("foo" + "bar")  // "foobar" of type MyString
+string([]byte{'a'})      // not a constant: []byte{'a'} is not a constant
+(*int)(nil)              // not a constant: nil is not a constant, *int is not a boolean, numeric, or string type
+int(1.2)                 // illegal: 1.2 cannot be represented as an int
+string(65.0)             // illegal: 65.0 is not an integer constant
+```
+
+#### 非常量值转换
+一个非常量值 x 可以在以下情况下被转换成类型 T：
+
+    (1) x 对类型 T 是可赋值的。
+    (2) x 的类型和 T 有相同标识的底层类型。
+    (3) x 的类型和 T 都是未命名的指针类型，且它们指向的基础类型有相同标识的底层类型。
+    (4) x 的类型和 T 都是整数类型或浮点类型。
+    (5) x 的类型和 T 都是复数类型。
+    (6) x 是整数，或是bytes或rune类型的分片；且 T 是字符串类型。
+    (7) x 是字符串，T 是 bytes或rune 类型的分片。
+
+特定的规则适应于(1)数值类型之间的转换，(2)转换成字符串类型或从字符串转换而来。但这些转换可能会改变 x 的底层表示，以及增加运行时开销；而其他所有的转换都仅仅是改变 x 的类型，并不改变 x 的底层表示。
+
+在指针和整数之间的类型转换并不没有语言上的机制。标准库 unsafe 在受限环境下实现了这个功能。
+
+#### 数值类型间的转换
+对于非常量数值类型值间的转换，适应于下面的规则：
+
+    (1) 当在整数类型间转换时，如果一个值是有符号整数，那么它的符号被扩展到无限的精度；否则，它是0。
+        然后，它会被截断以便适合结果类型的大小。例如，如果 v := uint16(0x10F0)，那么 uint32(int8(v)) == 0xFFFFFFF0。
+        这个转换总是产生一个有效的值，不会有溢出。
+    (2) 当把一个浮点数转换成整数时，小数部分会被移除，即向0方向截断。
+    (3) 当把一个整数或浮点数转换成另一个浮点数，或把一个复数转换成另一个复数时，其结果值是四舍五入到目的类型的精确度。
+
+在所有的非常量转换（包括浮点数值或复数值）中，如果结果类型不能表示成功转换后的值，那么结果值将是未定义的。
+
+#### 转换到字符串类型 或 从字符串类型转换
+
+(1) 把一个有符号或无符号的整数值转换成字符串类型，将产生一个包含整数表述的UTF8字符串。超出有效的Unicode Code Point范围的值会被转换成 "\uFFFD"。
+```go
+string('a')       // "a"
+string(-1)        // "\ufffd" == "\xef\xbf\xbd"
+string(0xf8)      // "\u00f8" == "ø" == "\xc3\xb8"
+type MyString string
+MyString(0x65e5)  // "\u65e5" == "日" == "\xe6\x97\xa5"
+```
+
+(2) 把一个bytes类型的分片转换成字符串类型，将产生一个字符串值，它的连续的字节就是分片的元素。
+```go
+string([]byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'})   // "hellø"
+string([]byte{})                                     // ""
+string([]byte(nil))                                  // ""
+
+type MyBytes []byte
+string(MyBytes{'h', 'e', 'l', 'l', '\xc3', '\xb8'})  // "hellø"
+```
+
+(3) 把一个rune类型的分片转换成字符串类型，将产生一个字符串值，该值是所有被转换成字符串的、单独的rune值的串联。
+```go
+string([]rune{0x767d, 0x9d6c, 0x7fd4})   // "\u767d\u9d6c\u7fd4" == "白鵬翔"
+string([]rune{})                         // ""
+string([]rune(nil))                      // ""
+
+type MyRunes []rune
+string(MyRunes{0x767d, 0x9d6c, 0x7fd4})  // "\u767d\u9d6c\u7fd4" == "白鵬翔"
+```
+
+(4) 把一个字符串类型的值转换成 bytes 分片，将产生一个分片，它的连续的元素 就是字符串的每个字节。
+```go
+[]byte("hellø")   // []byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'}
+[]byte("")        // []byte{}
+
+MyBytes("hellø")  // []byte{'h', 'e', 'l', 'l', '\xc3', '\xb8'}
+```
+
+(5) 把一个字符串类型的值转换成 rune 分片，将产生一个包含该字符串的每个单独的 Unicode Code Point 的分片，它的连续的元素 就是字符串的每个字节。
+```go
+[]rune(MyString("白鵬翔"))  // []rune{0x767d, 0x9d6c, 0x7fd4}
+[]rune("")                 // []rune{}
+
+MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
+```
