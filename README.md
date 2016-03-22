@@ -62,4 +62,3 @@ DOCS
     - other tools
 - [Version Control System](./snippet/docs/vcs)
 - [Web](./snippet/docs/web)
-- [Softwares](./snippet/docs/software)

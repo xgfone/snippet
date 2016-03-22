@@ -29,4 +29,4 @@
     The open source embeddable online markdown editor.
 
 ##### [Open Falcon](https://github.com/open-falcon/of-release)
-    - [Open Falcon Doc](http://book.open-falcon.org/)
+- [Open Falcon Doc](http://book.open-falcon.org/)
