@@ -73,7 +73,9 @@
     Structured, pluggable logging for Go.
 
 ##### [mxj](https://github.com/clbanning/mxj)
-    Decode / encode XML to/from map[string]interface{} (or JSON); extract values with dot-notation paths and wildcards. Replaces x2j and j2x packages.
+    Decode / encode XML to/from map[string]interface{} (or JSON); 
+    extract values with dot-notation paths and wildcards.
+    Replaces x2j and j2x packages.
 
 ##### [dom4g](https://github.com/donnie4w/dom4g)
     golang 的 xml 处理库
@@ -141,3 +143,6 @@
 ##### [mgo](http://godoc.org/labix.org/v2/mgo)
     MongoDB driver for the Go language that implements a rich and well tested selection of features
     under a very simple API following standard Go idioms.
+
+##### [nux](https://github.com/toolkits/nux)
+    Unix/Linux metric collector.
