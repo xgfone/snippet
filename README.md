@@ -140,4 +140,9 @@ DOCS
     - [VIM键盘映射(Map)](./snippet/docs/tool/vim-keyboard-map.md)
     - other tools
 - [Version Control System](./snippet/docs/vcs)
+    - [SVN搭建与简单使用](./snippet/docs/vcs/build-svn-server.md)
+    - [Git服务器架设](./snippet/docs/vcs/build-git-server.md)
+    - [Git HTTP代理](./snippet/docs/vcs/git-http-proxy.md)
+    - [Git学习笔记](./snippet/docs/vcs/git-learning-note.md)
+    - [Git rebase详解](./snippet/docs/vcs/git-rebase.md)
 - [Web](./snippet/docs/web)
