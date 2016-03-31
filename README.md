@@ -30,7 +30,7 @@ DOCS
         - [reStructuredText 入门](http://sphinx-doc-zh.readthedocs.org/en/latest/rest.html)
         - [Sphinx](http://sphinx-doc-zh.readthedocs.org/en/latest/contents.html)
 - [Editor](./snippet/docs/editor)
-    -[VIM](./snippet/docs/editor/vim)
+    - [VIM](./snippet/docs/editor/vim)
         - [VIM命令集](https://github.com/xgfone/dot-vimrc/blob/xgfone/docs/vim-doc.txt)
         - [Links](./snippet/docs/editor/vim/links.md)
 - [GCC](./snippet/docs/gcc)
