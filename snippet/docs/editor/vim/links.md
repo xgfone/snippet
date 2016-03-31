@@ -1,6 +1,5 @@
 
 - [VIM命令集](https://github.com/xgfone/dot-vimrc/blob/xgfone/docs/vim-doc.txt)
-- [Links](./snippet/docs/editor/vim/links.md)
 
 ----
 
