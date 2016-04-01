@@ -149,3 +149,6 @@
     
 ##### [cache](https://github.com/toolkits/cache)
     Cache based on Redis or Memory
+
+##### [mahonia](https://github.com/axgle/mahonia)
+    character-set conversion library implemented in Go.
