@@ -77,6 +77,8 @@ DOCS
 - [Linux](./snippet/docs/linux)
     - [OoS](./snippet/docs/linux/QoS)
     - [DiskIO](./snippet/docs/linux/diskio)
+    - [Distrbution](./snippet/docs/linux/distribution)
+        - [Kali](./snippet/docs/linux/distribution/kali.md)
     - [IP Route2](./snippet/docs/linux/iproute2)
     - [IPv4](./snippet/docs/linux/ipv4)
     - [NetFilter](./snippet/docs/linux/netfilter)
