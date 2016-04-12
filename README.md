@@ -75,7 +75,7 @@ DOCS
         - [Golang Packages](./snippet/docs/go/packages.md)
 - [JS](./snippet/docs/js)
 - [Linux](./snippet/docs/linux)
-    - [OoS](./snippet/docs/linux/QoS)
+    - [QoS](./snippet/docs/linux/QoS)
     - [DiskIO](./snippet/docs/linux/diskio)
     - [Distrbution](./snippet/docs/linux/distribution)
         - [Kali](./snippet/docs/linux/distribution/kali.md)
