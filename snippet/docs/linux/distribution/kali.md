@@ -26,7 +26,7 @@ apt-get isntall aptitude
 #### Install Some Softwares
 ```
 aptitude install libssl build-essential vim git vim-gtk libssl-dev
-aptitude install gdebi alacarte meld remmina devhelp
+aptitude install gdebi alacarte meld remmina devhelp calibre
 ```
 
 #### SecureCRT
