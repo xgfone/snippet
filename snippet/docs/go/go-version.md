@@ -26,7 +26,7 @@ sc[0], sc[0] = 1, 2 // sets sc[0]=1, then sc[0]=2 (so sc[0]=2 at end)
 在初始化`struct对象`时，最好指明`field字段名`，这是向后兼容的，当前也支持直接给初始值，但这并不保证能向后兼容，这个特性也有可能在后续的某个版本中被移除。
 
 
-# GO1.1
+# Go1.1
 
 ## 1、语言改变
 在`GO1`中，整数除以0将导致引发一个运行时“恐慌”（a run-time panic）。
@@ -222,3 +222,49 @@ Go规范不再允许双引用，而只允许单引用。
 （2）栈完全取消段模型。
 
 （3）修改了 interface 的实现。
+
+
+# Go1.5
+
+## Map字面值
+从 Go 1.5 开始，Map字面值中元素的类型可以被省略。如：
+```go
+// Before 1.5
+m := map[Point]string{
+    Point{29.935523, 52.891566}:   "Persepolis",
+    Point{-25.352594, 131.034361}: "Uluru",
+    Point{37.422455, -122.084306}: "Googleplex",
+}
+
+// Since 1.5
+m := map[Point]string{
+    {29.935523, 52.891566}:   "Persepolis",
+    {-25.352594, 131.034361}: "Uluru",
+    {37.422455, -122.084306}: "Googleplex",
+}
+```
+
+## 开发实现
+（1）除了额外的一小部分汇编外，编译器完全用 Go 重写。
+
+（2）GC是并发的，并且在执行GC时，减少了整个程序的暂停时间：被限制在 10ms 以内，有时会更少。
+
+（3）默认地，GOMACPROCS被设置到可见到的CPU核数。先前版本被默认设置到 1。
+
+（4）Go 工具链开始试验性地支持包的版本依赖。
+
+## 移植性
+一些老的平台和系统版本不再支持。
+
+## 工具链
+（1）新增 `go tool trace` 命令，可进行细粒度地追踪程序的执行。
+
+（2）新增 `go doc` 命令（与 `godoc` 不同）。
+
+（3）编译器（`6g`、`8g`等）、汇编器（`6a`、`8a`等）和链接器（`6l`、`8l`等）被废弃，分别内建到 `go tool` 工具链中（`go tool compile`、`go tool asm`、`go tool link`）。如：
+```shell
+$ export GOOS=darwin GOARCH=amd64
+$ go tool compile program.go
+$ go tool link program.o
+```
+
