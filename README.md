@@ -70,6 +70,7 @@ DOCS
     	- [GO1.3](./snippet/docs/go/go-version.md#go13)
     	- [GO1.4](./snippet/docs/go/go-version.md#go14)
     	- [GO1.5](./snippet/docs/go/go-version.md#go15)
+    	- [GO1.6](./snippet/docs/go/go-version.md#go16)
     - [Others]
         - [Golang net.http标准库](./snippet/docs/go/net-http.md)
         - [Golang HTML Template](./snippet/docs/go/template.txt)

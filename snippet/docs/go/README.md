@@ -37,6 +37,7 @@ Go语言笔记
 	- [GO1.3](./go-version.md#go13)
 	- [GO1.4](./go-version.md#go14)
 	- [GO1.5](./go-version.md#go15)
+	- [GO1.6](./go-version.md#go16)
 
 ---
 

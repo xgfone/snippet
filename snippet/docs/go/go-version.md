@@ -268,3 +268,21 @@ $ go tool compile program.go
 $ go tool link program.o
 ```
 
+
+# Go1.6
+
+## 移植
+新增一些平台的支持：`Linux on 64-bit MIPS`、`Android on 32-bit x86`等。
+
+## CGO
+定义在 C 中共享 Go 指针的规则，以确保 C 语言代码和 Go 的 GC 可以共存。简单地说，Go 和
+C 可以共享由 Go 分配的内存，即指向该内在的 Go 指针可通过作为 CGO 调用的一部分传递给 C。但是，该内存本身不再属于Go分配的内存；同时，调用返回后，C不再保留该指针。这些规则在程序执行中由运行时负责检查：如果运行时检测到违规，它会打印诊断信息并使程序崩溃。
+
+## 性能
+Go1基准测试套件比 Go1.5 更快了，GC停顿时间比 Go1.5 更短了。
+
+对部分标准库进行了优化，带来了超过 10% 的性能提升：`compress/bzip2`、`compress/gzip`、`crypto/aes`、`crypto/elliptic`、`crypto/ecdsa`、`sort`等。
+
+## 标准库
+`net/http` 包透明地支持全新的 `HTTP/2` 协议。Go的客户端和服务器在使用 `https` 时将自动使用 `HTTP/2`。Go中并没有特定的可导出的 API 来处理 `HTTP/2`，就像没有特定的可导出 API 来处理 `HTTP/1.1` 一样。不过，程序可通过导入 `golang.org/x/net/http2` 包来调整`HTTP/2`的细节,特别是它的`ConfigureServer`和`ConfigureTransport`函数。
+
