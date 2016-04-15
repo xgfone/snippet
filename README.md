@@ -140,6 +140,8 @@ DOCS
         	- [Django Form的使用](./snippet/docs/python/django-form.md#%E4%B8%83django-form-%E7%9A%84%E4%BD%BF%E7%94%A8)
         	- [ModelForm类](./snippet/docs/python/django-form.md#%E5%85%ABmodelform%E7%B1%BB)
         - [其它资源](./snippet/docs/python/link.md)
+- [Rust](./snippet/docs/rust)
+    -[其它资源](./snippet/docs/rust/links.md)
 - [Shell](./snippet/docs/shell)
     - [前言](./snippet/docs/shell/shell-preface.md)
     - [一 词法预览](./snippet/docs/shell/shell-lexical-preview.md)
