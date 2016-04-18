@@ -4,3 +4,6 @@
 
 ##### [hypter](https://github.com/hyperium/hyper)
     An HTTP library for Rust.
+
+##### [syncbox](https://github.com/carllerche/syncbox)
+    Concurrency utilities for Rust
