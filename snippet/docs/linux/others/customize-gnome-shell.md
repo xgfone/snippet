@@ -67,6 +67,8 @@ CSS 选择器结构：
 - 在 Gdb 中输入 `r --replace`
 - 按下 `Alt-F7`，重回图形界面
 
+如果 Gnome Shell 卡死，可以切换到其它控制台（tty1 ~ tty6），然后执行 `DISPLAY=:0 gnome-shell --replace` 或 `gnome-shell --replace --display=:0`。
+
 
 ## 修改 Gnome Shell 主题
 
