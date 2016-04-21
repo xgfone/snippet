@@ -226,12 +226,12 @@ stage {
 
 下面我们来个对比：
 
-前（min-width: 60pt）
+前（`min-width: 60pt`）
 
 ![min-width 前](./_static/gnome-shell-min-width-fore.png)
 
 
-后（min-width: 120pt）
+后（`min-width: 120pt`）
 
 ![min-width 后](./_static/gnome-shell-min-width-post.png)
 
@@ -308,4 +308,3 @@ From:
 
 - [跟我一起修改 Gnome Shell 主题(1)](http://blog.deepin.org/2012/02/customize-gnome-shell-theme-1/)
 - [跟我一起修改 Gnome Shell 主题(2)](http://blog.deepin.org/2012/02/customize-gnome-shell-theme-2/)
-- [跟我一起修改 Gnome Shell 主题(3)](http://blog.deepin.org/2012/02/customize-gnome-shell-theme-3/)
