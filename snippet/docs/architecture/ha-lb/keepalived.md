@@ -82,3 +82,9 @@ IP头认证的方式提供了更高的安全性，能够防止报文重放和修
 VRRP协议的工作机理与CISCO公司的HSRP（Hot Standby Routing Protocol）有许多相似之处。但二者主要的区别是在CISCO的HSRP中，需要单独配置一个IP地址作为虚拟路由器对外体现的地址，这个地址不能是组中任何一个成员的接口地址。 
 
 使用VRRP协议，不用改造目前的网络结构，最大限度保护了当前投资，只需最少的管理费用，却大大提升了网络性能，具有重大的应用价值。
+
+------
+
+[Keepalived Documention](http://www.keepalived.org/documentation.html).
+
+Download [SRC](http://www.keepalived.org/software/), then change the directory, `doc`, and execute `make help`. You can produce the different format documentions.
