@@ -54,7 +54,7 @@ xml-formatter
 xml-tools
 ```
 
-=== Core Packages
+### Core Packages
 ```
 about
 archive-view
