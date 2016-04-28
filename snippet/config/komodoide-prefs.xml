@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<!-- Komodo Preferences File - DO NOT EDIT -->
+
+<preference-set id="global">
+  <string id="C++HelpCommand">%25(browser) http://www.google.com/search?q=site%253Ahttp%253A%252F%252Fwww.cppreference.com%252F+%25W</string>
+  <string id="actionScriptDefaultInterpreter"></string>
+  <string id="analyticsLastVersion">pre-9.0a1</string>
+  <string id="analytics_ga_uid">fc015af1-0952-4ca5-99a3-c79710ee18c4</string>
+  <long id="autoSaveSeconds">30</long>
+  <string id="bowerDefaultInterpreter"></string>
+  <boolean id="cleanLineEnds">1</boolean>
+  <boolean id="cleanLineEnds_ChangedLinesOnly">0</boolean>
+  <boolean id="cleanLineEnds_CleanCurrentLine">1</boolean>
+  <boolean id="codeintel_completion_auto_fillups_enabled">1</boolean>
+  <string id="codeintel_open_codebrowser_nodes">{}</string>
+  <string id="codeintel_sort_codebrowser_by">file-order</string>
+  <string id="composerDefaultInterpreter"></string>
+  <string id="cpanDefaultInterpreter"></string>
+  <string id="cpanmDefaultInterpreter"></string>
+  <string id="cursorColor">#dfe1e8</string>
+  <boolean id="cvs_uses_externaldiff">0</boolean>
+  <boolean id="debuggerHoverValue">1</boolean>
+  <boolean id="dedentOnColon">1</boolean>
+  <string id="defaultDateFormat">%25Y-%25m-%25d %25H:%25M:%25S </string>
+  <string id="defaultEncoding">utf-8</string>
+  <string id="defaultSelectedPref">projectsItem</string>
+  <string id="dockerBinary"></string>
+  <string id="docs_db_version">linux-x86_6488191</string>
+  <string id="donotask_action_ensure_filename_has_ext"></string>
+  <boolean id="donotask_ensure_filename_has_ext">0</boolean>
+  <boolean id="editTabCompletes">1</boolean>
+  <boolean id="editUseEdge">1</boolean>
+  <string id="editor-scheme">Ocean_Light</string>
+  <boolean id="encodingHTML">1</boolean>
+  <boolean id="ensureFinalEOL">0</boolean>
+  <string id="fileAssociationDiffs">[]</string>
+  <string id="fileDefaultNew">CoffeeScript</string>
+  <string id="filtered-prefs-open-nodes-by-id">{"debuggerItem":true,"editorItem":true,"languagesItem":true,"sourceCodeControlItem":true}</string>
+  <boolean id="find-confirmReplacementsInFiles">1</boolean>
+<ordered-preference id="find-excludeFiletypes">
+  <string>.svn</string>
+  <string>CVS</string>
+  <string>.git</string>
+  <string>.hg</string>
+  <string>.bzr</string>
+  <string>*~</string>
+</ordered-preference>
+<ordered-preference id="find-folders">
+  <string></string>
+</ordered-preference>
+<ordered-preference id="find-includeFiletypes">
+</ordered-preference>
+  <boolean id="find-matchWord">0</boolean>
+  <boolean id="find-multiline">0</boolean>
+  <long id="find-patternType">0</long>
+  <long id="find-preferredContextType">0</long>
+  <boolean id="find-searchInSubfolders">1</boolean>
+  <boolean id="find-showReplaceAllResults">1</boolean>
+  <string id="gitExecutable">/usr/bin/git</string>
+  <string id="gocodeDefaultLocation">/usr/local/bin/gocode</string>
+  <string id="godefDefaultLocation">/usr/local/bin/godef</string>
+  <string id="golangDefaultLocation">/usr/local/go/bin/go</string>
+  <string id="iconCacheVersion">linux-x86_6488191</string>
+  <string id="iconset-base-color">#7B7B7B</string>
+  <string id="iconset-base-defs">-1</string>
+  <string id="iconset-selected-color">#FFFFFF</string>
+  <string id="iconset-selected-defs">-1</string>
+  <string id="iconset-toolbar-color">#595959</string>
+  <string id="iconset-toolbar-defs">-1</string>
+  <string id="iconset-widgets-color">-1</string>
+  <string id="iconset-widgets-defs">-1</string>
+  <boolean id="indentStringsAfterParens">1</boolean>
+  <string id="jshint_linter_chooser">default</string>
+  <string id="jslint_linter_chooser">default</string>
+  <string id="keybindings">Default
+Emacs
+Vi
+_vi
+</string>
+<preference-set id="ko-dbexplorer">
+  <string id="dbexplorer-open-nodes">{}</string>
+</preference-set>
+  <string id="koSkin_custom_icons">chrome://iconset-cupertino/content/manifest/chrome.manifest</string>
+  <string id="koSkin_custom_skin">chrome://gtk-elementary/content/manifest/chrome.manifest</string>
+  <boolean id="koSkin_use_custom_scrollbars">1</boolean>
+  <boolean id="koSkin_use_gtk_detection">0</boolean>
+  <boolean id="komodo_normal_shutdown">0</boolean>
+  <boolean id="languages/Bash/primary">1</boolean>
+  <boolean id="languages/CMake/primary">1</boolean>
+  <boolean id="languages/Diff/primary">1</boolean>
+  <boolean id="languages/Docker/primary">1</boolean>
+  <boolean id="languages/MySQL/primary">1</boolean>
+  <boolean id="languages/SQL/primary">1</boolean>
+<preference-set id="lastTestPlanName">
+</preference-set>
+  <string id="lastTestPlanName_pref">New test plan #1</string>
+  <string id="lessCachePlatVersion">linux-x86_6488191</string>
+  <string id="lessDefaultInterpreter">None</string>
+  <boolean id="native_mozicons_available">0</boolean>
+  <string id="nodejsDefaultInterpreter">/usr/bin/node</string>
+  <string id="npmDefaultInterpreter">/usr/bin/npm</string>
+  <boolean id="openfiles_show_tab_bar">1</boolean>
+  <string id="perlDefaultInterpreter">/usr/bin/perl</string>
+  <string id="phpDefaultInterpreter">/usr/bin/php</string>
+  <boolean id="pin_find_frame">1</boolean>
+  <string id="pip3DefaultInterpreter">/usr/bin/pip3</string>
+  <string id="pipDefaultInterpreter">/usr/bin/pip</string>
+<preference-set id="places">
+<preference-set id="current_filter_by_uri">
+<preference-set id="file:///root">
+  <string id="timestamp">1461727428360</string>
+  <string id="viewName">Default</string>
+</preference-set>
+</preference-set>
+<preference-set id="current_project_filter_by_uri">
+</preference-set>
+  <boolean id="dblClickRebases">0</boolean>
+<preference-set id="filters">
+<preference-set id="Current Project">
+  <boolean id="builtin">1</boolean>
+  <string id="exclude_matches"></string>
+  <string id="include_matches"></string>
+  <boolean id="readonly">0</boolean>
+  <long id="version">3</long>
+</preference-set>
+<preference-set id="Default">
+  <boolean id="builtin">1</boolean>
+  <string id="exclude_matches">*~;#*;CVS;*.bak;*.pyo;*.pyc;.svn;.git;.hg;.bzr;.DS_Store;.komodotools;.tools;__pycache__;hg-checklink-*;hg-checkexec-*</string>
+  <string id="include_matches"></string>
+  <boolean id="readonly">0</boolean>
+  <long id="version">3</long>
+</preference-set>
+<preference-set id="View All">
+  <boolean id="builtin">1</boolean>
+  <string id="exclude_matches"></string>
+  <string id="include_matches"></string>
+  <boolean id="readonly">1</boolean>
+  <long id="version">3</long>
+</preference-set>
+</preference-set>
+<ordered-preference id="history_forwardPlaces">
+</ordered-preference>
+<ordered-preference id="history_prevPlaces">
+</ordered-preference>
+  <string id="lastHomePlace">file:///root</string>
+  <string id="lastLocalDirectoryChoice">file:///root</string>
+  <string id="places-open-nodes-v2">{"file:///root": 1461726060.962095}</string>
+  <long id="project_sort_direction">0</long>
+  <boolean id="showProjectPath">0</boolean>
+  <boolean id="showProjectPathExtension">0</boolean>
+  <boolean id="show_fullPath_tooltip">1</boolean>
+  <string id="sortDirection">natural</string>
+  <boolean id="trackCurrentTab">0</boolean>
+</preference-set>
+  <long id="places-open-nodes-size">100</long>
+  <string id="ppmDefaultInterpreter"></string>
+  <long id="prefs.fontsColorsLanguages.colors.extraColors">0</long>
+  <long id="prefs.fontsColorsLanguages.common.elementList">0</long>
+  <long id="prefs.fontsColorsLanguages.indicators.menulist">0</long>
+  <long id="prefs.fontsColorsLanguages.langSpecific.elementTypeIndex">0</long>
+  <string id="prefs.fontsColorsLanguages.langSpecific.lang">Text</string>
+  <long id="prefs.fontsColorsLanguages.whichTab">0</long>
+  <boolean id="prefs_show_advanced">1</boolean>
+  <boolean id="publishingBackgroundCheck">1</boolean>
+  <long id="publishingBackgroundMinutes">1</long>
+  <boolean id="publishingStatusEnabled">1</boolean>
+  <string id="pypm3DefaultInterpreter"></string>
+  <string id="pypmDefaultInterpreter"></string>
+  <string id="python3DefaultInterpreter">/usr/bin/python3</string>
+  <string id="pythonDefaultInterpreter">/usr/bin/python</string>
+  <boolean id="refactoring.renameVariable_in_comments">1</boolean>
+  <boolean id="refactoring.renameVariable_in_strings">0</boolean>
+  <string id="rubyDefaultInterpreter">/usr/bin/ruby</string>
+  <string id="runtime_manifests">["chrome://gtk-elementary/content/manifest/chrome.manifest","chrome://iconset-cupertino/content/manifest/chrome.manifest"]</string>
+  <string id="sassDefaultInterpreter">None</string>
+  <string id="scssDefaultInterpreter">None</string>
+  <boolean id="show-getstarted-9.3">0</boolean>
+  <boolean id="showFileIcons">1</boolean>
+  <boolean id="showWhitespace">1</boolean>
+  <string id="skinVersion">linux-x86_6488191</string>
+  <boolean id="startupFullScreen">0</boolean>
+  <boolean id="startupMaximized">0</boolean>
+  <string id="svnExecutable">/usr/bin/svn</string>
+  <boolean id="svn_uses_externaldiff">0</boolean>
+  <string id="tclshDefaultInterpreter">/usr/bin/tclsh</string>
+<preference-set id="testPlans">
+<preference-set id="New test plan #1">
+  <string id="command_line"></string>
+  <string id="directory">file:///~/</string>
+  <string id="language">Python - unittest</string>
+</preference-set>
+</preference-set>
+  <long id="toolbox-open-nodes-size">100</long>
+<preference-set id="toolbox2">
+  <long id="currentIndex">-1</long>
+  <long id="firstVisibleRow">0</long>
+  <string id="open-nodes">{"/root/.komodoide/9.3/tools": 1461726059.912681}</string>
+  <string id="sortDirection">natural</string>
+</preference-set>
+  <string id="ui.tabs.sidepanes.left.layout">icons</string>
+  <string id="ui.tabs.sidepanes.right.layout">icons</string>
+  <string id="ui.tabs.sidepanes.state">{"widgets":{},"panes":{"workspace_bottom_area":{"collapsed":true,"children":[[{"id":"breakpoints-tabpanel"}],[{"id":"runoutput-desc-tabpanel"}],[{"id":"projectUnitTestsResults_tabpanel"}],[{"id":"notifications-widget"}],[{"id":"console-widget"}]],"selectedTab":"breakpoints-tabpanel"},"workspace_right_area":{"collapsed":true,"children":[[{"id":"toolbox2viewbox"}],[{"id":"codebrowserviewbox"}],[{"id":"DOMviewbox"}]],"selectedTab":"toolbox2viewbox"},"workspace_left_area":{"collapsed":false,"children":[[{"id":"placesViewbox"}],[{"id":"openfilesViewbox"}],[{"id":"collab-panel"}],[{"id":"dbexplorer_viewbox"}]],"selectedTab":"placesViewbox"}}}</string>
+  <string id="userEnvironmentStartupOverride">GOROOT=/usr/local/go
+GOPATH=~/go
+</string>
+  <string id="vagrantBinary"></string>
+  <long id="version">20</long>
+<preference-set id="windowWorkspace">
+<preference-set id="1">
+<preference-set id="coordinates">
+  <long id="outerHeight">700</long>
+  <long id="outerWidth">1150</long>
+  <long id="screenX">0</long>
+  <long id="screenY">0</long>
+  <long id="windowState">3</long>
+</preference-set>
+  <boolean id="hasFocus">1</boolean>
+<preference-set id="history_rctabs">
+  <string id="rctabs_list">[]</string>
+</preference-set>
+<preference-set id="opened_projects_v7">
+  <string id="mpv_projects">[]</string>
+  <string id="spv_projects">[]</string>
+</preference-set>
+  <boolean id="restoreOnRestart">1</boolean>
+  <long id="timestamp">1461727426</long>
+  <long id="windowNum">1</long>
+</preference-set>
+</preference-set>
+  <string id="wishDefaultInterpreter">/usr/bin/wish</string>
+</preference-set>
