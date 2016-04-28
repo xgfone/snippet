@@ -15,40 +15,39 @@ nameserver  233.6.6.6
 deb http://mirrors.aliyun.com/kali kali-rolling main contrib non-free
 ```
 
-### Install Softwares
+### Install and Configure Softwares
 #### Add i386 Arch and Update the System
-```
-dpkg --add-architecture i386
+```shell
+#dpkg --add-architecture i386
 apt-get update
 apt-get isntall aptitude
 ```
 
-#### Install Some Softwares
-```
-aptitude install libssl build-essential vim git vim-gtk libssl-dev
-aptitude install gdebi alacarte meld remmina devhelp calibre
+#### Optional
+```shell
+# Configure the i10n, such as chinese.
+dpkg-reconfigure locales
 ```
 
-#### SecureCRT
-See BaiduPan.
+#### Install Some Softwares
+```
+aptitude install libssl1.0.0 build-essential vim git vim-gtk libssl-dev
+aptitude install gdebi alacarte meld remmina devhelp calibre
+aptitude install fcitx-table-wubi fcitx-pinyin fcitx-table-wbpy
+aptitude install mysql-workbench chromium gparted gimp
+```
 
 #### VPN Proxy
 ```
-apt-get install network-manager-openvpn-gnome
-apt-get install network-manager-pptp
-apt-get install network-manager-pptp-gnome
-apt-get install network-manager-strongswan
-apt-get install network-manager-vpnc
-apt-get install network-manager-vpnc-gnome
+aptitude install network-manager-openvpn-gnome
+aptitude install network-manager-pptp
+aptitude install network-manager-pptp-gnome
+aptitude install network-manager-strongswan
+aptitude install network-manager-vpnc
+aptitude install network-manager-vpnc-gnome
 /etc/init.d/network-manager restart
 ```
-#### Optional
-```
-aptitude install fcitx-table-wubi fcitx-pinyin fcitx-table-wbpy
-aptitude install mysql-workbench chromium
-```
 
-### Configure
 #### vim
 ```shell
 git clone git://github.com/xgfone/dot-vimrc.git ~/.vim
@@ -63,10 +62,38 @@ git config --global user.name "xgfone"
 git config --global user.email "xgfone@126.com"
 ```
 
-#### Optional
-```
-dpkg-reconfigure locales
-```
+#### SecureCRT
+See BaiduPan.
+
+**Notice:** The configuration is under `~/.vandyke/SecureCRT/Config`, and the session is under `~/.vandyke/SecureCRT/Config/Sessions`.
+
+#### Sublime Text
+##### Installation
+Download from [here](https://www.sublimetext.com/3), then install it.
+
+Download the configuration from [Github](https://github.com/xgfone/sublime-config), then copy them into the configuration directory, such as `~/.config/sublime_text_3`.
+
+#### Atom
+Download from [here](https://atom.io/), then install it.
+
+About the plugin packages, see [here](https://github.com/xgfone/snippet/blob/master/snippet/config/atom-packages.md).
+
+#### Komodo IDE
+Download from [here](http://downloads.activestate.com/Komodo/releases/), then install it.
+
+Download the preference from [here](https://github.com/xgfone/snippet/blob/master/snippet/config/komodoide-prefs.xml), then copy the configuration directory of Komodo IDE.
+
+#### NetBeans
+Download from [here](https://netbeans.org/downloads/).
+
+#### MySQL Workbench
+Download from [here](http://dev.mysql.com/downloads/workbench/).
+
+#### WPS for Linux
+Download from [here](http://community.wps.cn/download/).
+
+Download the fonts from [here](https://github.com/xgfone/snippet/blob/master/snippet/software/symbol-fonts_1.2_all.deb?raw=true), then install it.
+
 
 ## Troubles
 
