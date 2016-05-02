@@ -871,20 +871,34 @@ Coercion在以下类型之间是被允许的：
 
     In the future, `coerce_inner` will be recursively extended to tuples and structs. In addition, coercions from sub-traits to super-traits will be added. See RFC401 for more details.
 
-## 7 内存模型(Memory Model)
+## 7 Special Trait
+
+### 7.1 Copy Trait
+Copy trait 改变了实现了它的类型的语义：实现了 Copy Trait 的类型的值在赋值时将会被拷贝、复制，而不是 move（即移交所有权）。
+
+### 7.2 Sized Trait
+Sized Trait 表示该类型的大小在编译时是可知的。
+
+### 7.3 Drop Trait
+Drop Trait 提供了一个析构函数；无论任何时候，只要实现 Drop 的类型的值被销毁，该析构函数就会被调用。
+
+### 7.4 Deref Trait
+`Deref<Target = U>` 允许一个类型隐式地实现类型 `U` 的所有方法。当试图解析一个方法调用时，编译器将先搜索最顶层的类型是否实现了该方法；如果没有找到该方法，`.deref()` 将被调用，编译器并在返回的类型 `U` 上继承搜索该方法的实现。
+
+## 8 内存模型(Memory Model)
 一个 Rust 程序的内存包含一组静态的 Item 和一个堆。对于堆，不可修改的部分可以在线程间被安全地共享，而可修改的部分不能被安全地共享，但是有一些机制可以保证可修改的值和不安全的代码被安全地共享。
 
 在栈上分配的是 **`变量(variable)`**，在堆上分配的是 **`box`**。
 
-### 7.1 内存分配和生存时间
+### 8.1 内存分配和生存时间
 Rust 程序中的 Item 包括 `函数(function)`、`模块(module)`、`类型(type)`，且类型的值会在编译期被计算，并唯一地存储在 Rust 进程的内存镜像中。这些 Item 既不会被动态地分配，也不会被动态地释放。
 
 堆(heap)是一个描述 `box` 的一般术语。在堆上，一个分配的生命周期依赖于指向它的 `box` 的生命周期。由于 `box` 的值可以被传入/传出栈桢(frame)，或者存储在堆上，所以，堆分配可能比分配它的栈桢(frame)存活的更久。
 
-### 7.2 内存拥有权
+### 8.2 内存拥有权
 当退出一个栈桢(frame)时，在它本地分配的所有内存都会被释放，并且对 `box` 的引用也将会被丢弃掉。
 
-### 7.3 变量
+### 8.3 变量
 一个变量是一个栈桢的组成成分，可能是一个命名的函数参数，或者是一个匿名的临时值，亦或是一个命名的本地变量。
 
 一个本地变量（即在本地栈上分配的）直接拥有一个在栈内存中分配的值，该值是栈桢的一部分。
@@ -903,7 +917,7 @@ trait Changer {
 
 **`本地变量在分配时不会被初始化。`**本地变量会在当前栈桢上立即分配，但不会初始化它们，在一个函数中，其后的语句可能会/也不可能会初始化本地变量。但是**`本地变量只能在它们被初始化后才能使用，这是编译器强制要求的`**。
 
-## 8 链接(Linkage)
+## 9 链接(Linkage)
 Rust 编译器支持多种途径把 Crate 静态或动态地链接在一起。
 
 在一个编译会话中，编译器能够通过 `命令行链接标志` 或 `crate_type` 属性来产生多个工件(artifacts)；但如果在命令行指定一个或多个链接标志，则所有的 `crate_type` 属性都将被忽略。
@@ -917,7 +931,7 @@ Rust 编译器支持多种途径把 Crate 静态或动态地链接在一起。
 
 一般情况下，**`--crate_type=bin`** 或 **`--crate_type=lib`** 应当对于所有的编译需要都是有效的；其它选项仅当以下情况可见：对于一个 Rust Crate 的输出格式，如果需要更细粒度的控制。
 
-## 9 非安全代码(Unsafety)
+## 10 非安全代码(Unsafety)
 不安全的操作是那些可能违反 Rust 静态语义的内存安全保证的操作。
 
 下面的语言级特性不能使用在 Rust 的安全子集中：
@@ -925,10 +939,10 @@ Rust 编译器支持多种途径把 Crate 静态或动态地链接在一起。
 - 读写一个可修改的静态变量
 - 调用一个不安全的函数（包括 Rust 函数和非 Rust 函数）
 
-### 9.1 不安全函数(Unsafe Function)
+### 10.1 不安全函数(Unsafe Function)
 不安全函数是那些在所有上下文中都不安全的函数。这样的函数的前面必须放置关键字 `unsage`，并且只能在一个 `unsafe` 块或另一个 `unsafe` 函数中被调用。
 
-### 9.2 不安全块(Unsafe Block)
+### 10.2 不安全块(Unsafe Block)
 在一个代码块前可以放置关键字 `unsafe`，以便在一个安全函数中调用一个 `unsafe` 函数，或解引用(dereference)一个原指针(Raw Pointer)。
 
 如果一系列不安全的操作可以明确地确认为是安全的，那么它们可以被封装到一个 `unsafe` 块中；编译器将认为这样的代码是安全的。也就是说，凡是处于 `unsafe` 块中的代码，编译器都认为是安全的，即使它们不是安全；这个安全性由程序员来保证，而不是由编译器。
@@ -937,10 +951,10 @@ Rust 编译器支持多种途径把 Crate 静态或动态地链接在一起。
 
 Rust 的类型系统是动态安全需求的保守近似值(a conservative approximation of the dynamic safety requirements)，所以，在某些情况下，使用安全代码将会导致一个性能开销(performance cost)。
 
-### 9.3 被认为未定义的行为(Behavior Considered Undefined)
+### 10.3 被认为未定义的行为(Behavior Considered Undefined)
 略。
 
-### 9.4 并不认为不安全的行为(Behavior Not Considered Unsafe)
+### 10.4 并不认为不安全的行为(Behavior Not Considered Unsafe)
 下面的行为在 Rust 中并不被认为不安全，只是不期望它们发生。
 - **死锁(Deadlock)。**
 - **内存或其它资源的泄漏。**
@@ -948,7 +962,7 @@ Rust 的类型系统是动态安全需求的保守近似值(a conservative appro
 - **整数溢出。**
     除非使用 `wrapping` 原语，否则溢出被认为不期望的行为，并且总是一个用户错误。
 
-## 10 影响(Influence)
+## 11 影响(Influence)
 在设计上，Rust 从其它语言借鉴了一些特性，下面包含一个列表（包括曾经借鉴但后来又被删除的特性）：
 
 - **SML, OCaml**: algebraic data types, pattern matching, type inference, semicolon statement separation
