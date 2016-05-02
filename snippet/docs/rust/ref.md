@@ -218,8 +218,8 @@ let x: f64 = 2.; // type f64
 | \u{7FFF} | 24-bit Unicode character code (up to 6 digits) |
 
 ##### 1.5.5.3 数字
-|Number literals* |   Example   | Exponentiation | Suffixes |
-|-----------------|--- ---------|----------------|----------|
+| Number literals |   Example   | Exponentiation | Suffixes |
+|-----------------|-------------|----------------|----------|
 |Decimal integer  | 98_222      | N/A            | Integer suffixes |
 |Hex integer      | 0xff        | N/A            | Integer suffixes |
 |Octal integer    | 0o77        | N/A            | Integer suffixes |
