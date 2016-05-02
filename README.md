@@ -142,6 +142,7 @@ DOCS
         	- [ModelForm类](./snippet/docs/python/django-form.md#%E5%85%ABmodelform%E7%B1%BB)
         - [其它资源](./snippet/docs/python/link.md)
 - [Rust](./snippet/docs/rust)
+    - [Rust参考手册摘录翻译(表达式和Item部分暂未翻译)](./snippet/docs/rust/ref.md)
     - [其它资源](./snippet/docs/rust/links.md)
 - [Shell](./snippet/docs/shell)
     - [前言](./snippet/docs/shell/shell-preface.md)
