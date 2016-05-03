@@ -7,6 +7,9 @@
 
 ---
 
+##### [iris](https://github.com/kataras/iris)
+    A Community-Driven web framework written in Go.
+
 ##### [handlers](https://github.com/gorilla/handlers)
     A collection of useful handlers for Go's net/http package.
 
