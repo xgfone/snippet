@@ -41,7 +41,7 @@ Go语言笔记
 
 ---
 
+- [Go Playground](https://wide.b3log.org/playground)
 - [Golang net.http标准库](./net-http.md)
 - [Golang HTML Template](./template.txt)
 - [Golang Packages](./packages.md)
-
