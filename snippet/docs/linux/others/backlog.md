@@ -26,7 +26,7 @@ $ man tcp
         recommended that if this needs to be increased above 1024, TCP_SYNQ_HSIZE in include/net/tcp.h be
         modified to keep TCP_SYNQ_HSIZE*16<=tcp_max_syn_backlog, and the kernel be recompiled.
 
-[TCP Listen Queue](./_static/backlog.png)
+![TCP Listen Queue](./_static/backlog.png)
 
 ### 测试与总结
 **注意：**
