@@ -259,7 +259,7 @@ make(channelType [, capacity])
     B. 如果A是类型T的匿名域，f 是A的Field/Method，则“f在T中的深度”等于“f在A中的深度”加1。
 
 
-## 12、 类型标识
+## 12、类型标识
 
 （1）两个类型，要么是完全相同的，要么是不同的。
 
@@ -286,8 +286,8 @@ make(channelType [, capacity])
         H. 如果两个Channel类型有完全相同的值类型和方向，那么它们是完全相同的。
 
 
-## 13、 值的确定性（Assignability）
- 如果满足以下任何一条，则 `x` 的值可以确定为 `类型T` 的变量：
+## 13、值的确定性（Assignability）
+如果满足以下任何一条，则 `x` 的值可以确定为 `类型T` 的变量：
 
     （1）x 的类型和类型T完全相同。 注：有相同的类型标识，见上文“类型标识”。
     （2）x 的 类型V 和 类型T 有完全相同的底层类型（underlying type），并且其中至少有一个不是命名类型（named type）。
@@ -295,3 +295,11 @@ make(channelType [, capacity])
     （4）x 是双向 channel 值，T 是 Chaneel类型，x 的 类型V 和 类型T 有完全相同的元素类型，并且其中至少有一个不是命名类型。
     （5）x 是预声明标识符 nil，T 是一个 Pointer、Function、 Slice、Map、Channel 或 Interface 类型。
     （6）x 是一个 可用类型T 的值来表示的 untyped 常量。
+
+
+## 14、特殊的 interface
+### 14.1 `String() string`
+任何类型都可以实现 `fmt.Stringer` interface，即方法 `String() string`，这个方法主要用于打印值，如 `fmt.Print`，或者需要一个 `string` 类型的值（即如果一个类型不是`string`，但又需要`string`，可以使用此方法来获得）。
+
+### 14.2 `Format(f State, c rune)`
+这是一个自定义 `Formatter`，主要用于 `fmt.Sprintf(f)` 或 `fmt.Fprintf(f)` 调用，以产生它的输出。
