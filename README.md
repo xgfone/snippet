@@ -20,6 +20,8 @@ DOCS
         - [HAProxy Conf Example](./snippet/docs/architecture/ha-lb/haproxy-conf-example.md)
 - [Book & Atricle](./snippet/docs/book&article)
 - [C & C++](./snippet/docs/c&c++)
+- [Compile](./snippet/docs/compile)
+    - [Parser Generator](./snippet/docs/compile/parser_generator.md)
 - [Distributed](./snippet/docs/distributed)
 - [Document](./snippet/docs/document)
     - [Markdown](./snippet/docs/document/markdown)
