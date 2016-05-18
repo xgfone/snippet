@@ -4,9 +4,7 @@
 
 ---
 
-##### [VIM脚本语法摘录](./vim-script-syntax.md)
-
-##### [VIM脚本编写第一部分：变量、值和表达式](./vim-write-script-first.md)
+- [Diff & Patch](./diff&patch.md)
 
 ---
 
