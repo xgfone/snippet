@@ -70,9 +70,9 @@ vmap <s-tab> <gv
 如果想要取消所有映射，可以使用`:mapclear`命令。请注意，这个命令将会移除所有用户定义和系统默认的键盘映射。
 
 #### 参考
-[Vim Map](http://yyq123.blogspot.com/2010/12/vim-map.html)
-
-[Vim按键映射](http://www.pythonclub.org/vim/map-basic)
+- [Vim Map](http://yyq123.blogspot.com/2010/12/vim-map.html)
+- [Vim按键映射](http://www.pythonclub.org/vim/map-basic)
+- [Make your vim better(1)](http://www.15yan.com/story/gBO0NySazIG/)
 
 ---
 
