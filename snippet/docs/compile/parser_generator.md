@@ -33,6 +33,7 @@
 
 ### Docs
 - [Packrat & PEG](http://bford.info/packrat/)
+- [Packrat Parsing](https://pdos.csail.mit.edu/~baford/packrat/thesis/)
 - [PEG Wiki](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
 
         PEG（Parsing Expression Grammar，解析表达式文法） 与 CFG（Context-Free Grammar，上下文无关文法）的基本
