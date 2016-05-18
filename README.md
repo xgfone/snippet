@@ -38,6 +38,7 @@ DOCS
         - [VIM脚本编写第一部分：变量、值和表达式](./snippet/docs/editor/vim/vim-write-script-first.md)
         - [VIM键盘映射(Map)](./snippet/docs/editor/vim/vim-keyboard-map.md)
         - [Links](./snippet/docs/editor/vim/links.md)
+        - [Others](./snippet/docs/editor/vim/others.md)
 - [GCC](./snippet/docs/gcc)
 - [Go](./snippet/docs/go)
     - [前言](./snippet/docs/go/go-learning-note.md)
