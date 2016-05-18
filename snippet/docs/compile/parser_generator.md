@@ -36,5 +36,5 @@
 - [PEG Wiki](https://en.wikipedia.org/wiki/Parsing_expression_grammar)
 
         PEG（Parsing Expression Grammar，解析表达式文法） 与 CFG（Context-Free Grammar，上下文无关文法）的基本
-        区别就是：PEG 的选择符（choice operator）是顺序性的，即，对于 e1 | e2，如果 e1 成功匹配，e2 将会被忽略。
+        区别就是：PEG 的选择符（choice operator）是顺序性的，即，对于 e1 / e2，如果 e1 成功匹配，e2 将会被忽略。
         这将不会产生二义性，也即是，PEG 通过顺序性避免了二义性（这在 CFG 中可能会产生二义性）。
