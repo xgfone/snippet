@@ -82,7 +82,7 @@ nerdtree 提供如下功能及特性：
   **`:BookmarkToRoot`**    | 以指定目录书签或文件书签的父目录作为根结点显示NerdTree
   **`:RevealBookmark`**    | 如果指定书签已经存在于当前目录树下，打开它的上层结点并选中该书签
   **`:OpenBookmark`**      | 打开指定的文件（参数必须是文件书签）。如果该文件在当前的目录树下，则打开它的上层结点并选中该书签
-  **`:ClearBookmarks`** [] | 清除指定书签；如未指定参数，则清除所有书签
+  **`:ClearBookmarks []`** | 清除指定书签；如未指定参数，则清除所有书签
   **`:ClearAllBookmarks`** | 清除所有书签
 
 ##### :ReadBookmarks
