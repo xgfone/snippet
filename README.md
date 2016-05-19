@@ -26,6 +26,10 @@ DOCS
 - [Document](./snippet/docs/document)
     - [Markdown](./snippet/docs/document/markdown)
         - [Cheat Sheet](./snippet/docs/document/markdown/cheatsheet.md)
+        - [Markdown & GFM](https://guides.github.com/features/mastering-markdown/)
+        - Github Docs
+            - [Basic writing and formatting syntax](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
+            - [Organizing information with tables](https://help.github.com/articles/organizing-information-with-tables/)
     - [reStructuredText](./snippet/docs/document/reStructuredText)
         - [Quick reStructuredText](http://docutils.sourceforge.net/docs/user/rst/quickref.html)
         - [reStructuredText Markup Specification](http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html)
