@@ -53,21 +53,13 @@ nerdtree 提供如下功能及特性：
 
 ## 2 功能
 ### 2.1 全局命令
-##### :NERDTree [ | ]
-	打开一个Nerdtree，根结点由参数指定，不指定参数就是以当前目录为根结点
-
-##### :NERDTreeFromBookmark
-	打开一个Nerdtree，根结点由参数所指定的书签
-
-##### :NERDTreeToggle [ | ]
-	在当前Tab中如果Nerdtree已经存在，就切换显示与隐藏；如果不存在，就相当于执行:NERDTree命令
-
-##### :NERDTreeMirror
-	从另一个Tab中共享一个NerdTree过来（在当前Tab的Tree所作的改变也反应到原Tab中）
-	如果总共只有一个Tree，就直接共享；如果不止一个，就会询问共享哪个
-
-##### :NERDTreeClose
-	在当前Tab中关闭Tree
+          Command         |         Description
+--------------------------|---------------------------------------------------
+  **`:NERDTree [ | ]`**   | 打开一个Nerdtree，根结点由参数指定，不指定参数就是以当前目录为根结点
+  **`:NERDTreeFromBookmark`**   | 打开一个Nerdtree，根结点由参数所指定的书签
+  **`:NERDTreeToggle [ | ]`**   | 在当前Tab中如果Nerdtree已经存在，就切换显示与隐藏；如果不存在，就相当于执行:NERDTree命令
+  **`:NERDTreeMirror`**         | 从另一个Tab中共享一个NerdTree过来（在当前Tab的Tree所作的改变也反应到原Tab中）。如果总共只有一个Tree，就直接共享；如果不止一个，就会询问共享哪个
+  **`:NERDTreeClose`**          | 在当前Tab中关闭Tree
 
 ### 2.2 书签
 在NerdTree中，书签用于标记某个感兴趣的文件或目录，比如可以用书签标记所有 Project目录
@@ -84,23 +76,14 @@ nerdtree 提供如下功能及特性：
 #### 2.2.2 书签命令
 以下命令只在在 Nerdtree 的 buffer 中有效
 
-##### :Bookmark
-	将选中结点添加到书签列表中，并命名为name（书签名不可包含空格）；如与现有书签重名，则覆盖现有书签。
-
-##### :BookmarkToRoot
-	以指定目录书签或文件书签的父目录作为根结点显示NerdTree
-
-##### :RevealBookmark
-	如果指定书签已经存在于当前目录树下，打开它的上层结点并选中该书签
-
-##### :OpenBookmark
-	打开指定的文件（参数必须是文件书签）。如果该文件在当前的目录树下，则打开它的上层结点并选中该书签
-
-##### :ClearBookmarks []
-	清除指定书签；如未指定参数，则清除所有书签
-
-##### :ClearAllBookmarks
-	清除所有书签
+       Bookmark     | Description
+--------------------|---------------------------------------------------
+  **`:Bookmark`**          | 将选中结点添加到书签列表中，并命名为name（书签名不可包含空格）；如与现有书签重名，则覆盖现有书签。
+  **`:BookmarkToRoot`**    | 以指定目录书签或文件书签的父目录作为根结点显示NerdTree
+  **`:RevealBookmark`**    | 如果指定书签已经存在于当前目录树下，打开它的上层结点并选中该书签
+  **`:OpenBookmark`**      | 打开指定的文件（参数必须是文件书签）。如果该文件在当前的目录树下，则打开它的上层结点并选中该书签
+  **`:ClearBookmarks`** [] | 清除指定书签；如未指定参数，则清除所有书签
+  **`:ClearAllBookmarks`** | 清除所有书签
 
 ##### :ReadBookmarks
 	重新读入'NERDTreeBookmarksFile'中的所有书签
