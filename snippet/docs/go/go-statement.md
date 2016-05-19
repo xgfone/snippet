@@ -190,6 +190,21 @@ for Condition {
 }
 ```
 
+**Example:**
+```go
+i := 1
+for i <= 3 {
+    fmt.Println(i)
+    i = i + 1
+}
+```
+
+**注：**
+
+`for      { S() }` 等同于 `for true     { S() }`。
+
+`for cond { S() }` 等同于 `for ; cond ; { S() }`。
+
 ### 语法二：ForClause
 ```go
 for [ InitStmt ] ; [ Condition ] ; [ PostStmt ] {
@@ -201,6 +216,13 @@ for [ InitStmt ] ; [ Condition ] ; [ PostStmt ] {
 
     （1）语义等同于C、C++等语言中的 for 语句；
     （2）如果 Condition 缺失，它的值等同于布尔值 true。
+
+**Example:**
+```go
+for j := 7; j <= 9; j++ {
+    fmt.Println(j)
+}
+```
 
 ### 语法三：For-Range-Clause
 ```go
@@ -244,6 +266,43 @@ channel           c chan E, <-chan E    | element e E    |
        如果map为nil，则迭代次数为 0（即不做任何迭代）。
     D. 对于 Channel，被处理的迭代值是成功发送到Channel上的值，直到Channel被关闭。
        如果channel为nil，则range表达式将永远被阻塞。
+
+**Example:**
+```go
+var testdata *struct {
+	a *[7]int
+}
+for i, _ := range testdata.a {
+	// testdata.a is never evaluated; len(testdata.a) is constant
+	// i ranges from 0 to 6
+	f(i)
+}
+
+var a [10]string
+for i, s := range a {
+	// type of i is int
+	// type of s is string
+	// s == a[i]
+	g(i, s)
+}
+
+var key string
+var val interface {}  // value type of m is assignable to val
+m := map[string]int{"mon":0, "tue":1, "wed":2, "thu":3, "fri":4, "sat":5, "sun":6}
+for key, val = range m {
+	h(key, val)
+}
+// key == last map key encountered in iteration
+// val == map[key]
+
+var ch chan Work = producer()
+for w := range ch {
+	doWork(w)
+}
+
+// empty a channel
+for range ch {}
+```
 
 
 ## 9、go 语句（Goroutine）
