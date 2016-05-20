@@ -43,6 +43,8 @@ DOCS
         - [VIM键盘映射(Map)](./snippet/docs/editor/vim/vim-keyboard-map.md)
         - [Links](./snippet/docs/editor/vim/links.md)
         - [Others](./snippet/docs/editor/vim/others.md)
+        - Plugins
+            - [NERDTree](./vim-plugin-nerdtree.md)
 - [GCC](./snippet/docs/gcc)
 - [Go](./snippet/docs/go)
     - [前言](./snippet/docs/go/go-learning-note.md)
