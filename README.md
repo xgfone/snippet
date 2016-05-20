@@ -44,7 +44,7 @@ DOCS
         - [Links](./snippet/docs/editor/vim/links.md)
         - [Others](./snippet/docs/editor/vim/others.md)
         - Plugins
-            - [NERDTree](./vim-plugin-nerdtree.md)
+            - [NERDTree](./snippet/docs/editor/vim/vim-plugin-nerdtree.md)
 - [GCC](./snippet/docs/gcc)
 - [Go](./snippet/docs/go)
     - [前言](./snippet/docs/go/go-learning-note.md)
