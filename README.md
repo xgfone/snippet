@@ -22,6 +22,7 @@ DOCS
 - [C & C++](./snippet/docs/c&c++)
 - [Compile](./snippet/docs/compile)
     - [Parser Generator](./snippet/docs/compile/parser_generator.md)
+    - [Links](./snippet/docs/compile/links.md)
 - [Distributed](./snippet/docs/distributed)
 - [Document](./snippet/docs/document)
     - [Markdown](./snippet/docs/document/markdown)
