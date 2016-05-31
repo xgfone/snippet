@@ -155,3 +155,10 @@
 
 ##### [mahonia](https://github.com/axgle/mahonia)
     character-set conversion library implemented in Go.
+
+------
+
+## Tools
+
+##### [goversioninfo](https://github.com/josephspurrier/goversioninfo)
+    Golang Microsoft Windows File Properties/Version Info and Icon Resource Generator
