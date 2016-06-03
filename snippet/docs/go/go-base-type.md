@@ -303,3 +303,7 @@ make(channelType [, capacity])
 
 ### 14.2 `Format(f State, c rune)`
 这是一个自定义 `Formatter`，主要用于 `fmt.Sprintf(f)` 或 `fmt.Fprintf(f)` 调用，以产生它的输出。
+
+### 14.3 `Error() string`
+任何类型都可以通过实现 `Error() string` 方法来实现 `error` interface，此时，它可以作为类型 `error` 的值。
+
