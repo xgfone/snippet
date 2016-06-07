@@ -68,14 +68,25 @@ y[f()], ok = g(h(), i()+x[j()], <-c), k()
 注：关于`类型标识化（Type Identical）`，请参见上文的“类型标识”。
 
 （4）如果类型推断有效，那么其表达式的值就是存储在 `x` 中的值，而且其类型是`T类型`；否则，运行时`panic`将会发生。
+```go
+var x interface{} = 7  // x has dynamic type int and value 7
+i := x.(int)           // i has type int and value 7
 
-（5）类型推断表达式可以用于赋值或初始化中，其格式如下：
+type I interface { m() }
+var y I
+s := y.(string)        // illegal: string does not implement I (missing method m)
+r := y.(io.Reader)     // r has type io.Reader and y must implement both I and io.Reader
+```
+
+（5）类型推断表达式也可以以一个特殊的格式用于赋值或初始化中：
 ```go
 v, ok = x.(T)
 v, ok := x.(T)
 var v, ok = x.(T)
 ```
 其中，`ok` 是一个`boolean`值，如果推断成功，`ok` 为 `true`；否则，则 `ok` 为`false`，并且 `v` 的值是`类型T`的`零值`。
+
+注：在这种情况下，永远不会发生运行时恐慌。
 
 
 ## 6、索引表达式
