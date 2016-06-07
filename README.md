@@ -19,6 +19,8 @@ DOCS
         - [HAProxy Configure](./snippet/docs/architecture/ha-lb/haproxy-configuration.txt)
         - [HAProxy Conf Example](./snippet/docs/architecture/ha-lb/haproxy-conf-example.md)
 - [Book & Atricle](./snippet/docs/book&article)
+- [BitTorrent](./snippet/docs/bt)
+    - [DHT中文版](./snippet/docs/bt/dht-proto-chinese.md)
 - [C & C++](./snippet/docs/c&c++)
 - [Compile](./snippet/docs/compile)
     - [Parser Generator](./snippet/docs/compile/parser_generator.md)
