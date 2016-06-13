@@ -329,9 +329,9 @@ go Expr
 select {
 	case Channel <- Expr:  // Send
 		Statements
-	case [ Exprlist = ] Expr // Recv
+	case [ Exprlist = ] Expr: // Recv
 		Statements
-	case [ IdList := ] Expr // Recv
+	case [ IdList := ] Expr: // Recv
 		Statements
 	case default:
 		Statements
