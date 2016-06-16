@@ -111,7 +111,7 @@ DOCS
 - [Network](./snippet/docs/network)
     - [DDOS](./snippet/docs/network/ddos)
     - [NAT](./snippet/docs/network/nat)
-        - [穿越NAT的P2P通信方法的研究](./snippet/docs/network/nat/p2p-communication-across-nat.md)
+        - [穿越NAT的P2P通信方法的研究(英)](./snippet/docs/network/nat/p2p-communication-across-nat.md)
     - [OpenVSwitch & OpenFlow](./snippet/docs/network/ovs&of)
     - [Protocol](./snippet/docs/network/protocol)
     - [Tcpdump](./snippet/docs/network/tcpdump)
