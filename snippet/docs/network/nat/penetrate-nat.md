@@ -148,3 +148,9 @@ RFC规定：对于对称NAT，当这个接收到的 SYN包中的 `源IP地址:�
 	（因为接收是一个While循环）。重复若干次。如过在整个过程中，用户A收到S发来的数据包，
 	就说明NAT是限制型的；否则就说明NAT是端口限制型的。
 
+------
+
+From: 
+
+- http://blog.csdn.net/Leisure512/article/details/4900191
+- http://wanglimin2004.blog.163.com/blog/static/1154884982010229115251196/
