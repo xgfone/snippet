@@ -7,7 +7,7 @@ NAT(Network Address Translation，网络地址转换)是一种广泛应用的解
 
 ### 1.1 NAT分类
 
-NAT从表面上看有三种类型：静态NAT、动态地址NAT、地址端口转换NAPT。　　
+NAT从表面上看有三种类型：`静态NAT`、`动态地址NAT`、`地址端口转换NAPT`。　　
 
 ##### 静态NAT
 静态地址转换将内部私网地址与合法公网地址进行一对一的转换，且每个内部地址的转换都是确定的。
@@ -51,13 +51,13 @@ NAT不仅实现地址转换，同时还起到防火墙的作用，隐藏内部�
 
 下面假设有下图所示网络拓扑结构图。
 
-[网络拓扑结构图](./_static/10.jpg)
+![网络拓扑结构图](./_static/10.jpg)
 
 Server（129.208.12.38）是公网上的服务器，NAT-A和NAT-B是两个NAT设备（可能是集成NAT功能的路由器，防火墙等），它们具有若干个合法公网IP，在NAT-A阻隔的私有网络中有若干台主机【ClientA-1，ClientA-N】，在NAT-B阻隔的私有网络中也有若干台主机【ClientB-1，ClientB-N】。为了以后说明问题方便，只讨论主机ClientA-1和ClientB-1。
 
 假设主机ClientA-1和主机ClientB-1都和服务器Server建立了“连接”，如图2 所示。
 
-[ClientA-1，ClientB-1和Server之间通信](./_static/11.jpg)
+![ClientA-1，ClientB-1和Server之间通信](./_static/11.jpg)
 
 由于NAT的透明性，所以ClientA-1和ClientB-1不用关心和Server通信的过程，它们只需要知道Server开放服务的地址和端口号即可。根据图1，假设在ClientA-1中有进程使用socket（192.168.0.2：7000）和Server通信，在ClientB-1中有进程使用socket（192.168.1.12:8000）和Server通信。它们通过各自的NAT转换后分别变成了socket（202.103.142.29：5000）和socket（221.10.145.84：6000）。
 
