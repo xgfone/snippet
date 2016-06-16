@@ -112,6 +112,7 @@ DOCS
     - [DDOS](./snippet/docs/network/ddos)
     - [NAT](./snippet/docs/network/nat)
         - [穿越NAT的P2P通信方法的研究(英)](./snippet/docs/network/nat/p2p-communication-across-nat.md)
+        - [P2P、UDP和TCP穿透NAT](./snippet/docs/network/nat/penetrate-nat.md)
     - [OpenVSwitch & OpenFlow](./snippet/docs/network/ovs&of)
     - [Protocol](./snippet/docs/network/protocol)
     - [Tcpdump](./snippet/docs/network/tcpdump)
