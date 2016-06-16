@@ -25,7 +25,7 @@ Network Address Translation (NAT) causes well-known difficulties for peer-to-pee
 
 The combined pressures of tremendous growth and massive security challenges have forced the Internet to evolve in ways that make life difficult for many applications. The Internet's original uniform address architecture, in which every node has a globally unique IP address and can communicate directly with every other node, has been replaced with a new de facto Internet address architecture, consisting of a global address realm and many private address realms interconnected by Network Address Translators (NAT). In this new address architecture, illustrated in Figure 1, only nodes in the “main,” global address realm can be easily contacted from anywhere in the network, because only they have unique, globally routable IP addresses. Nodes on private networks can connect to other nodes on the same private network, and they can usually open TCP or UDP connections to “well-known” nodes in the global address realm. NATs on the path allocate temporary public endpoints for outgoing connections, and translate the addresses and port numbers in packets comprising those sessions, while generally blocking all incoming traffic unless otherwise specifically configured.
 
-[Figure 1: Public and private IP address domains](./_static/1.png)
+![Figure 1: Public and private IP address domains](./_static/1.png)
 
 The Internet's new de facto address architecture is suitable for client/server communication in the typical case when the client is on a private network and the server is in the global address realm. The architecture makes it difficult for two nodes on different private networks to contact each other directly, however, which is often important to the “peer-to-peer” communication protocols used in applications such as teleconferencing and online gaming. We clearly need a way to make such protocols function smoothly in the presence of NAT.
 
@@ -57,7 +57,7 @@ Outbound NAT has two sub-varieties: Basic NAT, which only translates IP addresse
 
 The most reliable--but least efficient--method of P2P communication across NAT is simply to make the communication look to the network like standard client/server communication, through relaying. Suppose two client hosts _A_ and _B_ have each initiated TCP or UDP connections to a well-known server _S_, at _S_'s global IP address 18.181.0.31 and port number 1234. As shown in Figure 2, the clients reside on separate private networks, and their respective NATs prevent either client from directly initiating a connection to the other. Instead of attempting a direct connection, the two clients can simply use the server _S_ to relay messages between them. For example, to send a message to client _B_, client _A_ simply sends the message to server _S_ along its already-established client/server connection, and server _S_ forwards the message on to client _B_ using its existing client/server connection with _B_.
 
-[Figure 2: NAT Traversal by Relaying](./_static/2.png)
+![Figure 2: NAT Traversal by Relaying](./_static/2.png)
 
 Relaying always works as long as both clients can connect to the server. Its disadvantages are that it consumes the server's processing power and network ban        " for insert modedwidth, and communication latency between the peering clients is likely increased even if the server is well-connected. Nevertheless, since there is no more efficient technique that works reliably on all existing NATs, relaying is a useful fall-back strategy if maximum robustness is desired. The TURN protocol [18](#18) defines a method of implementing relaying in a relatively secure fashion.
 
@@ -65,7 +65,7 @@ Relaying always works as long as both clients can connect to the server. Its dis
 
 Some P2P applications use a straightforward but limited technique, known as connection reversal, to enable communication when both hosts have connections to a well-known rendezvous server _S_ and only one of the peers is behind a NAT, as shown in Figure 3. If _A_ wants to initiate a connection to _B_, then a direct connection attempt works automatically, because _B_ is not behind a NAT and _A_'s NAT interprets the connection as an outgoing session. If _B_ wants to initiate a connection to _A_, however, any direct connection attempt to _A_ is blocked by _A_'s NAT. _B_ can instead relay a connection request to _A_ through a well-known server _S_, asking _A_ to attempt a “reverse” connection back to _B_. Despite the obvious limitations of this technique, the central idea of using a well-known rendezvous server as an intermediary to help set up direct peer-to-peer connections is fundamental to the more general hole punching techniques described next.
 
-[Figure 3: NAT Traversal by Connection Reversal](./_static/3.png)
+![Figure 3: NAT Traversal by Connection Reversal](./_static/3.png)
 
 ### 3 UDP Hole Punching
 
@@ -93,7 +93,7 @@ It is in general difficult or impossible for the application itself to determine
 
 First consider the simple scenario in which the two clients (probably unknowingly) happen to reside behind the same NAT, and are therefore located in the same private IP address realm, as shown in Figure 4. Client _A_ has established a UDP session with server _S_, to which the common NAT has assigned its own public port number 62000. Client _B_ has similarly established a session with _S_, to which the NAT has assigned public port number 62005.
 
-[Figure 4: UDP Hole Punching, Peers Behind a Common NAT](./_static/4.png)
+![Figure 4: UDP Hole Punching, Peers Behind a Common NAT](./_static/4.png)
 
 Suppose that client _A_ uses the hole punching technique outlined above to establish a UDP session with _B_, using server _S_ as an introducer. Client _A_ sends _S_ a message requesting a connection to _B_. _S_ responds to _A_ with _B_'s public and private endpoints, and also forwards _A_'s public and private endpoints to _B_. Both clients then attempt to send UDP datagrams to each other directly at each of these endpoints. The messages directed to the public endpoints may or may not reach their destination, depending on whether or not the NAT supports hairpin translation as described below in Section 3.5. The messages directed at the private endpoints do reach their destinations, however, and since this direct route through the private network is likely to be faster than an indirect route through the NAT anyway, the clients are most likely to select the private endpoints for subsequent regular communication.
 
@@ -103,7 +103,7 @@ By assuming that NATs support hairpin translation, the application might dispens
 
 Suppose clients _A_ and _B_ have private IP addresses behind different NATs, as shown in Figure 5. _A_ and _B_ have each initiated UDP communication sessions from their local port 4321 to port 1234 on server _S_. In handling these outbound sessions, NAT _A_ has assigned port 62000 at its own public IP address, 155.99.25.11, for the use of _A_'s session with _S_, and NAT _B_ has assigned port 31000 at its IP address, 138.76.29.7, to _B_'s session with _S_.
 
-[Figure 5: UDP Hole Punching, Peers Behind Different NATs](./_static/5.png)
+![Figure 5: UDP Hole Punching, Peers Behind Different NATs](./_static/5.png)
 
 In _A_'s registration message to _S_, _A_ reports its private endpoint to _S_ as 10.0.0.1:4321, where 10.0.0.1 is _A_'s IP address on its own private network. _S_ records _A_'s reported private endpoint, along with _A_'s public endpoint as observed by _S_ itself. _A_'s public endpoint in this case is 155.99.25.11:62000, the temporary endpoint assigned to the session by the NAT. Similarly, when client _B_ registers, _S_ records _B_'s private endpoint as 10.1.1.3:4321 and _B_'s public endpoint as 138.76.29.7:31000.
 
@@ -119,7 +119,7 @@ If _A_'s message to _B_'s public endpoint reaches _B_'s NAT before _B_'s first m
 
 In some topologies involving multiple NAT devices, two clients cannot establish an “optimal” P2P route between them without specific knowledge of the topology. Consider a final scenario, depicted in Figure 6. Suppose NAT _C_ is a large industrial NAT deployed by an internet service provider (ISP) to multiplex many customers onto a few public IP addresses, and NATs _A_ and _B_ are small consumer NAT routers deployed independently by two of the ISP's customers to multiplex their private home networks onto their respective ISP-provided IP addresses. Only server _S_ and NAT _C_ have globally routable IP addresses; the “public” IP addresses used by NAT _A_ and NAT _B_ are actually private to the ISP's address realm, while client _A_'s and _B_'s addresses in turn are private to the addressing realms of NAT _A_ and NAT _B_, respectively. Each client initiates an outgoing connection to server _S_ as before, causing NATs _A_ and _B_ each to create a single public/private translation, and causing NAT _C_ to establish a public/private translation for each session.
 
-[Figure 6: UDP Hole Punching, Peers Behind Multiple Levels of NAT](./_static/6.png)
+![Figure 6: UDP Hole Punching, Peers Behind Multiple Levels of NAT](./_static/6.png)
 
 Now suppose _A_ and _B_ attempt to establish a direct peer-to-peer UDP connection via hole punching. The optimal routing strategy would be for client _A_ to send messages to client _B_'s “semi-public” endpoint at NAT _B_, 10.0.1.2:55000 in the ISP's addressing realm, and for client _B_ to send messages to _A_'s “semi-public” endpoint at NAT _B_, namely 10.0.1.1:45000. Unfortunately, _A_ and _B_ have no way to learn these addresses, because server _S_ only sees the truly global public endpoints of the clients, 155.99.25.11:62000 and 155.99.25.11:62005 respectively. Even if _A_ and _B_ had some way to learn these addresses, there is still no guarantee that they would be usable, because the address assignments in the ISP's private address realm might conflict with unrelated address assignments in the clients' private realms. (NAT _A_'s IP address in NAT _C_'s realm might just as easily have been 10.1.1.3, for example, the same as client _B_'s private address in NAT _B_'s realm.)
 
@@ -152,7 +152,7 @@ _A_ and _B_ wait for outgoing connection attempts to succeed, and/or for incomin
 When a TCP connection is made, the hosts authenticate each other to verify that they connected to the intended host. If authentication fails, the clients close that connection and continue waiting for others to succeed. The clients use the first successfully authenticated TCP stream resulting from this process.
 Unlike with UDP, where each client only needs one socket to communicate with both _S_ and any number of peers simultaneously, with TCP each client application must manage several sockets bound to a single local TCP port on that client node, as shown in Figure 7. Each client needs a stream socket representing its connection to _S_, a listen socket on which to accept incoming connections from peers, and at least two additional stream sockets with which to initiate outgoing connections to the other peer's public and private TCP endpoints.
 
-[Figure 7: Sockets versus Ports for TCP Hole Punching](./_static/7.png)
+![Figure 7: Sockets versus Ports for TCP Hole Punching](./_static/7.png)
 
 Consider the common-case scenario in which the clients _A_ and _B_ are behind different NATs, as shown in Figure 5, and assume that the port numbers shown in the figure are now for TCP rather than UDP ports. The outgoing connection attempts _A_ and _B_ make to each other's private endpoints either fail or connect to the wrong host. As with UDP, it is important that TCP applications authenticate their peer-to-peer sessions, due of the likelihood of mistakenly connecting to a random host on the local network that happens to have the same private IP address as the desired host on a remote private network.
 
@@ -228,7 +228,7 @@ NAT Check consists of a client program to be run on a machine behind the NAT to 
 
 To test the NAT's behavior for UDP, the client opens a socket and binds it to a local UDP port, then successively sends “ping”-like requests to servers 1 and 2, as shown in Figure 8. These servers each respond to the client's pings with a reply that includes the client's public UDP endpoint: the client's own IP address and UDP port number as observed by the server. If the two servers report the same public endpoint for the client, NAT Check assumes that the NAT properly preserves the identity of the client's private endpoint, satisfying the primary precondition for reliable UDP hole punching.
 
-[Figure 8: NAT Check Test Method for UDP](./_static/8.png)
+![Figure 8: NAT Check Test Method for UDP](./_static/8.png)
 
 When server 2 receives a UDP request from the client, besides replying directly to the client it also forwards the request to server 3, which in turn replies to the client from its own IP address. If the NAT's firewall properly filters “unsolicited” incoming traffic on a per-session basis, then the client never sees these replies from server 3, even though they are directed at the same public port as the replies from servers 1 and 2.
 
@@ -248,7 +248,7 @@ To test hairpin translation for TCP, the client simply uses a secondary local TC
 
 The NAT Check data we gathered consists of 380 reported data points covering a variety of NAT router hardware from 68 vendors, as well as the NAT functionality built into different versions of eight popular operating systems. Only 335 of the total data points include results for UDP hairpin translation, and only 286 data points include results for TCP, because we implemented these features in later versions of NAT Check after we had already started gathering results. The data is summarized by NAT vendor in Table 1; the table only individually lists vendors for which at least five data points were available. The variations in the test results for a given vendor can be accounted for by a variety of factors, such as different NAT devices or product lines sold by the same vendor, different software or firmware versions of the same NAT implementation, different configurations, and probably occasional NAT Check testing or reporting errors.
 
-[Table 1: User Reports of NAT Support for UDP and TCP Hole Punching](./_static/9.png)
+![Table 1: User Reports of NAT Support for UDP and TCP Hole Punching](./_static/9.png)
 
 
 Out of the 380 reported data points for UDP, in 310 cases (82%) the NAT consistently translated the client's private endpoint, indicating basic compatibility with UDP hole punching. Support for hairpin translation is much less common, however: of the 335 data points that include UDP hairpin translation results, only 80 (24%) show hairpin translation support.
