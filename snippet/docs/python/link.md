@@ -3,6 +3,9 @@
 
 [Python的内存管理](http://www.cnblogs.com/vamei/p/3232088.html)
 
+Python 3.5 协程究竟是个啥（又译：Python 3.5 协程原理） （[中文版](http://blog.rainy.im/2016/03/10/how-the-heck-does-async-await-work-in-python-3-5/) | [英文版 ](http://www.snarky.ca/how-the-heck-does-async-await-work-in-python-3-5)）
+
+
 -----
 
 ## Software And Package
