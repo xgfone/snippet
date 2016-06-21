@@ -45,3 +45,5 @@ Go语言笔记
 - [Golang net.http标准库](./net-http.md)
 - [Golang HTML Template](./template.txt)
 - [Golang Packages](./packages.md)
+- [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
+

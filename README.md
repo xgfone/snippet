@@ -92,6 +92,7 @@ DOCS
         - [Golang net.http标准库](./snippet/docs/go/net-http.md)
         - [Golang HTML Template](./snippet/docs/go/template.txt)
         - [Golang Packages](./snippet/docs/go/packages.md)
+		- [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
 - [JS](./snippet/docs/js)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
