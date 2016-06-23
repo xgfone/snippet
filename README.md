@@ -18,6 +18,8 @@ DOCS
         - [HAProxy Architecture](./snippet/docs/architecture/ha-lb/haproxy-architecture.txt)
         - [HAProxy Configure](./snippet/docs/architecture/ha-lb/haproxy-configuration.txt)
         - [HAProxy Conf Example](./snippet/docs/architecture/ha-lb/haproxy-conf-example.md)
+- [Assembly](./snippet/docs/assembly)
+    - [Linux 汇编语言开发指南](./snippet/docs/assembly/linux-assembly-develop)
 - [Book & Atricle](./snippet/docs/book&article)
 - [BitTorrent](./snippet/docs/bt)
     - [DHT中文版](./snippet/docs/bt/dht-proto-chinese.md)
