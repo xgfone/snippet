@@ -111,10 +111,12 @@ def find_config_files(self):
 
 方法有两种：
 1. 在 `pip` 命令行添加 `--trusted-host pypi.douban.com`。如：
+
 	```shell
 	$ pip install --trusted-host pypi.douban.com PACKAGE_NAME
 	```
 2. 在 `pip.conf` 文件中 `[install]` 节添加 `trusted-host` 选项。如：
+
 	```ini
 	[global]
 	index-url = http://pypi.douban.com/simple
