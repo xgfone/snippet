@@ -110,11 +110,13 @@ def find_config_files(self):
 如果 `pip` 提示指定的源不是一个 `trusted` 或 `secure` 的主机，可以使用使用 `trusted-host` 选项来信任该主机源。
 
 方法有两种：
+
 1. 在 `pip` 命令行添加 `--trusted-host pypi.douban.com`。如：
 
 	```shell
 	$ pip install --trusted-host pypi.douban.com PACKAGE_NAME
 	```
+
 2. 在 `pip.conf` 文件中 `[install]` 节添加 `trusted-host` 选项。如：
 
 	```ini
