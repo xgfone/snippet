@@ -68,6 +68,7 @@ tc filter add dev vnet0 parent 1:0 pref 5 protocol ip u32 ht 800:: \
 注意：
 
     上层首先要为VM分类一个FlowID（整数值），该值全局唯一。
+    FLOWID 是一个 32 位整数，并且必须用十六进制形式表示。
 
 建议：
 
