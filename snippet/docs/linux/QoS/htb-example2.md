@@ -68,7 +68,6 @@ tc filter add dev vnet0 parent 1:0 pref 5 protocol ip u32 ht 800:: \
 注意：
 
     上层首先要为VM分类一个FlowID（整数值），该值全局唯一。
-    FLOWID 是一个 32 位整数，并且必须用十六进制形式表示。
 
 建议：
 
@@ -165,6 +164,8 @@ tc class replace dev vnet0 parent 1:1 classid 1:${FLOWID} \
 
 `CLASSID` 的完整形式是 `XXX:YYY`，其中 `XXX`是`major`，`YYY`是`minor`。`XXX:` 或 `XXX:0` 为 `QDisc`（如上述的`1:0`）， 其它情况为 `CLASS`（如上述的`1:1`及`1:${FLOWID}`）。
 
+`ClassID` 是一个 `32` 位整数，其中，`major` 和 `minor` 均为 `16` 位整数，且用十六进制形式表示，因此 `FlowID` 是一个 `十六进制` 形式的 `16` 位整数。
+    
 `FILTERID` 的完整形式是 `XXX:YYY:ZZZ`，其中，`XXX`是哈希表项（从`0x001`到`0xfff`，就相当于可以生成`0xfff`个哈希变量）；`YYY`是哈希表`XXX`的 `Bucket`，取值范围为 `0`到`位桶大小减1`，`YYY`最大为 `255`（也就是说，_**哈希表的位桶最大是256，且位桶的值要求是2的次幂，即创建哈希表时，只能指定 1、2、4、8、16、32、64、128、256**_）；`ZZZ`是`Bucket`的 `Item`。因此，可以把TC中的哈希表看成是“`哈希链表`”，XXX表示哈希链表变量，YYY表示Bucket号，ZZZ表示相应的Bucket中Item 的序号，这就唯一索引到一个元素（这里即是过滤器Filter）。
 
 ### 脚本
