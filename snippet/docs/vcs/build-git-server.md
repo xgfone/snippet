@@ -16,7 +16,7 @@ Copyright © 2014 - 2016  xgfone(三界). All Rights Reserved.
 
 根据国人写的教程，本人没能跟着做出来，不是国人写人的不好或不对，可能是本人太愚钝了，还没开化，跟不上贤人们的步伐。
 
-Git 支持多种协议：`HTTP`、`SSH`、`Git` 以及 `file`。由于 file 本地协议（即`file://`）只能用于本机，下文就不再讲述。
+Git 支持多种协议：`HTTP`、`SSH`、`Git` 以及 `file`。由于 file 本地协议（即`file://`，可省略）只能用于本机，下文就不再讲述，具体参见 `https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%8D%8F%E8%AE%AE#本地协议`。除了 `HTTP` 协议外，其他所有协议都要求在服务器端安装并运行 `Git`。
 
 注：`Gitolite` 服务器和 `Gitosis` 服务器是基于 `SSH` 协议。
 
@@ -218,7 +218,7 @@ $ git pull                # 拉取远程版本库中的更新到本地版本库
 
 
 ## 使用Git协议
-待写。
+参见 [**此处**](https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Git-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B)。
 
 
 ## 使用SSH协议
@@ -230,4 +230,5 @@ $ git pull                # 拉取远程版本库中的更新到本地版本库
 
 
 ## Gitosis服务器架设
-待写。
+已废弃。参见 [**此处**](https://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitosis)。
+
