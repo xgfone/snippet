@@ -125,6 +125,8 @@ DOCS
         - [P2P、UDP和TCP穿透NAT](./snippet/docs/network/nat/penetrate-nat.md)
     - [OpenVSwitch & OpenFlow](./snippet/docs/network/ovs&of)
     - [Protocol](./snippet/docs/network/protocol)
+	- [TCP](./snippet/docs/network/tcp)
+		- [`CLOSE_WAIT`和`TIME_WAIT`](./snippet/docs/network/tcp/close_wait_and_time_wait.md)
     - [Tcpdump](./snippet/docs/network/tcpdump)
     - [Tunnel](./snippet/docs/network/tunnel)
     - [Others](./snippet/docs/network/others)
