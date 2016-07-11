@@ -1,8 +1,8 @@
 (摘录)翻译自：[Rust Reference](http://doc.rust-lang.org/reference.html)
 
-注：`Rust` 版本是 `1.8.0`。
+注：首次摘录翻译时参考的 `Rust` 版本是 `1.8.0`，后续会根据新版本的变动进行更新。
 
-`第一部分(Introduction)`、`第二部分(Notation)` 未翻译，主要是因为笔者觉得这两部分没必要翻译。
+`第一部分(Introduction)`、`第二部分(Notation)` 未翻译，主要是因为笔者觉得这两部分没必要翻译。另外，本文是「摘录」翻译，并不是一句一句、原封不动地翻译。
 
 ----
 
