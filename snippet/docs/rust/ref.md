@@ -8,7 +8,7 @@
 
 ### 目录（Content）
 
-- [1. 词法结构](1-词法结构)
+- [1. 词法结构](#1-词法结构)
 	- [1.1 源代码编码（Input Format）](#11-源代码编码input-format)
 	- [1.2 标识符（Identifier）](#12-标识符identifier)
 	- [1.3 注释（Comment）](#13-注释comment)
@@ -41,18 +41,18 @@
 	- [2.1 宏（Macro）](#21-宏macro)
 		- [2.1.1 样式宏](#211-样式宏)
 		- [2.1.2 解析限制](#212-解析限制)
-- [3 Crate和源文件](#3-crate和源文件)
+- [3 Crate和源文件](#3-crate-和-源文件)
 	- [3.1 `main`函数](#31-main函数)
-- [4 Item和属性（Attribute）](#4-item和属性attribute)
+- [4 Item和属性（Attribute）](#4-item-和-属性attribute)
 	- [4.1 Item](#41-item)
-	- [4.2 可见性（Visibility）和私有性（Privacy）](#42-可见性visibility和私有性privacy)
+	- [4.2 可见性（Visibility）和私有性（Privacy）](#42-可见性visibility-和-私有性privacy)
 		- [4.2.1 重导出（Re-Export）及其可见性（Visibility）](#421-重导出re-export及其可见性visibility)
 	- [4.3 属性（Attribute）](#43-属性attribute)
-- [5 表达式（Expression）和语句（Statement）](#5-表达式expression和语句statement)
+- [5 表达式（Expression）和语句（Statement）](#5-表达式expression-和-语句statement)
 	- [5.1 语句（Statement）](#51-语句statement)
 		- [5.1.1 声明语句](#511-声明语句)
-			- [5.1.1.1 Item声明](#5111-item声明)
-			- [5.1.1.2 `let`语句](#5112-let语句)
+			- [5.1.1.1 Item声明](#5111-item-声明)
+			- [5.1.1.2 `let`语句](#5112-let-语句)
 		- [5.1.2 表达式语句](#512-表达式语句)
 	- [5.2 表达式（待写）](#52-表达式)
 - [6 类型系统（Type System）](#6-类型系统type-system)
@@ -90,10 +90,10 @@
 - [9 链接（Linkage）](#9-链接linkage)
 - [10 非安全代码（Unsafety）](#10-非安全代码unsafety)
 	- [10.1 不安全函数（Unsafe Function）](#101-不安全函数unsafe-function)
-	- [10.2 不安全代码块（Unsafe Block）](#102-不安全代码块unsafe-block)
+	- [10.2 不安全块（Unsafe Block）](#102-不安全块unsafe-block)
 	- [10.3 被认为未定义的行为（Behavior Considered Undedined）](#103-被认为未定义的行为behavior-considered-undefined)
-	- [10.4 并不认为不安全的行为（Behavior Not Considered Unsafe）](#104-并不认为不安全的行为behavior-not-considered unsafe)
-- [11 灵感（Influence）](#11-灵感unfluence)
+	- [10.4 并不认为不安全的行为（Behavior Not Considered Unsafe）](#104-并不认为不安全的行为behavior-not-considered-unsafe)
+- [11 灵感（Influence）](#11-灵感influence)
 
 
 ------
