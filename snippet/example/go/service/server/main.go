@@ -66,7 +66,8 @@ func (h TCPHandler) Handle(conn *net.TCPConn) {
 func init() {
 	flag.StringVar(&handler.ip, "ip", "0.0.0.0", "ip")
 	flag.StringVar(&handler.port, "port", "80", "port")
-	flag.BoolVar(&handler.send, "send", false, "Send the data to the client")
+	flag.BoolVar(&handler.send, "send", false,
+		"Send the data to the client. Or receive the data from the client.")
 }
 
 func main() {

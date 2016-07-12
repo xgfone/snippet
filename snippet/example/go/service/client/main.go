@@ -11,7 +11,8 @@ import (
 var (
 	ip   = flag.String("ip", "127.0.0.1", "ip")
 	port = flag.String("port", "80", "port")
-	send = flag.Bool("send", false, "Send the data to the server")
+	send = flag.Bool("send", false,
+		"Send the data to the server. Or receive the data from the server.")
 )
 
 func setData(num int, b byte) []byte {
