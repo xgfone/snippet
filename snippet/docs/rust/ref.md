@@ -895,7 +895,7 @@ Coercion是隐式的，并没有任何显式语法。
 #### 6.3.1 强制场所(Coercion Sites)
 一个强制只可能发生在程序中的某个强制场所。可能的强制场所有：
 - 显示指定类型的 `let` 语句。
-- 
+
     ```rust
     let _: i8 = 42; // 42 的类型被强制为 i8
     ```
@@ -910,7 +910,7 @@ Coercion是隐式的，并没有任何显式语法。
     }
     ```
 - `struct` 及其 `变体域(variant field)` 的实例。
-- 
+
     ```rust
     struct Foo {x: i8}
     fn main() {
@@ -918,7 +918,7 @@ Coercion是隐式的，并没有任何显式语法。
     }
     ```
 - 函数的返回值。
-- 
+
     ```rust
     fn foo() -> i8 {
         42  // 返回值 42 被强制为类型 i8
@@ -941,7 +941,7 @@ Coercion在以下类型之间是被允许的：
 - `&T` to `*const T`
 - `&mut T` to `*mut T`
 - `&T` to `&U` if `T` implements `Deref<Target = U>`. For example:
-- 
+
     ```rust
     use std::ops::Deref;
 
