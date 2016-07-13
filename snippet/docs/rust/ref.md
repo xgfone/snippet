@@ -480,7 +480,7 @@ Rust中的库以 `Crate` 的形式被组织。每个编译以单个源文件的�
 ## 4 Item 和 属性(Attribute)
 
 ### 4.1 Item
-一个 Item 是 Crate 的一部分。Item 通过一个嵌套的模块集被组织在一个 Crate 中。每个 Crate 都有一个最外层的匿名模块。**Item 在编译期完全被确定。**
+一个 Item 是 Crate 的一部分。Item 通过一个嵌套的模块集被组织在一个 Crate 中。每个 Crate 都有一个最外层的匿名模块。**Item 在编译期完全被确定，在运行期保持固定不变，并驻留在只读内存区。**
 
 Item 为分以下几种：
 - **extern crate 声明**
@@ -494,6 +494,97 @@ Item 为分以下几种：
 - **静态Item**
 - **Trait**
 - **实现(implementation)**
+
+这些 Item 对子 Item 的声明提供了一个隐式的作用域。换句话说就是，在一个函数或模块内，Item 的声明可以混合语句、控制块以及组成一个 Item 的其它工件（artifacts）。
+
+#### 4.1.1 类型参数（Type Parameters）
+除了模块、常量和静态外，其它所有的 Item 都是可以通过类型被参数化的。类型参数是一个被一对尖括号（`<...>`）包含、并用逗号分隔的标识符列表，并且位于 Item 的名字之后、定义之前。Item 的类型参数被认为是其名字的一部分，而不是其类型的一部分。原则上，一个引用路径必须提供类型参数（形式同上），目的是为了引用一个类型参数化的 Item。但实际上，类型推断系统通常都能够根据上下文推断出这样的参数类型。没有通用的类型参数化的类型，只有类型参数化的 Item。也就是说，Rust 没有类型抽象的概念。
+
+#### 4.1.2 模块（Modules）
+一个模块包含零或多个 Item。
+
+一个模块 Item 是一个模块，包含在一对大括号中（`{...}`），并在大括号前用一个 `mod` 关键字前缀来命名一个名字。一个模块 Item 将一个新的、命名的模块引入到组成一个 crate 的模块树中，并且模块可以任意嵌套。
+
+```rust
+mod math {
+    type Complex = (f64, f64);
+    fn sin(f: f64) -> f64 {
+        /* ... */
+    }
+    fn cos(f: f64) -> f64 {
+        /* ... */
+    }
+    fn tan(f: f64) -> f64 {
+        /* ... */
+    }
+}
+```
+
+模块和类型共用同一个命名空间，因此，在同一个作用域中，不能同时声明相同名字的模块和类型。也就是说，在同一个作用域内，类型定义、Trait、结构体、枚举或类型参数不能遮挡一个模块的名字，反之亦然。
+
+一个没有主体的模块会加载一个外部文件，默认地，该外部文件外即为模块名，并以 `.rs` 作为扩展名。当一个嵌套的子模块从一个外部文件被加载进来时，Rust 将根据与模块层次相对的子目录中查找外部文件。
+```rust
+// Load the `vec` module from `vec.rs`
+mod vec;
+
+mod thread {
+    // Load the `local_data` module from `thread/local_data.rs`
+    // or `thread/local_data/mod.rs`.
+    mod local_data;
+}
+```
+
+但是，可以通过 `path` 属性来影响加载外部文件模块时所使用的目录和文件。
+```rust
+#[path = "thread_files"]
+mod thread {
+    // Load the `local_data` module from `thread_files/tls.rs`
+    #[path = "tls.rs"]
+    mod local_data;
+}
+```
+
+##### 4.1.2.1 外部 `crate` 声明
+一个 `extern crate` 声明指定了一个对外部 crate 的依赖。这个外部的 crate 会被作为 `extern_crate_decl` 中提供的 `ident` 绑定到声明它的作用域中。
+
+外部的 crate 在编译时被解析到一个特定的 `soname`（即动态链接库），而在运行时被解析为一个运行时链接要求——`soname`在加载时被传递给链接器。
+
+```rust
+extern crate pcre;
+
+extern crate std; // equivalent to: extern crate std as std;
+
+extern crate std as ruststd; // linking to 'std' under another name
+```
+
+##### 4.1.2.2 `use` 声明
+
+#### 4.1.3 函数（Function）
+
+##### 4.1.3.1 通用函数（Generic Function）
+
+##### 4.1.3.2 发散函数（Diverging Function）
+
+##### 4.1.3.3 外部函数（Extern Function）
+
+#### 4.1.4 类型别名（Type Alias）
+
+#### 4.1.5 结构体（Struct）
+
+#### 4.1.6 枚举（Enumeration）
+
+#### 4.1.7 常量 Item
+
+#### 4.1.8 静态 Item
+
+##### 4.1.8.1 可变性静态（Mutable Static）
+
+#### 4.1.9 特性（Trait）
+
+#### 4.1.10 实现（Implementation）
+
+#### 4.1.11 外部的块（External Block）
+
 
 ### 4.2 可见性(Visibility) 和 私有性(Privacy)
 在 Rust 中，所有的一切默认都是私有的(private)，除了一个例外：对于一个 `pub` 的 `枚举(Enum)`，其中的 `变体(variant)`(即成员) 默认也是公有的。
