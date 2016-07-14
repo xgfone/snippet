@@ -15,6 +15,9 @@
 ##### [gom](https://github.com/mattn/gom)
     Go Manager - bundle for go.
     
+##### [goversioninfo](https://github.com/josephspurrier/goversioninfo)
+    Golang Microsoft Windows File Properties/Version Info and Icon Resource Generator
+    
 ## Packages
 
 ##### [iris](https://github.com/kataras/iris)
@@ -169,9 +172,5 @@
 ##### [com](https://github.com/Unknwon/com)
     This is an open source project for commonly used functions for the Go programming language.
 
-------
-
-## Tools
-
-##### [goversioninfo](https://github.com/josephspurrier/goversioninfo)
-    Golang Microsoft Windows File Properties/Version Info and Icon Resource Generator
+##### [uuid](https://github.com/google/uuid)
+    UUID
