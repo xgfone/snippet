@@ -5,7 +5,17 @@
 ##### [awesome-go](https://github.com/avelino/awesome-go)
     A curated list of awesome Go frameworks, libraries and software.
 
----
+------
+
+## Tools
+
+##### [gopm](https://github.com/gpmgo/gopm)
+    Go Package Manager (gopm) is a package manager and build tool for Go.
+
+##### [gom](https://github.com/mattn/gom)
+    Go Manager - bundle for go.
+    
+## Packages
 
 ##### [iris](https://github.com/kataras/iris)
     A Community-Driven web framework written in Go.
