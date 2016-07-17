@@ -1,33 +1,47 @@
 package main
 
 import (
-	"flag"
+	"bytes"
 	"fmt"
 	"io"
 	"net"
+	"time"
 
+	"github.com/xgfone/argparse"
+	"github.com/xgfone/go-tools/count"
 	"github.com/xgfone/go-tools/net/server"
 )
 
-var (
-	handler TCPHandler
-)
+type Default struct {
+	Ip      string `default:"0.0.0.0" help:"The ip to listen to"`
+	Port    string `default:"8000" help:"The port to listen to"`
+	Single  bool   `name:"tcp_single" help:"Enable the one way to send or receive the date"`
+	Send    bool   `name:"tcp_send" help:"If true, send the data to the client"`
+	Rsize   int    `default:"8192" help:"The size of the buffer to receive the data from the client"`
+	Ssize   int    `default:"1024" help:"The size of the sent data"`
+	Verbose bool   `help:"Output the verbose information"`
+	Rate    uint   `help:"The rate to send the data" validate:"validate_num_range" min:"1024" max:"8192"`
+	End     bool   `strategy:"skip"`
+	Addr    string `strategy:"skip"`
+	IsIPv4  bool   `strategy:"skip"`
 
-func receiver(conn *net.TCPConn) {
-	buf := make([]byte, 8192)
-	for {
-		n, err := conn.Read(buf)
-		if err != nil {
-			if err == io.EOF {
-				fmt.Println("Conn broke off")
-				return
-			}
-			fmt.Println(err)
-		} else {
-			fmt.Printf("Receive %v bytes\n", n)
-		}
+	Count *count.Count `strategy:"skip"`
+}
+
+func (d Default) Debug(format string, args ...interface{}) {
+	if d.Verbose {
+		d.Error(format, args...)
 	}
 }
+
+func (d Default) Error(format string, args ...interface{}) {
+	f := fmt.Sprintf("[Server] %v\n", format)
+	fmt.Printf(f, args...)
+}
+
+var (
+	args = Default{Count: count.NewCount()}
+)
 
 func setData(num int, b byte) []byte {
 	data := make([]byte, num)
@@ -37,43 +51,119 @@ func setData(num int, b byte) []byte {
 	return data
 }
 
-func sender(conn *net.TCPConn) {
-	data := setData(1024, 'a')
+type TCPHandler struct {
+}
+
+func (t TCPHandler) Handle(conn *net.TCPConn) {
+	fmt.Println("AAAAAAAAAAAAA")
+	if !args.Single { // Send and Receive
+		t.PingPong(conn)
+	} else if args.Send { // Send only
+		t.sender(conn)
+	} else { // Receive only
+		t.receiver(conn)
+	}
+}
+
+func (t TCPHandler) PingPong(conn *net.TCPConn) {
+	buf := make([]byte, args.Rsize)
 	for {
-		if n, err := conn.Write(data); err != nil {
-			fmt.Println(err)
-			return
+		n, err := conn.Read(buf)
+		if err != nil {
+			if err == io.EOF {
+				args.Error("Connection broke off")
+				return
+			}
+			args.Error("%v", err)
 		} else {
-			fmt.Printf("Send %v bytes\n", n)
+			args.Debug("Receive %v bytes", n)
+			if n, err := conn.Write(buf[:n]); err != nil {
+				args.Error("Failed to send the data to the client: %v", err)
+			} else {
+				args.Debug("Send %v bytes", n)
+			}
 		}
 	}
 }
 
-type TCPHandler struct {
-	ip   string
-	port string
-	send bool
+// Send the data in a certain rate.
+func (t TCPHandler) sendData(conn *net.TCPConn, data []byte) (int, error) {
+	// TODO:) Send the data in a certain rate.
+	return conn.Write(data)
 }
 
-func (h TCPHandler) Handle(conn *net.TCPConn) {
-	if h.send {
-		sender(conn)
-	} else {
-		receiver(conn)
+func (t TCPHandler) sender(conn *net.TCPConn) {
+	data := setData(args.Ssize, 'a')
+	for {
+		if n, err := t.sendData(conn, data); err != nil {
+			args.Error("TCP Sender: ", err)
+			return
+		} else {
+			args.Debug("Send %v bytes", n)
+		}
 	}
 }
 
-func init() {
-	flag.StringVar(&handler.ip, "ip", "0.0.0.0", "ip")
-	flag.StringVar(&handler.port, "port", "80", "port")
-	flag.BoolVar(&handler.send, "send", false,
-		"Send the data to the client. Or receive the data from the client.")
+func (t TCPHandler) receiver(conn *net.TCPConn) {
+	buf := make([]byte, args.Rsize)
+	for {
+		n, err := conn.Read(buf)
+		if err != nil {
+			if err == io.EOF {
+				args.Error("Connection broke off")
+				return
+			}
+			args.Error("%v", err)
+		} else {
+			args.Debug("Receive %v bytes", n)
+		}
+	}
+}
+
+func (t TCPHandler) Start() {
+	info()
+	go fmt.Println(server.TCPServerForever("tcp4", args.Addr, nil, t))
+	for !args.End {
+		time.Sleep(time.Second)
+	}
+}
+
+func info() {
+	buf := bytes.NewBufferString("[Debug] Enable ")
+	buf.WriteString(fmt.Sprintf("TCP, Addr[%v], ", args.Addr))
+	if args.Single {
+		if args.Send {
+			s := fmt.Sprintf("One-Way to send, data size to send[%v]", args.Ssize)
+			buf.WriteString(s)
+		} else {
+			buf.WriteString("One-Way to receive")
+		}
+	} else {
+		s := fmt.Sprintf("Two-Way to send and receive, data size to send[%v]", args.Ssize)
+		buf.WriteString(s)
+	}
+	fmt.Println(buf.String())
 }
 
 func main() {
-	flag.Parse()
-	addr := net.JoinHostPort(handler.ip, handler.port)
-	fmt.Printf("Addr[%v] Send[%v]\n", addr, handler.send)
-	err := server.TCPServerForever("tcp", addr, handler)
-	fmt.Println(err)
+	parser := argparse.NewParser()
+	parser.Register(&args)
+	parser.Parse(nil)
+
+	if args.Ssize < 64 || args.Ssize > 32768 {
+		args.Ssize = 1024
+	}
+
+	if args.Rsize < 1024 || args.Rsize > 65535 {
+		args.Rsize = 8192
+	}
+
+	args.Addr = net.JoinHostPort(args.Ip, args.Port)
+
+	fmt.Printf("%+v\n", args)
+	server.Debug = true
+	//argparse.Debug = true
+
+	tcp := TCPHandler{}
+	tcp.Start()
 }
