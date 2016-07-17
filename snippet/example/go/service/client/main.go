@@ -1,18 +1,45 @@
 package main
 
 import (
-	"flag"
+	"bytes"
 	"fmt"
 	"io"
 	"net"
 	"os"
+	"time"
+
+	"github.com/xgfone/argparse"
+	"github.com/xgfone/go-tools/count"
 )
 
+type Default struct {
+	Ip      string `default:"127.0.0.1" help:"The ip to connect to"`
+	Port    string `default:"8000" help:"The port to connnect to"`
+	Single  bool   `name:"tcp_single" help:"Enable the one way to send or receive the date"`
+	Send    bool   `name:"tcp_send" help:"If true, send the data to the server"`
+	Rsize   int    `default:"8192" help:"The size of the buffer to receive the data from the client"`
+	Ssize   int    `default:"1024" help:"The size of the sent data"`
+	Verbose bool   `help:"Output the verbose information"`
+	Rate    uint   `help:"The rate to send the data"`
+	End     bool   `strategy:"skip"`
+	Addr    string `strategy:"skip"`
+
+	Count *count.Count `strategy:"skip"`
+}
+
+func (d Default) Debug(format string, args ...interface{}) {
+	if d.Verbose {
+		d.Error(format, args...)
+	}
+}
+
+func (d Default) Error(format string, args ...interface{}) {
+	f := fmt.Sprintf("[Client] %v\n", format)
+	fmt.Printf(f, args...)
+}
+
 var (
-	ip   = flag.String("ip", "127.0.0.1", "ip")
-	port = flag.String("port", "80", "port")
-	send = flag.Bool("send", false,
-		"Send the data to the server. Or receive the data from the server.")
+	args = Default{Count: count.NewCount()}
 )
 
 func setData(num int, b byte) []byte {
@@ -23,47 +50,104 @@ func setData(num int, b byte) []byte {
 	return data
 }
 
-func sender(conn *net.TCPConn) {
-	data := setData(1024, 'a')
-	for {
-		if n, err := conn.Write(data); err != nil {
-			fmt.Println(err)
+type TcpClient struct {
+}
+
+// Send the data in a certain rate.
+func (t TcpClient) sendData(conn *net.TCPConn, data []byte) (int, error) {
+	// TODO:) Send the data in a certain rate.
+	return conn.Write(data)
+}
+
+func (t TcpClient) sender(conn *net.TCPConn) {
+	args.Error("Start a goroutine to send the data")
+
+	data := setData(args.Ssize, 'a')
+	for !args.End {
+		if n, err := t.sendData(conn, data); err != nil {
+			args.Error("%v", err)
+			args.End = true
 			return
 		} else {
-			fmt.Printf("Send %v bytes\n", n)
+			args.Debug("Send %v bytes", n)
 		}
 	}
 }
 
-func receiver(conn *net.TCPConn) {
-	buf := make([]byte, 8192)
+func (t TcpClient) receiver(conn *net.TCPConn) {
+	args.Error("Start a goroutine to receive the data")
+
+	buf := make([]byte, args.Rsize)
 	for {
 		n, err := conn.Read(buf)
 		if err != nil {
 			if err == io.EOF {
-				fmt.Println("Conn broke off")
+				args.End = true
+				args.Error("Conn broke off")
 				return
 			}
-			fmt.Println(err)
+			args.Error("%v", err)
 		} else {
-			fmt.Printf("Receive %v bytes\n", n)
+			args.Debug("Receive %v bytes\n", n)
 		}
 	}
 }
 
-func main() {
-	flag.Parse()
-	addr := net.JoinHostPort(*ip, *port)
-	fmt.Printf("Addr[%v] Send[%v]\n", addr, *send)
-	conn, err := net.Dial("tcp", addr)
+func (t TcpClient) Start() {
+	conn, err := net.Dial("tcp4", args.Addr)
 	if err != nil {
-		fmt.Println(err)
+		args.Error("%v", err)
 		os.Exit(1)
 	}
-	tcp, _ := conn.(*net.TCPConn)
-	if *send {
-		sender(tcp)
+
+	tcp := conn.(*net.TCPConn)
+	args.Debug("Connect to %v", args.Addr)
+
+	if !args.Single {
+		go t.sender(tcp)
+		go t.receiver(tcp)
+	} else if args.Send {
+		go t.sender(tcp)
 	} else {
-		receiver(tcp)
+		go t.receiver(tcp)
 	}
+	for !args.End {
+		time.Sleep(time.Second)
+	}
+}
+
+func info() {
+	buf := bytes.NewBufferString("[Debug] Enable ")
+	buf.WriteString(fmt.Sprintf("TCP, Addr[%v], ", args.Addr))
+	if args.Single {
+		if args.Send {
+			s := fmt.Sprintf("One-Way to send, data size to send[%v]", args.Rsize)
+			buf.WriteString(s)
+		} else {
+			buf.WriteString("One-Way toreceive")
+		}
+	} else {
+		s := fmt.Sprintf("Two-Way to send and receive, data size to send[%v]", args.Rsize)
+		buf.WriteString(s)
+	}
+	fmt.Println(buf.String())
+}
+
+func main() {
+	parser := argparse.NewParser()
+	parser.Register(&args)
+	parser.Parse(nil)
+
+	if args.Ssize < 64 || args.Ssize > 32768 {
+		args.Ssize = 1024
+	}
+
+	if args.Rsize < 1024 || args.Rsize > 65535 {
+		args.Rsize = 8192
+	}
+
+	args.Addr = net.JoinHostPort(args.Ip, args.Port)
+	info()
+	h := TcpClient{}
+	h.Start()
 }
