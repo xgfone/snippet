@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/xgfone/argparse"
-	"github.com/xgfone/go-tools/count"
 	"github.com/xgfone/go-tools/net/server"
+	"github.com/xgfone/go-tools/tbucket"
 )
 
 type Default struct {
@@ -20,12 +20,12 @@ type Default struct {
 	Rsize   int    `default:"8192" help:"The size of the buffer to receive the data from the client"`
 	Ssize   int    `default:"1024" help:"The size of the sent data"`
 	Verbose bool   `help:"Output the verbose information"`
-	Rate    uint   `help:"The rate to send the data" validate:"validate_num_range" min:"1024" max:"8192"`
+	Rate    uint   `help:"The rate to send the data, Mbit/s" validate:"validate_num_range" min:"0" max:"1000"`
 	End     bool   `strategy:"skip"`
 	Addr    string `strategy:"skip"`
 	IsIPv4  bool   `strategy:"skip"`
 
-	Count *count.Count `strategy:"skip"`
+	TB *tbucket.TokenBucket `strategy:"skip"`
 }
 
 func (d Default) Debug(format string, args ...interface{}) {
@@ -40,7 +40,7 @@ func (d Default) Error(format string, args ...interface{}) {
 }
 
 var (
-	args = Default{Count: count.NewCount()}
+	args = Default{}
 )
 
 func setData(num int, b byte) []byte {
@@ -55,7 +55,6 @@ type TCPHandler struct {
 }
 
 func (t TCPHandler) Handle(conn *net.TCPConn) {
-	fmt.Println("AAAAAAAAAAAAA")
 	if !args.Single { // Send and Receive
 		t.PingPong(conn)
 	} else if args.Send { // Send only
@@ -88,8 +87,14 @@ func (t TCPHandler) PingPong(conn *net.TCPConn) {
 
 // Send the data in a certain rate.
 func (t TCPHandler) sendData(conn *net.TCPConn, data []byte) (int, error) {
-	// TODO:) Send the data in a certain rate.
-	return conn.Write(data)
+	if args.TB != nil {
+		args.TB.Get()
+	}
+	if n, err := conn.Write(data); err != nil {
+		return 0, err
+	} else {
+		return n, nil
+	}
 }
 
 func (t TCPHandler) sender(conn *net.TCPConn) {
@@ -122,7 +127,7 @@ func (t TCPHandler) receiver(conn *net.TCPConn) {
 
 func (t TCPHandler) Start() {
 	info()
-	go fmt.Println(server.TCPServerForever("tcp4", args.Addr, nil, t))
+	go fmt.Println(server.TCPServerForever("tcp4", args.Addr, 0, t))
 	for !args.End {
 		time.Sleep(time.Second)
 	}
@@ -156,6 +161,12 @@ func main() {
 
 	if args.Rsize < 1024 || args.Rsize > 65535 {
 		args.Rsize = 8192
+	}
+
+	if args.Rate != 0 {
+		rate := args.Rate * 1024 / 8                   // Convert MBit/s to KByte/s
+		args.TB = tbucket.NewTokenBucket(uint64(rate)) // 1 token stands for 1KB/s
+		args.TB.Start()
 	}
 
 	args.Addr = net.JoinHostPort(args.Ip, args.Port)
