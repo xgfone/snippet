@@ -34,7 +34,8 @@ dpkg-reconfigure locales
 aptitude install libssl1.0.0 build-essential vim git vim-gtk libssl-dev
 aptitude install gdebi alacarte meld remmina devhelp calibre chmsee
 aptitude install fcitx-table-wubi fcitx-pinyin fcitx-table-wbpy
-aptitude install mysql-workbench chromium gparted gimp bcompare
+aptitude install mysql-workbench chromium gparted gimp bcompare thunderbird soundconverter brasero
+aptitude install xmind gitkraken gnome-screenshot
 ```
 
 #### VPN Proxy
