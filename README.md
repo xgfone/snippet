@@ -231,6 +231,8 @@ DOCS
         - [37 脚本编写](./snippet/docs/shell/shell-others.md#37-脚本编写)
     - [附录](./snippet/docs/shell/shell-appendix.md)
 - [SQL](./snippet/docs/db/sql)
+- [Swift](./snippet/docs/swift)
+	- [Packages](./snippet/docs/swift/packages.md)
 - [Tool](./snippet/docs/tool)
     - [Diff & Patch](./snippet/docs/tool/diff&patch.md)
     - other tools
