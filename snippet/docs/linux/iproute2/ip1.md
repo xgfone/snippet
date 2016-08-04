@@ -1,7 +1,7 @@
 
 # 前言
 
-[iproute2](./_static/iproute2.png_)
+[iproute2](./_static/iproute2.png)
 
 ## 一、替代 arp, ifconfig, route 等命令
 
