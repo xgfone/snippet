@@ -1,4 +1,8 @@
 
+# 前言
+
+[iproute2](./_static/iproute2.png_)
+
 ## 一、替代 arp, ifconfig, route 等命令
 
 #### 显示网卡
