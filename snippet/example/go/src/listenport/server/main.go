@@ -34,7 +34,12 @@ func tcp(conn *net.TCPConn) {
 
 			break
 		} else {
-			fmt.Printf("Receive the data from %v: %v\n", addr, buf[:n])
+			quit := strings.Lower(strings.Trim(string(buf[:n])))
+			if quit == "quit" || quit == "exit" {
+				fmt.Printf("The client[%v] exit\n", addr)
+			} else {
+				fmt.Printf("Receive the data from %v: %v\n", addr, buf[:n])
+			}
 		}
 	}
 }
