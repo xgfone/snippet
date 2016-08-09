@@ -140,6 +140,8 @@ DOCS
     - [Tcpdump](./snippet/docs/network/tcpdump)
     - [Tunnel](./snippet/docs/network/tunnel)
     - [Others](./snippet/docs/network/others)
+    	- [写一个每秒接收 100 万数据包的程序究竟有多难](http://blog.jobbole.com/87759/)
+    	- [端口扫描](./snippet/docs/network/others/port-scan.md)
 - [Openstack](./snippet/docs/openstack)
 - [Package](./snippet/docs/package)
 - [Python](./snippet/docs/python)
