@@ -13,6 +13,10 @@ RegexExp | `/pattern/flags`(详见下文)
 Function | `function(...){...}`(详见下文)
 Object   | `{prop: value, prop2: value2... }`
 
+JavaScript 只提供了 9 个原生构造函数，除了上面的 8 个，还有一个是 `Error()`。
+
+当原生值被当作对象使用时，JavaScript 引擎会自动将其包装成一个对应的临时对象，然后使用该临时对象；当使用完成后，再丢弃该临时对象。
+
 `typeof 表达式` → 小写的类型名称
 
 将 `0`、`''(空字符串)`、`null` 和 `undefined` 转换为 `布尔类型` 时会得到 `false`，转换其他值均会得到 `true`。
