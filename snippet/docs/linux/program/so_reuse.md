@@ -18,9 +18,9 @@ By default, no two sockets can be bound to the same combination of source addres
 
 Anything said so far is pretty much equal for all major operating system. Things start to get OS specific when address reuse comes into play. We start with BSD, since as I said above, it is the mother of all socket implementations.
 
-### BSD
+## BSD
 
-#### SO_REUSEADDR
+### SO_REUSEADDR
 
 If `SO_REUSEADDR` is enabled on a socket prior to binding it, the socket can be successfully bound unless there is a conflict with another socket bound to **`exactly`** the same combination of source address and port. Now you may wonder how is that any different than before? The keyword is "exactly". `SO_REUSEADDR` mainly changes the way how wildcard addresses ("any IP address") are treated when searching for conflicts.
 
@@ -52,7 +52,7 @@ The question is, how does the system treat a socket in state `TIME_WAIT`? If `SO
 
 There is one final thing you should know about `SO_REUSEADDR`. Everything written above will work as long as the socket you want to bind to has address reuse enabled. It is not necessary that the other socket, the one which is already bound or is in a `TIME_WAIT` state, also had this flag set when it was bound. The code that decides if the bind will succeed or fail only inspects the `SO_REUSEADDR` flag of the socket fed into the `bind()` call, for all other sockets inspected, this flag is not even looked at.
 
-#### SO_REUSEPORT
+### SO_REUSEPORT
 
 `SO_REUSEPORT` is what most people would expect `SO_REUSEADDR` to be. Basically, `SO_REUSEPORT` allows you to bind an arbitrary number of sockets to **`exactly`** the same source address and port as long as **`all`** prior bound sockets also had `SO_REUSEPORT` set before they were bound. If the first socket that is bound to an address and port does not have `SO_REUSEPORT` set, no other socket can be bound to exactly the same address and port, regardless if this other socket has `SO_REUSEPORT` set or not, until the first socket releases its binding again. Unlike in case of `SO_REUESADDR` the code handling `SO_REUSEPORT` will not only verify that the currently bound socket has `SO_REUSEPORT` set but it will also verify that the socket with a conflicting address and port had `SO_REUSEADDR` set when it was bound.
 
@@ -60,7 +60,7 @@ There is one final thing you should know about `SO_REUSEADDR`. Everything writte
 
 There is not much more to say about `SO_REUSEPORT` other than that it was added later than `SO_REUSEADDR`, that's why you will not find it in many socket implementations of other systems, which "forked" the BSD code before this option was added, and that there was no way to bind two sockets to exactly the same socket address in BSD prior to this option.
 
-#### `Connect()` Returning `EADDRINUSE`?
+### `Connect()` Returning `EADDRINUSE`?
 
 Most people know that `bind()` may fail with the error `EADDRINUSE`, however, when you start playing around with address reuse, you may run into the strange situation that `connect()` fails with that error as well. How can this be? How can a remote address, after all that's what connect adds to a socket, be already in use? Connecting multiple sockets to exactly the same remote address has never been a problem before, so what's going wrong here?
 
@@ -68,47 +68,54 @@ As I said on the very top of my reply, a connection is defined by a tuple of fiv
 
 So if you bind two sockets of the same protocol to the same source address and port and try to connect them both to the same destination address and port, `connect()` will actually fail with the error `EADDRINUSE` for the second socket you try to connect, which means that a socket with an identical tuple of five values is already connected.
 
-#### Multicast Addresses
+### Multicast Addresses
 
 Most people ignore the fact that multicast addresses exist, but they do exist. While unicast addresses are used for one-to-one communication, multicast addresses are used for one-to-many communication. Most people got aware of multicast addresses when they learned about IPv6 but multicast addresses also existed in IPv4, even though this feature was never widely used on the public Internet.
 
 The meaning of `SO_REUSEADDR` changes for multicast addresses as it allows multiple sockets to be bound to exactly the same combination of source multicast address and port. In other words, for multicast addresses `SO_REUSEADDR` behaves exactly as `SO_REUSEPORT` for unicast addresses. Actually the code treats `SO_REUSEADDR` and `SO_REUSEPORT` identically for multicast addresses, that means you could say that `SO_REUSEADDR` implies `SO_REUSEPORT` for all multicast addresses and the other way round.
 
 
-### FreeBSD/OpenBSD/NetBSD
+## FreeBSD/OpenBSD/NetBSD
 
 All these are rather late forks of the original BSD code, that's why they all three offer the same options as BSD and they also behave the same way as in BSD.
 
 
-### MacOS X
+## MacOS X
 
 At its very core, MacOS X is simply a BSD-style UNIX, based on a rather late fork of the BSD code, which was even synchronized with FreeBSD 5 for the Mac OS 10.3 release. That's why MacOS X offers the same options as BSD and they also behave the same way as in BSD.
 
 
-### iOS
+## iOS
 
 iOS is just modified MacOS X at its core, so everything that applies to MacOS X also applies to iOS.
 
 
-### Linux
+## Linux
 
 Prior to `Linux 3.9`, only the option `SO_REUSEADDR` existed. This option behaves generally the same as in BSD with two important exceptions. One exception is that if a listening (server) TCP socket is already bound to a wildcard IP address and a specific port, no other TCP socket can be bound to the same port, regardless whether either one or both sockets have this flag set. Not even if it would use a more specific address (as is allowed in case of BSD). This restriction does not apply to non-listening (client) TCP sockets and it is also possible to first bind a listening TCP socket to a specific IP address and port combination and later on bind another one to a wildcard IP address and the same port. The second exception is that for UDP sockets this option behaves exactly like `SO_REUSEPORT` in BSD, so two UDP sockets can be bound to exactly the same address and port combination as long as both had this flag set before they were bound.
 
 `Linux 3.9` added the option `SO_REUSEPORT` to Linux as well. This option allows two (or more) sockets, TCP or UDP, listening (server) or non-listening (client), to be bound to exactly the same address and port combination as long as all sockets (including the very first one) had this flag set prior to binding them. To prevent "port hijacking", there is one special limitation, though: All sockets that want to share the same address and port combination must belong to processes that share the same effective user ID! So one user cannot "steal" ports of another user. Additionally the kernel performs some "special magic" for `SO_REUSEPORT` sockets that isn't found in any other operating system so far: For UDP sockets, it tries to distribute datagrams evenly, for TCP listening sockets, it tries to distribute incoming connect requests (those accepted by calling `accept()`) evenly across all the sockets that share the same address and port combination. That means while it is more or less random which socket receives a datagram or connect request in other operating systems that allow full address reuse, Linux tries to optimize distribution so that, for example, multiple instances of a simple server process can easily use `SO_REUSEPORT` sockets to achieve a kind of simple load balancing and that absolutely for free as the kernel is doing "all the hard work" for them.
 
 
-### Android
+## Android
 
 Even though the whole Android system is somewhat different from most Linux distributions, at its core works a slightly modified Linux kernel, thus everything that applies to Linux applies to Android as well.
 
 
-### Windows
+## Windows
 
 Windows only knows the `SO_REUSEADDR` option, there is no `SO_REUSEPORT`. Setting `SO_REUSEADDR` on a socket in Windows behaves like setting `SO_REUSEPORT` and `SO_REUSEADDR` on a socket in BSD, with one exception: A socket with `SO_REUSEADDR` can always bind to exactly the same source address and port as an already bound socket, **even if the other socket did not have this option set when it was bound**. This behavior is somewhat dangerous because it allows an application "to steal" the connected port of another application. Needless to say, this can have major security implications. Microsoft realized that this might be a problem and thus added another socket option `SO_EXCLUSIVEADDRUSE`. Setting `SO_EXCLUSIVEADDRUSE` on a socket makes sure that if the binding succeeds, the combination of source address and port is owned exclusively by this socket and no other socket can bind to them, not even if it has `SO_REUSEADDR` set.
 
 
-### Solaris
+## Solaris
 
 Solaris is the successor of SunOS. SunOS was originally based on a fork of BSD, SunOS 5 and later was based on a fork of SVR4, however SVR4 is a merge of BSD, System V, and Xenix, so up to some degree Solaris is also a BSD fork, and a rather early one. As a result Solaris only knows `SO_REUSEADDR`, there is no `SO_REUSEPORT`. The `SO_REUSEADDR` behaves pretty much the same as it does in BSD. As far as I know there is no way to get the same behavior as `SO_REUSEPORT` in Solaris, that means it is not possible to bind two sockets to exactly the same address and port.
 
 Similar to Windows, Solaris has an option to give a socket an exclusive binding. This option is named `SO_EXCLBIND`. If this option is set on a socket prior to binding it, setting `SO_REUSEADDR` on another socket has no effect if the two sockets are tested for an address conflict. E.g. if `socketA` is bound to a wildcard address and `socketB` has `SO_REUSEADDR` enabled and is bound to a non-wildcard address and the same port as `socketA`, this bind will normally succeed, unless `socketA` had `SO_EXCLBIND` enabled, in which case it will fail regardless the `SO_REUSEADDR` flag of `socketB`.
+
+------
+
+From: http://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t
+
+Reference:
+- [SO_REUSEPORT学习笔记](http://www.blogjava.net/yongboy/archive/2015/02/12/422893.html)
