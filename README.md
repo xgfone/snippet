@@ -123,7 +123,7 @@ DOCS
     - [IPv4](./snippet/docs/linux/ipv4)
     - [NetFilter](./snippet/docs/linux/netfilter)
         - [Linux IPtables使用入门](./snippet/docs/linux/netfilter/iptables-usage.md)
-        - [TCP握手与IPtables](./snippet/docs/linux/netfilter/iptables-bigginer.md)
+        - [TCP握手与IPtables](./snippet/docs/linux/netfilter/iptables-biginner.md)
         - [IPtables 扩展](./snippet/docs/linux/netfilter/iptables-ext.md)
         - [NetFilter插件开发](./snippet/docs/linux/netfilter/netfilter.txt)
         - [其它链接](./snippet/docs/linux/netfilter/link.md)
