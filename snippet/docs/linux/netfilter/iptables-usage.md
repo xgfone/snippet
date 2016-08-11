@@ -5,7 +5,7 @@ Linux iptables使用入门
 
 netfilter/iptables 是在 linux 2.4 及后继版本的内核中集成的一种服务，其工作在 osi 七层模型的二、三层。
 
-netfilter/iptables 由 netfilter 组件和 iptables 组件构成，其中 netfilter 组件集成在内核的一部分，由一些信息包过滤表组成，这些表包含内核用来控制信息包过滤处理的规则集。
+netfilter/iptables 由 `netfilter` 组件和 `iptables` 组件构成，其中 `netfilter` 组件集成在内核的一部分，由一些信息包过滤表组成，这些表包含内核用来控制信息包过滤处理的规则集。
 
 其模块位于 `/lib/modules/$(uname -r)/kernel/net/netfilter/`，iptables 组件是一种开发工具，它运行于用户空间，它使插入、修改和除去信息包过滤表中的规则变得容易。
 
