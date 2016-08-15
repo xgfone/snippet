@@ -54,7 +54,7 @@ aptitude install network-manager-vpnc-gnome
 ```shell
 git clone git://github.com/xgfone/dot-vimrc.git ~/.vim
 #ln -s ~/.vim/vimrc ~/.vimrc
-git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+git clone https://github.com/VundleVim/Vundle.Vim ~/.vim/bundle/Vundle.vim
 ```
 Then, start `vim`, and execute the command `:BundleInstall`.
 
