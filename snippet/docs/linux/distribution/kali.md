@@ -20,7 +20,8 @@ deb http://mirrors.aliyun.com/kali kali-rolling main contrib non-free
 ```shell
 #dpkg --add-architecture i386
 apt-get update
-apt-get isntall aptitude
+apt-get install aptitude
+aptitude upgrade
 ```
 
 #### Optional
