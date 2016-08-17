@@ -286,3 +286,20 @@ Go1基准测试套件比 Go1.5 更快了，GC停顿时间比 Go1.5 更短了。
 ## 标准库
 `net/http` 包透明地支持全新的 `HTTP/2` 协议。Go的客户端和服务器在使用 `https` 时将自动使用 `HTTP/2`。Go中并没有特定的可导出的 API 来处理 `HTTP/2`，就像没有特定的可导出 API 来处理 `HTTP/1.1` 一样。不过，程序可通过导入 `golang.org/x/net/http2` 包来调整`HTTP/2`的细节,特别是它的`ConfigureServer`和`ConfigureTransport`函数。
 
+
+# Go1.7
+
+除了一个小的语言规范方面的改变外，大部分改变都是关于工具链（toolchain）、运行时（runtime）和库（libraries）。
+
+## 语言规范
+1.7 之前：
+
+    A statement list ends in a terminating statement if the list is not empty and
+    its final statement is terminating.
+
+1.7 中：
+
+    A statement list ends in a terminating statement if the list is not empty and
+    its final non-empty statement is terminating. 
+
+即：1.7 中多了个 `non-empty` 词，强调语句列表中的最后一个语句必须是 `非空的`。
