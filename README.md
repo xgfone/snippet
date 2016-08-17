@@ -94,6 +94,7 @@ DOCS
     	- [GO1.4](./snippet/docs/go/go-version.md#go14)
     	- [GO1.5](./snippet/docs/go/go-version.md#go15)
     	- [GO1.6](./snippet/docs/go/go-version.md#go16)
+        - [GO1.7](./snippet/docs/go/go-version.md#go17)
     - [Others]
         - [Go Playground](https://wide.b3log.org/playground)
         - [Golang net.http标准库](./snippet/docs/go/net-http.md)
