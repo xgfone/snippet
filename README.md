@@ -32,6 +32,7 @@ DOCS
         - [处理百万级以上的数据时，提高查询速度的方法](./snippet/docs/db/sql/million-record.md)
         - [MySQL 的查询、子查询及连接查询](./snippet/docs/db/sql/mysql-select.md)
         - [MySQL 建表与索引使用规范详解](./snippet/docs/db/sql/mysql-table-and-index.md)
+        - [理解MySQL——索引与优化](./snippet/docs/db/sql/mysql-index.md)
 - [Distributed](./snippet/docs/distributed)
 - [Document](./snippet/docs/document)
     - [Markdown](./snippet/docs/document/markdown)
