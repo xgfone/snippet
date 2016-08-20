@@ -17,7 +17,10 @@
     
 ##### [goversioninfo](https://github.com/josephspurrier/goversioninfo)
     Golang Microsoft Windows File Properties/Version Info and Icon Resource Generator
-    
+
+##### [btlike](https://github.com/btlike)
+    高性能、全功能BT搜索引擎.
+
 ## Packages
 
 ##### [go-flags](https://github.com/jessevdk/go-flags)
@@ -177,3 +180,9 @@
 
 ##### [uuid](https://github.com/google/uuid)
     UUID
+
+##### [lhttp](https://github.com/fanux/lhttp)
+    go websocket, a better way to buid your IM server.
+
+##### [dht](https://github.com/shiyanhui/dht)
+    BitTorrent DHT Protocol && DHT Spider.
