@@ -1,19 +1,12 @@
 package logger
 
 import (
-	"fmt"
 	"io"
 	"os"
 
 	log "github.com/inconshreveable/log15"
 	"github.com/xgfone/go-tools/log/handler"
 )
-
-var Logger log.Logger
-
-func init() {
-	Logger, _ = NewLogger("info", "")
-}
 
 type closingHandler struct {
 	io.WriteCloser
@@ -38,7 +31,11 @@ func TimedRotatingFileHandler(fmtr log.Format, filename string, backupCount, int
 	return closingHandler{_h, log.StreamHandler(_h, fmtr)}, nil
 }
 
-func NewLogger(level, filepath string) (logger log.Logger, err error) {
+type Logger struct {
+	log.Logger
+}
+
+func NewLogger(level, filepath string) (logger *Logger, err error) {
 	// Logger := log.New(os.Stderr, "app", log.LstdFlags|log.Lshortfile)
 
 	var lvl log.Lvl
@@ -70,48 +67,10 @@ func NewLogger(level, filepath string) (logger log.Logger, err error) {
 		log.LvlFilterHandler(lvl, shandler),
 	)
 
-	logger = log.New()
-	logger.SetHandler(handlers)
+	_logger := log.New()
+	_logger.SetHandler(handlers)
+
+	logger = &Logger{Logger: _logger}
 
 	return
-}
-
-func Debug(v ...interface{}) {
-	Logger.Debug(fmt.Sprint(v...))
-}
-
-func Info(v ...interface{}) {
-	Logger.Info(fmt.Sprint(v...))
-}
-
-func Warn(v ...interface{}) {
-	Logger.Warn(fmt.Sprint(v...))
-}
-
-func Error(v ...interface{}) {
-	Logger.Error(fmt.Sprint(v...))
-}
-
-func Crit(v ...interface{}) {
-	Logger.Crit(fmt.Sprint(v...))
-}
-
-func Debugf(format string, v ...interface{}) {
-	Logger.Debug(fmt.Sprintf(format, v...))
-}
-
-func Infof(format string, v ...interface{}) {
-	Logger.Info(fmt.Sprintf(format, v...))
-}
-
-func Warnf(format string, v ...interface{}) {
-	Logger.Warn(fmt.Sprintf(format, v...))
-}
-
-func Errorf(format string, v ...interface{}) {
-	Logger.Error(fmt.Sprintf(format, v...))
-}
-
-func Critf(format string, v ...interface{}) {
-	Logger.Crit(fmt.Sprintf(format, v...))
 }
