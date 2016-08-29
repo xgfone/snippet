@@ -268,4 +268,5 @@ DOCS
     - [Git HTTP代理](./snippet/docs/vcs/git-http-proxy.md)
     - [Git学习笔记](./snippet/docs/vcs/git-learning-note.md)
     - [Git rebase详解](./snippet/docs/vcs/git-rebase.md)
+    - [Github Guide](./snippet/docs/vcs/github-guide.md)
 - [Web](./snippet/docs/web)
