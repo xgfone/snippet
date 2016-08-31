@@ -23,6 +23,9 @@
 
 ## Packages
 
+##### [go-restful](https://github.com/emicklei/go-restful)
+    package for building REST-style Web Services using Google Go.
+
 ##### [go-flags](https://github.com/jessevdk/go-flags)
     go command line option parser.
 
