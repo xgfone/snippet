@@ -82,6 +82,13 @@ CSS_SELECTORS = {
             "text_css": '#MyContent',
             "title_css": '#ks_xp .title'
         },
+        "4xbxb": {
+            "list_css": ".zuo li a[href]",
+            "next_css": ".zuo div.pagination22 a.pagelink_a[href]",
+
+            "text_css": "div.content",
+            "title_css": "div.page_title",
+        },
     }
 }
 FILE_MIN_SIZE = 30  # The unit is KB.
