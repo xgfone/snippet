@@ -109,6 +109,7 @@ DOCS
 	- [Node.js ES2015 Support](http://node.green/)
     - [JavaScript 快速参考](./snippet/docs/js/js-quick-reference.md)
     - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
+    - [Packages](./snippet/docs/js/packages.md)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
 		- [理论篇](./snippet/docs/linux/QoS/qos-theory.md)

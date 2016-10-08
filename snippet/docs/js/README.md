@@ -4,3 +4,4 @@
 - [JavaScript 标准参考教程](https://github.com/ruanyf/jstutorial) （点击 [这里](http://javascript.ruanyifeng.com/) 阅读）
 - [Node.js ES2015 Support](http://node.green/)
 - [JavaScript 快速参考](./js-quick-reference.md)
+- [Packages](./packages.md)
