@@ -14,7 +14,7 @@
 
 ##### [gom](https://github.com/mattn/gom)
     Go Manager - bundle for go.
-    
+
 ##### [goversioninfo](https://github.com/josephspurrier/goversioninfo)
     Golang Microsoft Windows File Properties/Version Info and Icon Resource Generator
 
@@ -189,3 +189,6 @@
 
 ##### [dht](https://github.com/shiyanhui/dht)
     BitTorrent DHT Protocol && DHT Spider.
+
+##### [go-version](https://github.com/hashicorp/go-version)
+    A Go (golang) library for parsing and verifying versions and version constraints.
