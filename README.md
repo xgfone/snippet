@@ -110,7 +110,7 @@ DOCS
 	- [Node.js ES2015 Support](http://node.green/)
     - [JavaScript 快速参考](./snippet/docs/js/js-quick-reference.md)
     - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
-    - [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)
+    - [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)（点击 [这里](https://i5ting.github.io/asynchronous-flow-control) 阅读）
     - [Packages](./snippet/docs/js/packages.md)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
