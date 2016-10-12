@@ -5,4 +5,6 @@
 - [JavaScript 标准参考教程](https://github.com/ruanyf/jstutorial) （点击 [这里](http://javascript.ruanyifeng.com/) 阅读）
 - [Node.js ES2015 Support](http://node.green/)
 - [JavaScript 快速参考](./js-quick-reference.md)
+- [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
+- [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)
 - [Packages](./packages.md)
