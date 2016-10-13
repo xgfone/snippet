@@ -17,7 +17,9 @@
     Router middleware for koa. Support Koa 2.x.
 
 ##### [easynode](https://github.com/easynode/easynode)
-    Easynode is a framework for microservice written with es6 and
-    integrated a light web service based on koa and a light tcp servic
-    based on native socket.
+    Easynode is a framework for microservice written with es6 and integrated a light web service 
+    based on koa and a light tcp servic based on native socket.
     You can utilize all feature characters of ES6 in the framework.
+
+##### [ava](https://github.com/avajs/ava)
+    Futuristic JavaScript test runner.
