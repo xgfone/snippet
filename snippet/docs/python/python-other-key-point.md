@@ -155,4 +155,4 @@ X.static_method()      # 输出 static method
 from __future__ import unicode_literals
 ```
 
-关于Python编码的问题，具体的请参见“`文字编码和Unicode标准`”和“`Python文件编码`”。
+关于Python编码的问题，具体的请参见 [`Python文件编码`](./python-file-encoding.md)。
