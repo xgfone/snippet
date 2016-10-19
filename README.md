@@ -204,7 +204,7 @@ DOCS
         	- [Django Form的使用](./snippet/docs/python/django-form.md#%E4%B8%83django-form-%E7%9A%84%E4%BD%BF%E7%94%A8)
         	- [ModelForm类](./snippet/docs/python/django-form.md#%E5%85%ABmodelform%E7%B1%BB)
 		- [修改 `pypi` 源](./snippet/docs/python/pypi_source.md)
-        - [Python文件编码](./python-file-encoding.md)
+        - [Python文件编码](./snippet/docs/python/python-file-encoding.md)
         - [其它资源](./snippet/docs/python/link.md)
 - [Rust](./snippet/docs/rust)
     - [Rust参考手册摘录翻译(表达式和Item部分暂未翻译)](./snippet/docs/rust/ref.md)
