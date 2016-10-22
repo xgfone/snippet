@@ -23,3 +23,6 @@
 
 ##### [ava](https://github.com/avajs/ava)
     Futuristic JavaScript test runner.
+
+##### [js-csp](https://github.com/ubolonton/js-csp)
+    CSP channels for Javascript (like Clojurescript's core.async, or Go)
