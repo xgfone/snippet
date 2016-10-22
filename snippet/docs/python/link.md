@@ -24,3 +24,5 @@
 ##### [Markdown](https://github.com/waylan/Python-Markdown)
     A Python implementation of John Gruber’s Markdown.
 
+##### [twisted-csp](https://github.com/ubolonton/twisted-csp)
+    Go-style concurrency for Twisted
