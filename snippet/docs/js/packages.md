@@ -38,3 +38,6 @@
 
 ##### [js-csp](https://github.com/ubolonton/js-csp)
     CSP channels for Javascript (like Clojurescript's core.async, or Go)
+
+##### [task.js](https://github.com/mozilla/task.js)
+    Beautiful concurrency for JavaScript.
