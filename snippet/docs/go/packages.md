@@ -195,3 +195,6 @@
 
 ##### [gofc](https://github.com/Kmotiko/gofc)
     OpenFlow Controller written in go.
+
+##### [graceful](https://github.com/tylerb/graceful)
+    Graceful is a Go package enabling graceful shutdown of an http.Handler server.
