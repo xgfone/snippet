@@ -102,6 +102,8 @@ DOCS
         - [Golang HTML Template](./snippet/docs/go/template.txt)
         - [Golang Packages](./snippet/docs/go/packages.md)
 		- [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
+- [Java](./snippet/docs/java)
+    - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)
 	- [JavaScript ES6官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
     - [Exploring ES6](http://exploringjs.com/es6/)
