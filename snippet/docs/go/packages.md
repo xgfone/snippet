@@ -207,3 +207,7 @@
 
 ##### [graceful](https://github.com/tylerb/graceful)
     Graceful is a Go package enabling graceful shutdown of an http.Handler server.
+
+##### [goquery](https://github.com/PuerkitoBio/goquery)
+    A little like that j-thing, only in Go.
+    goquery brings a syntax and a set of features similar to jQuery to the Go language.
