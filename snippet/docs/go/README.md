@@ -48,3 +48,4 @@ Go语言笔记
 - [Golang Packages](./packages.md)
 - [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
 - [Go 性能优化](./optimization.md)
+- [优化Go的模式](http://blog.cyeam.com/golang/2016/08/18/apatternforoptimizinggo)

@@ -103,6 +103,7 @@ DOCS
         - [Golang Packages](./snippet/docs/go/packages.md)
 		- [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
         - [Go 性能优化](./snippet/docs/go/optimization.md)
+        - [优化Go的模式](http://blog.cyeam.com/golang/2016/08/18/apatternforoptimizinggo)
 - [Java](./snippet/docs/java)
     - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)
