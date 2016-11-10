@@ -102,7 +102,7 @@ DOCS
         - [Golang HTML Template](./snippet/docs/go/template.txt)
         - [Golang Packages](./snippet/docs/go/packages.md)
 		- [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
-        - [Go 优化](./optimization.md)
+        - [Go 性能优化](./snippet/docs/go/optimization.md)
 - [Java](./snippet/docs/java)
     - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)

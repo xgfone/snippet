@@ -47,4 +47,4 @@ Go语言笔记
 - [Golang HTML Template](./template.txt)
 - [Golang Packages](./packages.md)
 - [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
-- [Go 优化](./optimization.md)
+- [Go 性能优化](./optimization.md)
