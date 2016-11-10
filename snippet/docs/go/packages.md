@@ -211,3 +211,7 @@
 ##### [goquery](https://github.com/PuerkitoBio/goquery)
     A little like that j-thing, only in Go.
     goquery brings a syntax and a set of features similar to jQuery to the Go language.
+
+##### [go_spider](https://github.com/hu17889/go_spider)
+    An awesome Go concurrent Crawler(spider) framework. The crawler is flexible and modular. 
+    It can be expanded to an Individualized crawler easily or you can use the default crawl components only.
