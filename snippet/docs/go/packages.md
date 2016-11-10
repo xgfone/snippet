@@ -21,6 +21,9 @@
 ##### [btlike](https://github.com/btlike)
     高性能、全功能BT搜索引擎.
 
+##### [leacrawler](https://github.com/lealife/leacrawler)
+    Web template crawler written by golang.
+
 ## Packages
 
 ##### [go-restful](https://github.com/emicklei/go-restful)
