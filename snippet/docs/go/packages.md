@@ -52,6 +52,12 @@
     gorilla/csrf provides Cross Site Request Forgery (CSRF) prevention middleware
     for Go web applications & services.
 
+##### [echo](https://github.com/labstack/echo)
+    Fast and unfancy HTTP server framework for Go (Golang). Up to 10x faster than the rest.
+
+##### [baa](https://github.com/go-baa/baa)
+    an express Go web framework with routing, middleware, dependency injection, http context.
+
 ##### [httprouter](https://github.com/julienschmidt/httprouter)
     A high performance HTTP request router that scales well
 
