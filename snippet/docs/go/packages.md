@@ -215,3 +215,6 @@
 ##### [go_spider](https://github.com/hu17889/go_spider)
     An awesome Go concurrent Crawler(spider) framework. The crawler is flexible and modular. 
     It can be expanded to an Individualized crawler easily or you can use the default crawl components only.
+
+##### [raft](https://github.com/coreos/etcd/tree/master/raft)
+    Raft is a protocol with which a cluster of nodes can maintain a replicated state machine.
