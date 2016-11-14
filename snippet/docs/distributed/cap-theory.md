@@ -67,7 +67,7 @@ Brewer后来提出了`BASE(Basically Available, Soft-state, Eventually consisten
 
 #### 证明
 
-（1）系统保证了`consistency`，因为所有的读操作都是基于`snapsho`t的，而不正确的`update`操作将被拒绝，不会导致错误执行。
+（1）系统保证了`consistency`，因为所有的读操作都是基于 `snapshot` 的，而不正确的 `update` 操作将被拒绝，不会导致错误执行。
 
 （2）系统保证了`availability`，因为所有的读一定会返回，而写也一样，虽然可能会因为排队而返回的比较慢。
 
