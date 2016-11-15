@@ -33,3 +33,44 @@
     "workbench.editor.enablePreviewFromQuickOpen": false
 }
 ```
+
+## Installed Packages
+
+Install a Package
+1. `Ctrl + Alt + P` to open the command palette.
+2. Type `ext install PACKAGE_NAME` and `Enter`.
+
+#### Common Packages
+
+```
+beautify
+Bookmarks
+cpptools
+code-runner
+vscode-color
+debugger-for-chrome
+vscode-eslint
+gitignore
+Go
+html-snippets
+vscode-javac
+vscode-JS-CSS-HTML-formatter
+markdown-pdf
+prettify-json
+project-manager
+python
+rest-client
+RustyCode
+Spell
+vscode-svgviewer
+vim
+vscode-icons
+xml
+```
+
+#### For Windows
+
+```
+tortoise-svn
+PowerShell
+```
