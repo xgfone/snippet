@@ -18,6 +18,11 @@
     // "files.eol": "\r\n",
     "files.trimTrailingWhitespace": true,
 
+    "python.linting.maxNumberOfProblems": 120,
+    "python.linting.pylintArgs": [
+        "-d C0111"
+    ],
+
     "terminal.integrated.cursorBlinking": true,
 
     "workbench.editor.enablePreview": false,
