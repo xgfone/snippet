@@ -49,3 +49,4 @@ Go语言笔记
 - [Go `database/sql` tutorial](https://github.com/VividCortex/go-database-sql-tutorial)
 - [Go 性能优化](./optimization.md)
 - [优化Go的模式](http://blog.cyeam.com/golang/2016/08/18/apatternforoptimizinggo)
+- 《The Go Programming Language》(Go语言圣经) [中文版](http://shinley.com) [官网](http://gopl.io) [源码](https://github.com/adonovan/gopl.io)
