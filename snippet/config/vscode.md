@@ -24,7 +24,7 @@
 
     "python.linting.maxNumberOfProblems": 120,
     "python.linting.pylintArgs": [
-        "-d C0111"
+        "-d C0111,W0703"
     ],
 
     "terminal.integrated.cursorBlinking": true,
