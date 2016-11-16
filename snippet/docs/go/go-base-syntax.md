@@ -203,3 +203,9 @@ const (
 // Elderberry: 3
 // Fig: 4
 ```
+
+## 10、Go的并发模型
+```
+Do not communicate by sharing memory; instead, share memory by communicating.
+不要通过共享内存来通信，相反，要通过通信来共享内存。
+```
