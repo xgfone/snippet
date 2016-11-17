@@ -1,6 +1,7 @@
 
 ## VS Code User Setting
 
+#### Setting.json
 ```json
 {
     "bookmarks.saveBookmarksBetweenSessions": true,
@@ -33,6 +34,14 @@
     "workbench.editor.enablePreviewFromQuickOpen": false
 }
 ```
+
+####
+```json
+{
+    "locale": "en"
+}
+```
+
 
 ## Installed Packages
 
