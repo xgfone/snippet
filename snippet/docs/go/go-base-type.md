@@ -141,6 +141,19 @@ fmt.Println(field.Tag.Get("color"), field.Tag.Get("species"))
       同时 *S 也另外包含被提升的“接收者*T的所有方法”。
     B. 如果struct类型S声明中包含匿名域 *T，则 S 和 *S 方法集中包含被提升的“接收者T或*T的所有方法”。
 
+（9）比较
+如果结构体的全部成员都是可以比较的，那么结构体也是可以比较的，那样的话两个结构体将可以使用 `==` 或 `!=` 运算符进行比较。相等比较运算符 `==` 将比较两个结构体的每个成员，因此下面两个比较的表达式是等价的：
+```go
+type Point struct{ X, Y int }
+
+p := Point{1, 2}
+q := Point{2, 1}
+fmt.Println(p.X == q.X && p.Y == q.Y) // "false"
+fmt.Println(p == q)                   // "false"
+```
+
+因此，可比较的结构体类型和其他可比较的类型一样，可以用于map的key类型。
+
 
 ## 6、接口interface
 （1）接口类型是由一组方法定义的集合。
