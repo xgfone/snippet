@@ -26,7 +26,7 @@ Go语言笔记
 	- [17. 终止语句](./go-statement.md#17终止语句)
 - [5. 函数](./go-function.md)
 - [6. 包](./go-package.md)
-- [7. 库](./go-std-lib.go)
+- [7. 库](./go-std-lib.md)
 - [8. 不常用的特性](./go-others.md)
 	- [字节对齐](./go-others.md#字节对齐)
 	- [GO环境变量](./go-others.md#go环境变量)

@@ -83,7 +83,7 @@ DOCS
     	- [17. 终止语句](./snippet/docs/go/go-statement.md#17终止语句)
     - [5. 函数](./snippet/docs/go/go-function.md)
     - [6. 包](./snippet/docs/go/go-package.md)
-    - [7. 库](./snippet/docs/go/go-std-lib.go)
+    - [7. 库](./snippet/docs/go/go-std-lib.md)
     - [8. 不常用的特性](./snippet/docs/go/go-others.md)
     	- [字节对齐](./snippet/docs/go/go-others.md#字节对齐)
     	- [GO环境变量](./snippet/docs/go/go-others.md#go环境变量)
