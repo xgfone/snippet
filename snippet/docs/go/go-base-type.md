@@ -44,6 +44,13 @@ string(b)
 ## 2、数组
 在Go中，数组是一个值对象，它在内部保存“int”指针；不同于C中的数组，**`Go中的数组在赋值是全拷贝`**。
 
+数组字面值初始化：
+```go
+var q [3]int = [3]int{1, 2, 3}
+r := [...]int{1, 2, 3}
+```
+注：如果在数组的长度位置处出现的是 `...`，则表示数组的长度是根据初始化值的个数来计算的。
+
 
 ## 3、指针
 （1）特殊的前缀 `&` 指向（或获取，即可以看成是“`取址操作符`”）一个变量的指针。
@@ -171,7 +178,7 @@ type LockedFile interface {
 ```
 
 
-### 7、slice、map和channel
+### 7、`slice`、`map` 和 `channel`
 ```go
 make([]T,  length [, capacity])    // 创建（或初始化）一个分片（slice）
 make(map[T1]int [, capacity])      // 创建（或初始化）一个映射（map）
@@ -185,6 +192,15 @@ channelType := ("chan"["<-"] | "<-""chan") ElementType
 （2）`slice`、`map` 和 `channel` 三个类型必须使用 `make` 内建函数进行初始化。
 
 （3）初始化 `map` 时指定的 `capacity` 仅仅是预先分配给该 `map对象` 的存储空间，但 `map` 的最大存储空间并不限于它；也就是说，当 `map对象` 的存储空间不足时，`map` 会自动增长其存储空间以满足新元素的添加。
+
+#### 7.1 `slice`
+如果须要测试一个 `slice` 是否是空的，则尽可能使用 `len(slice) == 0` 来判断，而不是 `slice == nil`。原因如下：
+```go
+var s []int    // len(s) == 0, s == nil
+s = nil        // len(s) == 0, s == nil
+s = []int(nil) // len(s) == 0, s == nil
+s = []int{}    // len(s) == 0, s != nil
+```
 
 
 ## 8、管道channel
