@@ -66,3 +66,16 @@ Greet("Hello:", "Joe", "Anna", "Eileen")    // who => []string{"Joe", "Anna", "E
 s := []string{"James", "Aaron"}
 Greet("Goodbye:", s...)                     // who => s
 ```
+
+## 6、匿名函数与递归
+当匿名函数需要被递归调用时，我们必须首先声明一个变量，再将匿名函数赋值给这个变量。
+```go
+var FuncN func(args ...interface{})
+FuncN = func(args ...interface{}) {
+    // ...
+}
+
+FuncN2 := func(args ...interface{}) {
+    FuncN2(args...)                      // compile error: undefined: FuncN2
+}
+```
