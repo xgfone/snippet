@@ -193,13 +193,25 @@ channelType := ("chan"["<-"] | "<-""chan") ElementType
 
 （3）初始化 `map` 时指定的 `capacity` 仅仅是预先分配给该 `map对象` 的存储空间，但 `map` 的最大存储空间并不限于它；也就是说，当 `map对象` 的存储空间不足时，`map` 会自动增长其存储空间以满足新元素的添加。
 
-#### 7.1 `slice`
-如果须要测试一个 `slice` 是否是空的，则尽可能使用 `len(slice) == 0` 来判断，而不是 `slice == nil`。原因如下：
+（4）如果须要测试一个 `slice`、`map` 或 `channel` 是否是空的，则尽可能使用 `len(v) == 0` 来判断，而不是 `v == nil`。原因如下：
 ```go
+// Slice
 var s []int    // len(s) == 0, s == nil
 s = nil        // len(s) == 0, s == nil
 s = []int(nil) // len(s) == 0, s == nil
 s = []int{}    // len(s) == 0, s != nil
+
+// map
+var m map[int]int      // len(m) == 0, m == nil
+m = nil                // len(m) == 0, m == nil
+m = map[int]int(nil)   // len(m) == 0, m == nil
+m = map[int]int{}      // len(m) == 0, m != nil
+m = make(map[int]int)  // len(m) == 0, m != nil
+
+// Channel
+var c chan int          // len(c) == 0, c == nil
+c = chan int(nil)       // len(c) == 0, c == nil
+c = make(chan int, 100) // len(c) == 0, c != nil
 ```
 
 
