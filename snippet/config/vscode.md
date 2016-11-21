@@ -35,11 +35,20 @@
 }
 ```
 
-####
+#### locale.json
 ```json
 {
     "locale": "en"
 }
+```
+
+#### keybindings.json
+```json
+[
+    { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
+    { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
+    { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
+]
 ```
 
 
