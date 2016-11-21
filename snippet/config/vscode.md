@@ -17,7 +17,7 @@
 
     "extensions.autoUpdate": true,
 
-    // "files.eol": "\r\n",
+    "files.eol": "\n",
     "files.trimTrailingWhitespace": true,
 
     "go.formatOnSave": true,
