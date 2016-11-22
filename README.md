@@ -61,6 +61,8 @@ DOCS
         - [Others](./snippet/docs/editor/vim/others.md)
         - Plugins
             - [NERDTree](./snippet/docs/editor/vim/vim-plugin-nerdtree.md)
+- [Encoding](./snippet/docs/encoding)
+    - [XML参考手册](http://www.runoob.com/svg/svg-reference.html)
 - [GCC](./snippet/docs/gcc)
 - [Go](./snippet/docs/go)
     - [前言](./snippet/docs/go/go-learning-note.md)
