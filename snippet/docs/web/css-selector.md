@@ -14,7 +14,7 @@ element+element       | div+p                 | 选择所有紧接着<div>元素
 [attribute]           | [target]              | 选择所有带有target属性元素                                       | 2
 [attribute=value]     | [target=-blank]       | 选择所有使用target="-blank"的元素                                | 2
 [attribute~=value]    | [title~=flower]       | 选择标题属性包含单词"flower"的所有元素                            | 2
-[attribute|=language] | [lang|=en]            | 选择一个lang属性的起始值="EN"的所有元素                           | 2
+[attribute\|=language] | [lang\|=en]          | 选择一个lang属性的起始值="EN"的所有元素                           | 2
 :link                 | a:link                | 选择所有未访问链接                                               | 1
 :visited              | a:visited             | 选择所有访问过的链接                                             | 1
 :active               | a:active              | 选择活动链接                                                    | 1
