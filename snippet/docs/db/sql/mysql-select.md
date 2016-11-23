@@ -8,11 +8,11 @@ mysql的查询、子查询及连接查询
 	group by 分组
 	order by 排序
 	limit    限制结果数
- 
+
 ### 1、where常用运算符
 #### 比较运算符
-	> ,  < ,=  , != （< >）,>=   ,   <=  
-	in(v1,v2..vn)  
+	> ,  < ,=  , != （< >）,>=   ,   <=
+	in(v1,v2..vn)
 	between v1 and v2   在v1至v2之间（包含v1,v2）
 
 #### 逻辑运算符
@@ -53,7 +53,7 @@ select max(goods_price) from goods;
 ```
 这里会取出最大的价格的值，只有值。
 
-```sql	
+```sql
 select cat_id,max(goods_price) from goos group by cat_id;
 ```
 查询每个栏目下价格最高的。
@@ -132,14 +132,14 @@ select cat_id,sum(shop_price * goods_number) as t from goods group by cat_id hav
 ```sql
 #(1) 先计算所有学生的平均分
 select name,avg(score) as pj from stu group by name;
-	
+
 #(2) 查出所有学生的挂科情况
 select name,score<60 from stu;
 #这里score<60是判断语句，所以结果为真或假，mysql中真为1假为0
-	
+
 #(3) 查出两门及两门以上不及格的学生
 select name,sum(score<60) as gk from stu group by name having gk > 1;
-	
+
 #(4) 综合结果
 select name,sum(score<60) as gk,avg(score) as pj from stu group by name having gk >1;
 ```
@@ -160,13 +160,13 @@ select * from goods where cat_id !=2 order by cat_id,price desc;
 ### 5、limit
 	limit [offset,] N
 	offset 	偏移量，可选，不写则相当于 limit 0,N
-	N     	取出条目 
+	N     	取出条目
 
 ```sql
 select good_id,goods_name,goods_price from goods order by good_price desc limit 3,3;
 ```
 取价格第4-6高的商品。
-	
+
 ###查询每个栏目下最贵的商品
 思路：
 ```sql
@@ -184,7 +184,7 @@ as t group by cat_id;
 良好的理解模型：
 
 	1、where后面的表达式，把表达式放在每一行中，看是否成立；
-	2、字段(列)，理解为变量，可以进行运算（算术运算和逻辑运算）；  
+	2、字段(列)，理解为变量，可以进行运算（算术运算和逻辑运算）；
 	3、取出结果可以理解成一张临时表。
 
 
@@ -210,7 +210,7 @@ group by cat_id);
 ```sql
 #(1) 先查出哪些同学挂科两门以上
 select name,count(*) as gk from stu where score < 60 having gk >=2;
-	
+
 #(2) 以上查询结果，我们只要名字就可以了，所以再取一次名字
 select name from (select name,count(*) as gk from stu having gk >=2) as t;
 
@@ -238,7 +238,7 @@ select cat_id,cat_name from category where exists(select * from goods where good
 	b    10
 	c    15
 	d    10
-	
+
 表b如下
 
 	id  num
@@ -246,7 +246,7 @@ select cat_id,cat_name from category where exists(select * from goods where good
 	c    10
 	d    20
 	e    99
-	
+
 求两个表中id相同的和：
 ```sql
 select id,sum(num) from (select * from ta union select * from tb) as tmp group by id;
@@ -273,7 +273,13 @@ order by shop_price desc;
 
 
 ## 四、左连接，右连接，内连接
- 
+
+- `INNER JOIN`：如果表中有至少一个匹配，则返回行。
+- `LEFT  JOIN`：即使右表中没有匹配，也从左表返回所有的行。
+- `RIGHT JOIN`：即使左表中没有匹配，也从右表返回所有的行。
+- `FULL  JOIN`：只要其中一个表中存在匹配，则返回行。
+
+
 现有表a有10条数据，表b有8条数据，那么表a与表b的笛尔卡积是多少？
 ```sql
 select * from ta,tb   // 输出结果为8*10=80条
@@ -295,7 +301,7 @@ select goods_id,goods_name,goods.cat_id,cat_name,shop_price from goods left join
 category on goods.cat_id = category.cat_id order by  shop_price desc limit 5;
 ```
 取出价格最高的五个商品，并显示商品的分类名称。
-     
+
 ### 2、右连接
 
 `a left join b` 等价于 `b right join a`。
@@ -324,7 +330,7 @@ select n1,n2,n3 from ta inner join tb on ta.n1 = ta.n2;
 	a     12
 	b     10
 	c     15
-	
+
 表b:
 
 	name   hot
@@ -332,7 +338,7 @@ select n1,n2,n3 from ta inner join tb on ta.n1 = ta.n2;
 	e      10
 	f      10
 	g      8
-	
+
 表a左连接表b，查询hot相同的数据：
 ```sql
 select a.*,b.* from a left join b on a.hot = b.hot;
@@ -344,9 +350,9 @@ select a.*,b.* from a left join b on a.hot = b.hot;
 	b     10     e     10
 	b     10     f     10
 	c     15     null  null
-	
+
 从上面可以看出，查询结果表a的列都存在，表b的数据只显示符合条件的项目。
-    
+
 再如表b左连接表a，查询hot相同的数据：
 ```sql
 select a.*,b.* from b left join a on a.hot = b.hot;
@@ -358,7 +364,7 @@ select a.*,b.* from b left join a on a.hot = b.hot;
 	e     10     b     10
 	f     10     b     10
 	g     8      null  null
-	
+
 再如表a右连接表b，查询hot相同的数据：
 ```sql
 select a.*,b.* from a right join b on a.hot = b.hot;
@@ -389,7 +395,7 @@ insert into m values
 	(2,3,2,'2:1','2006-06-21'),
 	(3,1,3,'2:2','2006-06-11'),
 	(4,2,1,'2:4','2006-07-01');
-	
+
 create table t(tid int, tname varchar(10)) charset utf8;
 
 insert into t values
