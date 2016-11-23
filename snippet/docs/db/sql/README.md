@@ -2,3 +2,4 @@
 - [MySQL 的查询、子查询及连接查询](./mysql-select.md)
 - [MySQL 建表与索引使用规范详解](./mysql-table-and-index.md)
 - [理解MySQL——索引与优化](./mysql-index.md)
+- [SQL快速参考](./sql-quick-ref.md)
