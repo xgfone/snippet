@@ -4,7 +4,7 @@
     The first supported CPU was Intel x86 and it is now extended to IBM Power 8, EZchip TILE-Gx and ARM.
     It runs mostly in Linux userland. A FreeBSD port is available for a subset of DPDK features.
 
-    DPDK is not a networking stack and does not provide functions such as Layer-3 forwarding, IPsec, firewalling, etc.
+    DPDK is not a networking stack and does not provide functions such as Layer-3 forwarding, firewalling, etc.
 
 #### [netmap](https://github.com/luigirizzo/netmap)
     NETMAP is a framework for very fast packet I/O from userspace.
