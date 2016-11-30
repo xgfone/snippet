@@ -29,9 +29,6 @@
 ##### [go-restful](https://github.com/emicklei/go-restful)
     package for building REST-style Web Services using Google Go.
 
-##### [go-flags](https://github.com/jessevdk/go-flags)
-    go command line option parser.
-
 ##### [iris](https://github.com/kataras/iris)
     A Community-Driven web framework written in Go.
 
@@ -84,7 +81,7 @@
 
 ##### [micro](https://github.com/micro/micro)
     A microservice toolkit https://micro.github.io/micro/
-    
+
 ##### [bitset](https://github.com/willf/bitset)
     Go package implementing bitsets.
 
@@ -107,7 +104,7 @@
     Structured, pluggable logging for Go.
 
 ##### [mxj](https://github.com/clbanning/mxj)
-    Decode / encode XML to/from map[string]interface{} (or JSON); 
+    Decode / encode XML to/from map[string]interface{} (or JSON);
     extract values with dot-notation paths and wildcards.
     Replaces x2j and j2x packages.
 
@@ -180,7 +177,7 @@
 
 ##### [nux](https://github.com/toolkits/nux)
     Unix/Linux metric collector.
-    
+
 ##### [cache](https://github.com/toolkits/cache)
     Cache based on Redis or Memory
 
@@ -213,8 +210,20 @@
     goquery brings a syntax and a set of features similar to jQuery to the Go language.
 
 ##### [go_spider](https://github.com/hu17889/go_spider)
-    An awesome Go concurrent Crawler(spider) framework. The crawler is flexible and modular. 
+    An awesome Go concurrent Crawler(spider) framework. The crawler is flexible and modular.
     It can be expanded to an Individualized crawler easily or you can use the default crawl components only.
 
 ##### [raft](https://github.com/coreos/etcd/tree/master/raft)
     Raft is a protocol with which a cluster of nodes can maintain a replicated state machine.
+
+##### [go-arg](https://github.com/alexflint/go-arg)
+    Struct-based argument parsing in Go
+
+##### [go-flags](https://github.com/jessevdk/go-flags)
+    a go library for parsing command line arguments
+
+##### [mow.cli](https://github.com/jawher/mow.cli)
+    A versatile library for building CLI applications in Go.
+
+    A framework to build command line applications in Go with most of the burden of arguments parsing and
+    validation placed on the framework instead of the developer.
