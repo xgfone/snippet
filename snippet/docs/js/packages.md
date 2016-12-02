@@ -13,6 +13,9 @@
 
 ## NodeJS
 
+##### [intel](https://github.com/seanmonstar/intel)
+    A comprehensive logging library (handlers, filters, formatters, console injection).
+
 ##### [py-logging](https://github.com/jose-pleonasm/py-logging)
     Javascript logging library based on the Python logging module.
 
