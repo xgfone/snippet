@@ -46,6 +46,7 @@
 ```json
 [
     { "key": "ctrl+a", "command": "editor.action.selectAll" },
+    { "key": "ctrl+f", "command": "actions.find" },
     { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
     { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
     { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
