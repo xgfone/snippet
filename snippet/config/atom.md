@@ -185,6 +185,8 @@ wrap-guide
   linter: {}
   "linter-python-pep257":
     ignoreCodes: "D100, D101, D102, D103, D104, D105, D209"
+  "linter-python-pep8":
+    ignoreErrorCodes: "E125, E126, E127, E128, E129, E221, E265, E401"
   "markdown-writer":
     fileExtension: ".md"
   minimap:
