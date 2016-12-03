@@ -153,6 +153,8 @@ whitespace
 wrap-guide
 ```
 
+------
+
 # Configuration
 
 ## `config.cson`
