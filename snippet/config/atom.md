@@ -1,60 +1,78 @@
-## atom packages
+# Atom Packages
 
-### Community Packages
+## Customized Packages
+
+### Commont
 ```
-activate-power-mode
+#activate-power-mode
 atom-beautify
-atom-django
-atom-python-debugger
-autocomplete-clang
-autocomplete-go
-autocomplete-python
-clang-format
 color-picker
-go-config
-go-find-references
-go-get
-go-oracle
-go-plus
-gpp-compiler
-javascript-snippets
-jsformat
-language-cpp14
-language-javascript-jsx
-language-markdown
-language-python-django-templates
 linter
-linter-clang
-linter-cpplint
-linter-gcc
-linter-golinter
-linter-js-standard
-linter-python-pep257  888
-linter-python-pep8
-linter-python-pyflakes
-linter-xmllint
-markdown-format
-markdown-pdf
-markdonw-writer
 merge-conflicts
 minimap
-minimap-autohide
-minimap-git-diff
-minimap-hide
 minimap-cursorline
-minimap-pigments
-minimap-find-and-replace
 pigments
-python-tools
 script
-switch-header-source
-turbo-javascript
-vim-mode
-xml-formatter
-xml-tools
+vim-mode-plus
 ```
 
-### Core Packages
+### C/C++
+```
+autocomplete-clang
+clang-format
+gpp-compiler
+#language-cpp14
+#linter-clang
+#linter-cpplint
+linter-gcc
+switch-header-source
+```
+
+### Go
+```
+autocomplete-go
+builder-go
+go-config
+go-debug
+go-get
+go-outline
+go-plus
+godoc
+gofmt
+gometalinter-linter
+gorename
+navigator-go
+tester-go
+```
+
+### JS
+```
+language-javascript-jsx
+#linter-js-standard
+#linter-js-standard-jsx
+```
+
+### Markdown
+```
+markdown-writer
+language-markdown
+```
+
+### Python
+```
+autocomplete-python
+python-tools
+linter-python-pep257
+linter-python-pep8
+linter-python-pyflakes
+```
+
+### SQL
+```
+qolor
+```
+
+## Core Packages
 ```
 about
 archive-view
