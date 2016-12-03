@@ -12,6 +12,7 @@ merge-conflicts
 minimap
 minimap-cursorline
 pigments
+repl
 script
 vim-mode-plus
 ```
