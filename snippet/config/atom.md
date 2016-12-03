@@ -152,3 +152,48 @@ welcome
 whitespace
 wrap-guide
 ```
+
+# Configuration
+
+## `config.cson`
+```cson
+"*":
+  "autocomplete-python":
+    useKite: false
+    useSnippets: "required"
+  core:
+    closeEmptyWindows: false
+    disabledPackages: [
+      "activate-power-mode"
+      "language-gfm"
+    ]
+    openEmptyEditorOnStart: false
+    telemetryConsent: "limited"
+  editor:
+    showIndentGuide: true
+    showInvisibles: true
+    tabLength: 4
+    zoomFontWhenCtrlScrolling: true
+  "exception-reporting":
+    userId: "9b9a29d3-8603-6a78-e2ca-83f27e7b8d16"
+  "go-config":
+    gopath: "~/go"
+  "go-plus":
+    currentPanelHeight: "19.5364238410596vh"
+  linter: {}
+  "linter-python-pep257":
+    ignoreCodes: "D100, D101, D102, D103, D104, D105, D209"
+  "markdown-writer":
+    fileExtension: ".md"
+  minimap:
+    plugins:
+      cursorline: true
+      cursorlineDecorationsZIndex: 0
+  qolor:
+    fourBorders: true
+  "vim-mode-plus":
+    clearMultipleCursorsOnEscapeInsertMode: true
+    highlightSearch: true
+    incrementalSearch: true
+    useClipboardAsDefaultRegister: true
+```
