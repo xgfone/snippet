@@ -13,6 +13,7 @@ minimap
 minimap-cursorline
 open-path
 pigments
+project-viewer
 repl
 script
 vim-mode-plus
