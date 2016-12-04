@@ -11,6 +11,7 @@ linter
 merge-conflicts
 minimap
 minimap-cursorline
+open-path
 pigments
 repl
 script
