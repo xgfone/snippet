@@ -211,4 +211,6 @@ wrap-guide
     highlightSearch: true
     incrementalSearch: true
     useClipboardAsDefaultRegister: true
+  welcome:
+    showOnStartup: false
 ```
