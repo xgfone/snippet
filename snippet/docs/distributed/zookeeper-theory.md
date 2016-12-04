@@ -73,9 +73,12 @@ Leader主要有三个功能：
 
 1. 恢复数据；
 2. 维持与Learner的心跳，接收Learner请求并判断Learner的请求消息类型；
-3. Learner的消息类型主要有 PING消息、REQUEST消息、ACK消息、REVALIDATE消息，根据不同的消息类型，进行不同的处理。
+3. Learner的消息类型主要有 `PING消息`、`REQUEST消息`、`ACK消息`、`REVALIDATE消息`，根据不同的消息类型，进行不同的处理。
 
-PING消息是指Learner的心跳信息；REQUEST消息是Follower发送的提议信息，包括写请求及同步请求；ACK消息是Follower的对提议的回复，超过半数的Follower通过，则commit该提议；REVALIDATE消息是用来延长SESSION有效时间。
+- `PING消息` 是指Learner的心跳信息；
+- `REQUEST消息` 是Follower发送的提议信息，包括写请求及同步请求；
+- `ACK消息` 是Follower的对提议的回复，超过半数的Follower通过，则commit该提议；
+- `REVALIDATE消息` 是用来延长SESSION有效时间。
 
 Leader的工作流程简图如下所示，在实际实现中，流程要比下图复杂得多，启动了三个线程来实现功能。
 
@@ -84,18 +87,20 @@ Leader的工作流程简图如下所示，在实际实现中，流程要比下�
 #### 2.3.2 Follower工作流程
 
 Follower主要有四个功能：
+
 1. 向Leader发送请求（PING消息、REQUEST消息、ACK消息、REVALIDATE消息）；
 2. 接收Leader消息并进行处理；
 3. 接收Client的请求，如果为写请求，发送给Leader进行投票；
 4. 返回Client结果。
 
 Follower的消息循环处理如下几种来自Leader的消息：
-1. PING消息： 心跳消息；
-2. PROPOSAL消息：Leader发起的提案，要求Follower投票；
-3. COMMIT消息：服务器端最新一次提案的信息；
-4. UPTODATE消息：表明同步完成；
-5. REVALIDATE消息：根据Leader的REVALIDATE结果，关闭待revalidate的session还是允许其接受消息；
-6. SYNC消息：返回SYNC结果到客户端，这个消息最初由客户端发起，用来强制得到最新的更新。
+
+1. **`PING消息`**： 心跳消息；
+2. **`PROPOSAL消息`**：Leader发起的提案，要求Follower投票；
+3. **`COMMIT消息`**：服务器端最新一次提案的信息；
+4. **`UPTODATE消息`**：表明同步完成；
+5. **`REVALIDATE消息`**：根据Leader的REVALIDATE结果，关闭待revalidate的session还是允许其接受消息；
+6. **`SYNC消息`**：返回SYNC结果到客户端，这个消息最初由客户端发起，用来强制得到最新的更新。
 
 Follower的工作流程简图如下所示，在实际实现中，Follower是通过5个线程来实现功能的。
 
@@ -110,10 +115,15 @@ Zookeeper C API 的声明和描述在 include/zookeeper.h 中可以找到，另�
 Zookeeper 中最有特色且最不容易理解的是监视(Watches)。Zookeeper 所有的读操作——getData(), getChildren(), 和 exists() 都 可以设置监视(watch)，监视事件可以理解为一次性的触发器， 官方定义如下： a watch event is one-time trigger, sent to the client that set the watch, which occurs when the data for which the watch was set changes。对此需要作出如下理解：
 
 - **One-time trigger（一次性触发）**
+
     当设置监视的数据发生改变时，该监视事件会被发送到客户端，例如，如果客户端调用了 getData("/znode1", true) 并且稍后 /znode1 节点上的数据发生了改变或者被删除了，客户端将会获取到 /znode1 发生变化的监视事件，而如果 /znode1 再一次发生了变化，除非客户端再次对 /znode1 设置监视，否则客户端不会收到事件通知。
+
 - **Sent to the client（发送至客户端）**
+
     Zookeeper 客户端和服务端是通过 socket 进行通信的，由于网络存在故障，所以监视事件很有可能不会成功地到达客户端，监视事件是异步发送至监视者的，Zookeeper 本身提供了保序性(ordering guarantee)：即客户端只有首先看到了监视事件后，才会感知到它所设置监视的 znode 发生了变化(a client will never see a change for which it has set a watch until it first sees the watch event). 网络延迟或者其他因素可能导致不同的客户端在不同的时刻感知某一监视事件，但是不同的客户端所看到的一切具有一致的顺序。
+
 - **The data for which the watch was set（被设置 watch 的数据）**
+
     这意味着 znode 节点本身具有不同的改变方式。你也可以想象 Zookeeper 维护了两条监视链表：数据监视和子节点监视(data watches and child watches) getData() and exists() 设置数据监视，getChildren() 设置子节点监视。 或者，你也可以想象 Zookeeper 设置的不同监视返回不同的数据，getData() 和 exists() 返回 znode 节点的相关信息，而 getChildren() 返回子节点列表。因此， setData() 会触发设置在某一节点上所设置的数据监视(假定数据设置成功)，而一次成功的 create() 操作则会出发当前节点上所设置的数据监视以及父节点的子节点监视。一次成功的 delete() 操作将会触发当前节点的数据监视和子节点监视事件，同时也会触发该节点父节点的child watch。
 
 Zookeeper 中的监视是轻量级的，因此容易设置、维护和分发。当客户端与 Zookeeper 服务器端失去联系时，客户端并不会收到监视事件的通知，只有当客户端重新连接后，若在必要的情况下，以前注册的监视会重新被注册并触发，对于开发人员来说 这通常是透明的。只有一种情况会导致监视事件的丢失，即：通过 exists() 设置了某个 znode 节点的监视，但是如果某个客户端在此 znode 节点被创建和删除的时间间隔内与 zookeeper 服务器失去了联系，该客户端即使稍后重新连接 zookeeper服务器后也得不到事件通知。
