@@ -78,31 +78,31 @@ Install a Package
 2. Type `ext install PACKAGE_NAME` and `Enter`.
 
 #### Common Packages
-
 ```shell
-beautify
 Bookmarks
-cpptools                // C/C++
 code-runner
 vscode-color
-debugger-for-chrome
-vscode-eslint
-githistory
-gitignore
-Go                      // Golang
-html-snippets
-java                    // Java
-javadebugger            // Java Debugger
-vscode-javac            // Java
-project-manager
-python                  // Python
-rest-client
-#RustyCode              // Rust
-#Spell
-vscode-svgviewer
-#vim
 vscode-icons
-xml
+#Spell
+#vim                    # It will lead to 'editor.useTabStops' to be invalid.
+
+beautify                # Format JS, JSON, CSS, HTML
+xml                     # Format XML
+cpptools                # C/C++
+debugger-for-chrome     # JS Debuger
+vscode-eslint           # JS Lint
+githistory              # Git log
+gitignore               # Git ignore
+Go                      # Golang
+html-snippets           # HTML 5
+java                    # Java
+vscode-javac            # Java
+javadebugger            # Java Debugger
+project-manager         # Project Manager
+python                  # Python
+rest-client             # Restful Client
+#RustyCode              # Rust
+#vscode-svgviewer       # SVG Viewer
 ```
 
 #### For Windows
@@ -111,7 +111,7 @@ tortoise-svn
 PowerShell
 ```
 
-### Install the
+### Install the commands depended on by the plugins above.
 
 #### For ESLint
 ```
