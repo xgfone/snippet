@@ -7,26 +7,44 @@
     "bookmarks.saveBookmarksBetweenSessions": true,
     "bookmarks.navigateThroughAllFiles": true,
 
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.openExplorerOnEnd": true,
+
+    "diffEditor.ignoreTrimWhitespace": false,
+
     "editor.rulers": [
         80, 100, 120
     ],
-    "editor.wordWrap": false,
+    "editor.wordWrap": true,
     "editor.mouseWheelZoom": true,
     "editor.renderIndentGuides": true,
     "editor.wrappingColumn": 140,
+    "editor.useTabStops": true,
+    "editor.detectIndentation": false,
+    "editor.tabCompletion": true,
 
     "extensions.autoUpdate": true,
 
+    "files.encoding": "utf8",
     "files.eol": "\n",
     "files.trimTrailingWhitespace": true,
 
     "go.formatOnSave": true,
     "go.formatTool": "goreturns",
+    "go.goroot": null,
+    "go.gopath": null,
 
+    "html.format.indentInnerHtml": true,
+
+    "python.autoComplete.addBrackets": true,
     "python.linting.maxNumberOfProblems": 120,
     "python.linting.pylintArgs": [
         "-d C0111,W0703"
     ],
+    "python.linting.pep8Enabled": true,
+    "python.linting.pep8Args": [],
+    "python.unitTest.nosetestsEnabled": true,
+    "python.unitTest.nosetestArgs": [],
 
     "terminal.integrated.cursorBlinking": true,
 
@@ -70,20 +88,19 @@ code-runner
 vscode-color
 debugger-for-chrome
 vscode-eslint
+githistory
 gitignore
 Go
 html-snippets
-vscode-javac
-vscode-JS-CSS-HTML-formatter
-markdown-pdf
-prettify-json
+#vscode-javac
+#vscode-JS-CSS-HTML-formatter
 project-manager
 python
 rest-client
-RustyCode
-Spell
+#RustyCode
+#Spell
 vscode-svgviewer
-vim
+#vim
 vscode-icons
 xml
 ```
