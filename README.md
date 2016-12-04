@@ -42,6 +42,7 @@ DOCS
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
     - [etcd集群实例](./snippet/docs/distributed/etcd-example.md)
     - [Links](./snippet/docs/distributed/link.md)
+    - [ZooKeeper原理](./snippet/docs/distributed/zookeeper-theory.md)
 - [Document](./snippet/docs/document)
     - [Markdown](./snippet/docs/document/markdown)
         - [Cheat Sheet](./snippet/docs/document/markdown/cheatsheet.md)
