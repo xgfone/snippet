@@ -29,6 +29,16 @@ linter-gcc
 switch-header-source
 ```
 
+
+### Git
+```
+#git-plus
+#git-time-machine
+git-control
+git-log
+git-status
+```
+
 ### Go
 ```
 autocomplete-go
