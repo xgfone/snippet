@@ -31,18 +31,17 @@
 
     "go.formatOnSave": true,
     "go.formatTool": "goreturns",
-    "go.goroot": null,
-    "go.gopath": null,
 
     "html.format.indentInnerHtml": true,
 
     "python.autoComplete.addBrackets": true,
     "python.linting.maxNumberOfProblems": 120,
+    "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
         "-d C0111,W0703"
     ],
-    "python.linting.pep8Enabled": true,
-    "python.linting.pep8Args": [],
+    //"python.linting.pep8Enabled": true,
+    //"python.linting.pep8Args": [],
     "python.unitTest.nosetestsEnabled": true,
     "python.unitTest.nosetestArgs": [],
 
@@ -80,24 +79,25 @@ Install a Package
 
 #### Common Packages
 
-```
+```shell
 beautify
 Bookmarks
-cpptools
+cpptools                // C/C++
 code-runner
 vscode-color
 debugger-for-chrome
 vscode-eslint
 githistory
 gitignore
-Go
+Go                      // Golang
 html-snippets
-#vscode-javac
-#vscode-JS-CSS-HTML-formatter
+java                    // Java
+javadebugger            // Java Debugger
+vscode-javac            // Java
 project-manager
-python
+python                  // Python
 rest-client
-#RustyCode
+#RustyCode              // Rust
 #Spell
 vscode-svgviewer
 #vim
@@ -106,8 +106,47 @@ xml
 ```
 
 #### For Windows
-
 ```
 tortoise-svn
 PowerShell
+```
+
+### Install the
+
+#### For ESLint
+```
+npm install -g eslint
+```
+
+#### For python
+```
+pip install pylint nose
+```
+
+#### For Go
+```
+go get -v github.com/nsf/gocode
+go get -v github.com/rogpeppe/godef
+go get -v github.com/zmb3/gogetdoc
+go get -v github.com/golang/lint/golint
+go get -v github.com/lukehoban/go-outline
+go get -v sourcegraph.com/sqs/goreturns
+go get -v golang.org/x/tools/cmd/gorename
+go get -v github.com/tpng/gopkgs
+go get -v github.com/newhook/go-symbols
+go get -v golang.org/x/tools/cmd/guru
+go get -v github.com/cweill/gotests/...
+```
+
+#### For RustyCode
+```
+racer
+racer
+using rustsym
+rustfmt
+
+check
+check-lib
+cargo-clippy
+build
 ```
