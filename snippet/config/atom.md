@@ -34,9 +34,9 @@ switch-header-source
 
 ### Git
 ```
-#git-plus
+git-plus
 #git-time-machine
-git-control
+#git-control
 git-log
 git-status
 ```
