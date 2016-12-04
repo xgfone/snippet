@@ -11,6 +11,7 @@ linter
 merge-conflicts
 minimap
 minimap-cursorline
+minimap-highlight-selected
 open-path
 pigments
 project-viewer
@@ -19,26 +20,26 @@ script
 vim-mode-plus
 ```
 
-### C/C++
-```
-autocomplete-clang
-clang-format
-gpp-compiler
-#language-cpp14
-#linter-clang
-#linter-cpplint
-linter-gcc
-switch-header-source
-```
-
-
 ### Git
 ```
 git-plus
+git-log
 #git-time-machine
 #git-control
-git-log
-git-status
+```
+
+------
+
+### C/C++
+```
+switch-header-source
+autocomplete-clang
+clang-format
+gpp-compiler
+linter-gcc
+#language-cpp14
+#linter-clang
+#linter-cpplint
 ```
 
 ### Go
@@ -65,12 +66,6 @@ language-javascript-jsx
 #linter-js-standard-jsx
 ```
 
-### Markdown
-```
-markdown-writer
-language-markdown
-```
-
 ### Python
 ```
 autocomplete-python
@@ -84,6 +79,7 @@ linter-python-pyflakes
 ```
 qolor
 ```
+
 
 ## Core Packages
 ```
@@ -173,14 +169,15 @@ wrap-guide
 ## `config.cson`
 ```cson
 "*":
-  "autocomplete-python":
-    useKite: false
-    useSnippets: "required"
+  #"autocomplete-go":
+  #  snippetMode: "nameAndType"
+  #"autocomplete-python":
+  #  useKite: false
+  #  useSnippets: "required"
   core:
     closeEmptyWindows: false
     disabledPackages: [
       "activate-power-mode"
-      "language-gfm"
     ]
     openEmptyEditorOnStart: false
     telemetryConsent: "limited"
@@ -191,23 +188,25 @@ wrap-guide
     zoomFontWhenCtrlScrolling: true
   "exception-reporting":
     userId: "9b9a29d3-8603-6a78-e2ca-83f27e7b8d16"
-  "go-config":
-    gopath: "~/go"
-  "go-plus":
-    currentPanelHeight: "19.5364238410596vh"
+  #"go-config":
+  #  gopath: "~/go"
+  #"go-plus":
+  #  currentPanelHeight: "19.5364238410596vh"
+  #gofmt:
+  #  formatTool: "goreturns"
   linter: {}
-  "linter-python-pep257":
-    ignoreCodes: "D100, D101, D102, D103, D104, D105, D209"
-  "linter-python-pep8":
-    ignoreErrorCodes: "E125, E126, E127, E128, E129, E221, E265, E401"
-  "markdown-writer":
-    fileExtension: ".md"
+  #"linter-python-pep257":
+  #  ignoreCodes: "D100, D101, D102, D103, D104, D105, D209"
+  #"linter-python-pep8":
+  #  ignoreErrorCodes: "E125, E126, E127, E128, E129, E221, E265, E401"
+  #"markdown-writer":
+  #  fileExtension: ".md"
   minimap:
     plugins:
       cursorline: true
       cursorlineDecorationsZIndex: 0
-  qolor:
-    fourBorders: true
+  #qolor:
+  #  fourBorders: true
   "vim-mode-plus":
     clearMultipleCursorsOnEscapeInsertMode: true
     highlightSearch: true
