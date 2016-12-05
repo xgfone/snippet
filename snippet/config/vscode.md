@@ -22,6 +22,7 @@
     "editor.useTabStops": true,
     "editor.detectIndentation": true,
     "editor.tabCompletion": true,
+    "editor.renderWhitespace": "boundary",
 
     "extensions.autoUpdate": true,
 
