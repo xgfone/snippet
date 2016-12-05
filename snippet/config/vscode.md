@@ -20,7 +20,7 @@
     "editor.renderIndentGuides": true,
     "editor.wrappingColumn": 140,
     "editor.useTabStops": true,
-    "editor.detectIndentation": false,
+    "editor.detectIndentation": true,
     "editor.tabCompletion": true,
 
     "extensions.autoUpdate": true,
@@ -45,7 +45,7 @@
     "python.unitTest.nosetestsEnabled": true,
     "python.unitTest.nosetestArgs": [],
 
-    "terminal.integrated.cursorBlinking": true,
+    //"terminal.integrated.cursorBlinking": true,
 
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false
@@ -79,36 +79,37 @@ Install a Package
 
 #### Common Packages
 ```shell
-Bookmarks
-code-runner
-vscode-color
-vscode-icons
-#Spell
-#vim                    # It will lead to 'editor.useTabStops' to be invalid.
+alefragnani.Bookmarks
+formulahendry.code-runner
+anseki.vscode-color
+robertohuertasm.vscode-icons
+#seanmcbreen.Spell
+#vscodevim.vim                    # It will lead to 'editor.useTabStops' to be invalid.
 
-beautify                # Format JS, JSON, CSS, HTML
-xml                     # Format XML
-cpptools                # C/C++
-debugger-for-chrome     # JS Debuger
-vscode-eslint           # JS Lint
-githistory              # Git log
-gitignore               # Git ignore
-Go                      # Golang
-html-snippets           # HTML 5
-java                    # Java
-vscode-javac            # Java
-javadebugger            # Java Debugger
-project-manager         # Project Manager
-python                  # Python
-rest-client             # Restful Client
-#RustyCode              # Rust
-#vscode-svgviewer       # SVG Viewer
+HookyQR.beautify                  # Format JS, JSON, CSS, HTML
+DotJoshJohnson.xml                # Format XML
+ms-vscode.cpptools                # C/C++
+msjsdiag.debugger-for-chrome      # JS Debuger
+dbaeumer.vscode-eslint            # JS Lint
+donjayamanne.githistory           # Git log
+codezombiech.gitignore            # Git ignore
+lukehoban.Go                      # Golang
+abusaidm.html-snippets            # HTML 5
+redhat.java                       # Java
+georgewfraser.vscode-javac        # Java
+donjayamanne.javadebugger         # Java Debugger
+alefragnani.project-manager       # Project Manager
+donjayamanne.python               # Python
+humao.rest-client                 # Restful Client
+#hcyang.ctags                     # CTags
+#saviorisdead.RustyCode           # Rust
+#cssho.vscode-svgviewer           # SVG Viewer
 ```
 
 #### For Windows
 ```
-tortoise-svn
-PowerShell
+fantasytyx.tortoise-svn
+ms-vscode.PowerShell
 ```
 
 ### Install the commands depended on by the plugins above.
