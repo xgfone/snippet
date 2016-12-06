@@ -3,7 +3,7 @@
 ## Customized Packages
 
 ### Commont
-```
+```shell
 #activate-power-mode
 atom-beautify
 color-picker
@@ -21,7 +21,7 @@ vim-mode-plus
 ```
 
 ### Git
-```
+```shell
 git-plus
 git-log
 #git-time-machine
@@ -31,7 +31,7 @@ git-log
 ------
 
 ### C/C++
-```
+```shell
 switch-header-source
 autocomplete-clang
 clang-format
@@ -60,10 +60,16 @@ tester-go
 ```
 
 ### JS
-```
+```shell
+linter-eslint
 language-javascript-jsx
 #linter-js-standard
 #linter-js-standard-jsx
+```
+
+**Configure**
+```shell
+$ npm i -g eslint
 ```
 
 ### Python
