@@ -1,6 +1,10 @@
 
 - [JavaScript ES6官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
-- [Exploring ES6](http://exploringjs.com/es6/)
+- [Exploring JS](http://exploringjs.com) **【重点推荐】**
+    - [Speaking JavaScript (ES5)](http://speakingjs.com/)（点击 [这里](http://speakingjs.com/es5/index.html) 阅读）
+    - [Exploring ES6 (ES6)](http://exploringjs.com/es6.html)（点击 [这里](http://exploringjs.com/es6/index.html) 阅读）
+    - [Exploring ES2016 and ES2017](http://exploringjs.com/es2016-es2017.html)（点击 [这里](http://exploringjs.com/es2016-es2017/index.html) 阅读）
+    - [Setting up ES6 (Using and configuring Babel 6 in web browsers and on Node.js.)](http://exploringjs.com/setting-up-es6.html)（点击 [这里](https://leanpub.com/setting-up-es6/read) 阅读）
 - [ECMAScript 6入门](https://github.com/ruanyf/es6tutorial) （点击 [这里](http://es6.ruanyifeng.com) 阅读）
 - [JavaScript 标准参考教程](https://github.com/ruanyf/jstutorial) （点击 [这里](http://javascript.ruanyifeng.com/) 阅读）
 - [Node.js ES2015 Support](http://node.green/)
