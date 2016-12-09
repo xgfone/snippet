@@ -10,8 +10,6 @@ color-picker
 linter
 merge-conflicts
 minimap
-minimap-cursorline
-minimap-highlight-selected
 open-path
 pigments
 project-viewer
@@ -22,8 +20,8 @@ vim-mode-plus
 
 ### Git
 ```shell
-git-plus
 git-log
+#git-plus
 #git-time-machine
 #git-control
 ```
@@ -73,12 +71,17 @@ $ npm i -g eslint
 ```
 
 ### Python
-```
+```shell
 autocomplete-python
-python-tools
-linter-python-pep257
+#python-tools
+#linter-python-pep257
 linter-python-pep8
-linter-python-pyflakes
+#linter-python-pyflakes
+```
+
+### Markdown
+```shell
+language-markdown
 ```
 
 ### SQL
@@ -205,14 +208,25 @@ wrap-guide
   #  ignoreCodes: "D100, D101, D102, D103, D104, D105, D209"
   #"linter-python-pep8":
   #  ignoreErrorCodes: "E125, E126, E127, E128, E129, E221, E265, E401"
+  "markdown-preview":
+    useGitHubStyle: true
   #"markdown-writer":
   #  fileExtension: ".md"
   minimap:
     plugins:
       cursorline: true
       cursorlineDecorationsZIndex: 0
+  "project-viewer":
+    autohide: true
+    convertOldData: false
+    hideHeader: true
+    keepContext: true
+    statusBarVisibility: true
   #qolor:
   #  fourBorders: true
+  "terminal-plus":
+    toggles:
+      autoClose: true
   "vim-mode-plus":
     clearMultipleCursorsOnEscapeInsertMode: true
     highlightSearch: true
