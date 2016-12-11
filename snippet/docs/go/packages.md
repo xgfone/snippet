@@ -26,6 +26,14 @@
 
 ## Packages
 
+##### [structs](https://github.com/fatih/structs)
+    Utilities for Go structs.
+    
+    Structs contains various utilities to work with Go (Golang) structs. It was initially used by me 
+    to convert a struct into a map[string]interface{}. With time I've added other utilities for structs. 
+    It's basically a high level package based on primitives from the reflect package. Feel free to 
+    add new functions or improve the existing code.
+
 ##### [go-stack](https://github.com/go-stack/stack)
     Package stack implements utilities to capture, manipulate, and format call stacks.
 
