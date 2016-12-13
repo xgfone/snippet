@@ -293,7 +293,6 @@ wrap-guide
   script:
     cwdBehavior: "Project directory of the script"
   tabs:
-    alwaysShowTabBar: false
     enableVcsColoring: true
   "terminal-plus":
     core:
