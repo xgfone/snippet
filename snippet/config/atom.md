@@ -15,7 +15,8 @@ pigments
 project-viewer
 repl
 script
-terminal-plus
+platformio-atom-ide-terminal  # Replace terminal-plus
+#terminal-plus
 vim-mode-plus
 ```
 
@@ -205,8 +206,6 @@ wrap-guide
     userId: "9b9a29d3-8603-6a78-e2ca-83f27e7b8d16"
   #"go-config":
   #  gopath: "~/go"
-  #"go-plus":
-  #  currentPanelHeight: "19.5364238410596vh"
   #gofmt:
   #  formatTool: "goreturns"
   linter: {}
@@ -230,9 +229,12 @@ wrap-guide
     statusBarVisibility: true
   #qolor:
   #  fourBorders: true
-  "terminal-plus":
+  "platformio-ide-terminal":  # Replace terminal-plus
     toggles:
       autoClose: true
+  #"terminal-plus":
+  #  toggles:
+  #    autoClose: true
   "vim-mode-plus":
     clearMultipleCursorsOnEscapeInsertMode: true
     highlightSearch: true
