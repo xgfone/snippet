@@ -57,6 +57,13 @@ gometalinter-linter
 gorename
 navigator-go
 tester-go
+
+go-oracle   # go-guru
+```
+
+**Configuration**
+```shell
+$ go install golang.org\x\tools\cmd\guru
 ```
 
 ### JS
@@ -197,15 +204,20 @@ wrap-guide
     ]
     openEmptyEditorOnStart: false
     telemetryConsent: "limited"
+    themes: [
+      "one-light-ui"
+      "one-light-syntax"
+    ]
   editor:
     showIndentGuide: true
     showInvisibles: true
     tabLength: 4
     zoomFontWhenCtrlScrolling: true
-  "exception-reporting":
-    userId: "9b9a29d3-8603-6a78-e2ca-83f27e7b8d16"
   #"go-config":
   #  gopath: "~/go"
+  #"go-oracle":
+  #  goPath: "~/go"
+  #  oraclePath: "$GOPATH/bin/guru"
   #gofmt:
   #  formatTool: "goreturns"
   linter: {}
@@ -221,6 +233,9 @@ wrap-guide
     plugins:
       cursorline: true
       cursorlineDecorationsZIndex: 0
+  "platformio-ide-terminal":  # Replace terminal-plus
+    toggles:
+      autoClose: true
   "project-viewer":
     autohide: true
     convertOldData: false
@@ -229,9 +244,6 @@ wrap-guide
     statusBarVisibility: true
   #qolor:
   #  fourBorders: true
-  "platformio-ide-terminal":  # Replace terminal-plus
-    toggles:
-      autoClose: true
   #"terminal-plus":
   #  toggles:
   #    autoClose: true
