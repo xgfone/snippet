@@ -202,6 +202,42 @@ wrap-guide
     closeEmptyWindows: false
     disabledPackages: [
       "activate-power-mode"
+      "language-gfm"
+      "pigments"
+      "color-picker"
+      "language-javascript-jsx"
+      "about"
+      "archive-view"
+      "autocomplete-atom-api"
+      "autoflow"
+      "autosave"
+      "background-tips"
+      "deprecation-cop"
+      "language-clojure"
+      "language-csharp"
+      "language-java"
+      "language-less"
+      "language-make"
+      "language-c"
+      "language-mustache"
+      "language-objective-c"
+      "language-perl"
+      "language-php"
+      "language-property-list"
+      "language-ruby"
+      "language-ruby-on-rails"
+      "language-sass"
+      "language-toml"
+      "language-yaml"
+      "open-path"
+      "package-generator"
+      "spell-check"
+      "styleguide"
+      "welcome"
+      "language-sql"
+      "open-on-github"
+      "metrics"
+      "exception-reporting"
     ]
     openEmptyEditorOnStart: false
     telemetryConsent: "limited"
@@ -210,6 +246,7 @@ wrap-guide
       "one-light-syntax"
     ]
   editor:
+    autoIndentOnPaste: false
     showIndentGuide: true
     showInvisibles: true
     tabLength: 4
@@ -263,6 +300,11 @@ wrap-guide
       mapTerminalsTo: "Folder"
     toggles:
       autoClose: true
+  "tree-view":
+    autoReveal: true
+    hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
+    squashDirectoryNames: true
   "vim-mode-plus":
     clearMultipleCursorsOnEscapeInsertMode: true
     highlightSearch: true
