@@ -6,17 +6,16 @@
 ```shell
 #activate-power-mode
 atom-beautify
-color-picker
+#color-picker
 linter
 merge-conflicts
-minimap
-open-path
-pigments
+#minimap
+#open-path
+#pigments
 project-viewer
 repl
 script
-platformio-atom-ide-terminal  # Replace terminal-plus
-#terminal-plus
+terminal-plus / platformio-atom-ide-terminal
 vim-mode-plus
 ```
 
@@ -63,20 +62,20 @@ go-oracle   # go-guru
 
 **Configuration**
 ```shell
-$ go install golang.org\x\tools\cmd\guru
+$ go install golang.org/x/tools/cmd/guru
 ```
 
 ### JS
 ```shell
-linter-eslint
-language-javascript-jsx
+#linter-eslint
+#language-javascript-jsx
 #linter-js-standard
 #linter-js-standard-jsx
 ```
 
 **Configure**
 ```shell
-$ npm i -g eslint
+$ npm install -g eslint
 ```
 
 ### Python
@@ -105,24 +104,24 @@ qolor
 
 
 ## Core Packages
-```
-about
-archive-view
-autocomplete-atom-api
+```shell
+#about
+#archive-view
+#autocomplete-atom-api
 autocomplete-css
 autocomplete-html
 autocomplete-plus
 autocomplete-snippets
-autoflow
-autosave
-background-tips
+#autoflow
+#autosave
+#background-tips
 bookmarks
 bracket-matcher
 command-palette
-deprecation-cop
+#deprecation-cop
 dev-live-reload
 encoding-selector
-exception-reporting
+#exception-reporting
 find-and-replace
 fuzzy-finder
 git-diff
@@ -131,56 +130,56 @@ grammer-selector
 image-view
 incompatible-packages
 keybinding-resolver
-language-c
-language-clojure
+#language-c
+#language-clojure
 language-coffee-script
-language-csharp
+#language-csharp
 language-css
-language-gfm
+#language-gfm
 language-git
 language-go
 language-html
 language-hyperlink
-language-java
+#language-java
 language-javascript
 language-json
-language-less
-language-make
-language-mustache
-language-objective-c
-language-perl
-language-php
-language-property-list
+#language-less
+#language-make
+#language-mustache
+#language-objective-c
+#language-perl
+#language-php
+#language-property-list
 language-python
-language-ruby
-language-ruby-on-rails
-language-sass
+#language-ruby
+#language-ruby-on-rails
+#language-sass
 language-shellscript
 language-source
-language-sql
+#language-sql
 language-text
 language-todo
-language-toml
+#language-toml
 language-xml
-language-yaml
+#language-yaml
 line-ending-selector
 link
 markdown-preview
-metrics
+#metrics
 notifications
-open-on-github
-package-generator
+#open-on-github
+#package-generator
 settings-view
 snippets
-spell-check
+#spell-check
 status-bar
-styleguide
+#styleguide
 symbols-view
 tabs
 timecop
 tree-view
 update-package-dependencies
-welcome
+#welcome
 whitespace
 wrap-guide
 ```
@@ -197,6 +196,8 @@ wrap-guide
   #"autocomplete-python":
   #  useKite: false
   #  useSnippets: "required"
+  "command-palette":
+    preserveLastSearch: true
   core:
     closeEmptyWindows: false
     disabledPackages: [
@@ -213,6 +214,10 @@ wrap-guide
     showInvisibles: true
     tabLength: 4
     zoomFontWhenCtrlScrolling: true
+  "fuzzy-finder":
+    preserveLastSearch: true
+  "git-diff":
+    showIconsInEditorGutter: true
   #"go-config":
   #  gopath: "~/go"
   #"go-oracle":
@@ -220,7 +225,8 @@ wrap-guide
   #  oraclePath: "$GOPATH/bin/guru"
   #gofmt:
   #  formatTool: "goreturns"
-  linter: {}
+  linter:
+    showErrorTabLine: true
   #"linter-python-pep257":
   #  ignoreCodes: "D100, D101, D102, D103, D104, D105, D209"
   #"linter-python-pep8":
@@ -230,23 +236,33 @@ wrap-guide
   #"markdown-writer":
   #  fileExtension: ".md"
   minimap:
+    absoluteMode: true
     plugins:
       cursorline: true
       cursorlineDecorationsZIndex: 0
-  "platformio-ide-terminal":  # Replace terminal-plus
-    toggles:
-      autoClose: true
+  #"platformio-ide-terminal":  # Replace terminal-plus
+  #  core:
+  #    mapTerminalsTo: "Folder"
+  #  toggles:
+  #    autoClose: true
   "project-viewer":
-    autohide: true
     convertOldData: false
     hideHeader: true
     keepContext: true
     statusBarVisibility: true
+    visibilityState: "Remember state"
   #qolor:
   #  fourBorders: true
-  #"terminal-plus":
-  #  toggles:
-  #    autoClose: true
+  script:
+    cwdBehavior: "Project directory of the script"
+  tabs:
+    alwaysShowTabBar: false
+    enableVcsColoring: true
+  "terminal-plus":
+    core:
+      mapTerminalsTo: "Folder"
+    toggles:
+      autoClose: true
   "vim-mode-plus":
     clearMultipleCursorsOnEscapeInsertMode: true
     highlightSearch: true
