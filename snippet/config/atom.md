@@ -243,3 +243,18 @@ wrap-guide
   welcome:
     showOnStartup: false
 ```
+
+## `keymap.cson`
+```cson
+'atom-text-editor':
+  'ctrl-a': 'core:select-all'
+  'ctrl-x': 'core:cut'
+  'ctrl-c': 'core:copy'
+  'ctrl-v': 'core:paste'
+
+'atom-workspace':
+  'ctrl-a': 'core:select-all'
+  'ctrl-x': 'core:cut'
+  'ctrl-c': 'core:copy'
+  'ctrl-v': 'core:paste'
+```
