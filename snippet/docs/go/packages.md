@@ -26,12 +26,18 @@
 
 ## Packages
 
+##### [go-flags](https://github.com/jessevdk/go-flags) [Recommendation]
+    a go library for parsing command line arguments
+
+##### [go-arg](https://github.com/alexflint/go-arg)
+    Struct-based argument parsing in Go
+
 ##### [structs](https://github.com/fatih/structs)
     Utilities for Go structs.
-    
-    Structs contains various utilities to work with Go (Golang) structs. It was initially used by me 
-    to convert a struct into a map[string]interface{}. With time I've added other utilities for structs. 
-    It's basically a high level package based on primitives from the reflect package. Feel free to 
+
+    Structs contains various utilities to work with Go (Golang) structs. It was initially used by me
+    to convert a struct into a map[string]interface{}. With time I've added other utilities for structs.
+    It's basically a high level package based on primitives from the reflect package. Feel free to
     add new functions or improve the existing code.
 
 ##### [go-stack](https://github.com/go-stack/stack)
@@ -226,12 +232,6 @@
 
 ##### [raft](https://github.com/coreos/etcd/tree/master/raft)
     Raft is a protocol with which a cluster of nodes can maintain a replicated state machine.
-
-##### [go-arg](https://github.com/alexflint/go-arg)
-    Struct-based argument parsing in Go
-
-##### [go-flags](https://github.com/jessevdk/go-flags)
-    a go library for parsing command line arguments
 
 ##### [mow.cli](https://github.com/jawher/mow.cli)
     A versatile library for building CLI applications in Go.
