@@ -15,6 +15,7 @@ pigments
 project-viewer
 repl
 script
+terminal-plus
 vim-mode-plus
 ```
 
@@ -77,6 +78,11 @@ autocomplete-python
 #linter-python-pep257
 linter-python-pep8
 #linter-python-pyflakes
+```
+
+**Configuration**
+```shell
+pip install pep8 pep257 pylint
 ```
 
 ### Markdown
