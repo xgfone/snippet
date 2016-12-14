@@ -9,6 +9,11 @@
 
 ## Tools
 
+##### [glide](https://github.com/Masterminds/glide) [Recommendation]
+    Package Management for Golang.
+
+    The doc of glide.yaml is located at https://glide.sh/docs/glide.yaml.
+
 ##### [gopm](https://github.com/gpmgo/gopm)
     Go Package Manager (gopm) is a package manager and build tool for Go.
 
