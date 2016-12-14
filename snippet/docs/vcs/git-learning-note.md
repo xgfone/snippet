@@ -109,6 +109,12 @@ $ git commit [-a] [-m “COMMINT DESCRIPTION”] [--allow-empty] [--amend]
 ```
 $ git fetch [<options>] [<repository> [<refspec>...]]
 ```
+
+**选项：**
+- `-p, --prune`：在拉取远程版本库的最新内容后，此选项会移除本地版本库存在而远程版本库却不存在的追踪分支(the remote-tracking branches)。
+- `-t, --tags`：这是 `refs/tags/:refs/tags/` 的简化，此选项会获取所有远程版本库中的 tag，然后存在在本地。这是默认行为。
+- `-n, --no-tags`：`-t, --tags` 的反动作。
+
 **说明：**
 
 （1）`<repository>` 和 `<refspec>` 语法及含义参见下文。
@@ -116,6 +122,11 @@ $ git fetch [<options>] [<repository> [<refspec>...]]
 （2）`git fetch` 命令仅是把远程版本库的对象库中的最新对象拉取到本地，并没有进行合并。一般来说，我们还需要进行一次合并（或变基，关于变基，请参见 《git rebase 详解》）操作。
 
 （3）`git fetch` 仅影响远程版本库分支，并不改变本地分支。
+
+**注意：**
+
+如果远程版本库中的某个 tag 已经被删除，当 fetch 时，本地对应的 tag 不会被删除，必须手工删除。一个解决办法就是：先删除所有本地的 tag，然后再执行 `git fetch -t` 即可。
+
 
 ### 6、合并（merge）
 合并是将一个提交对象或其他分支（指向的提交对象）合并到当前分支（所指向的提交对象）上，合并一般会产生一个新的提交对象，并将当前分支指针指向该提交对象上。
