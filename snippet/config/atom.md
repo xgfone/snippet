@@ -57,7 +57,9 @@ gorename
 navigator-go
 tester-go
 
-go-oracle   # go-guru
+## We will use go-guru in future.
+## Don't use rubyist/go-oracle, but smo921/go-oracle@branch:guru_cli_args
+go-oracle
 ```
 
 **Configuration**
