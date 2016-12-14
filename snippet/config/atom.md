@@ -163,7 +163,7 @@ language-text
 language-todo
 #language-toml
 language-xml
-#language-yaml
+language-yaml
 line-ending-selector
 link
 markdown-preview
@@ -235,7 +235,6 @@ wrap-guide
       "language-sass"
       "language-sql"
       "language-toml"
-      "language-yaml"
       "metrics"
       "open-on-github"
       "package-generator"
@@ -303,8 +302,7 @@ wrap-guide
       mapTerminalsTo: "Folder"
     toggles:
       autoClose: true
-  "tree-view":
-    autoReveal: true
+  "tree-view"
     hideIgnoredNames: true
     hideVcsIgnoredFiles: true
     squashDirectoryNames: true
