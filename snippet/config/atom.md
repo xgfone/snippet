@@ -313,6 +313,8 @@ wrap-guide
     useClipboardAsDefaultRegister: true
   welcome:
     showOnStartup: false
+  whitespace:
+    ignoreWhitespaceOnCurrentLine: false
 ```
 
 ## `keymap.cson`
