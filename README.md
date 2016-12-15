@@ -126,6 +126,7 @@ DOCS
         - [Go 内嵌静态资源](http://fuxiaohei.me/2016/10/1/go-binary-embed-asset.html)
         - [XML 动态解析样例](./snippet/example/go/xml.go)
         - [Gopher Academy Blog](https://blog.gopheracademy.com/)
+        - [Go Assembler](http://docs.studygolang.com/doc/asm)
 - [Java](./snippet/docs/java)
     - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)
