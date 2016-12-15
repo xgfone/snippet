@@ -171,6 +171,8 @@ _**Interface类型的方法集就是该类型所包含的方法。但如果接�
 
 注：_`包含接口类型E的所有方法集后所形成的接口类型T方法集，不能有相同的方法存在`_。比如：如果接口类型T1和T2的声明中都包含有接口类型E，那么接口类型T不能同时包含接口类型T1和T2，因为这将导致接口类型T中含有两个接口类型E中的所有方法，导致冲突。
 
+关于 `方法集` 的调用规则，参见 [这里](https://github.com/golang/go/wiki/MethodSets)。
+
 例子：
 ```go
 type ReadWriter interface {
@@ -354,4 +356,3 @@ make(channelType [, capacity])
 
 ### 14.3 `Error() string`
 任何类型都可以通过实现 `Error() string` 方法来实现 `error` interface，此时，它可以作为类型 `error` 的值。
-

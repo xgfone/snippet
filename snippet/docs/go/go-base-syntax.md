@@ -205,7 +205,12 @@ const (
 ```
 
 ## 10、Go的并发模型
-```
-Do not communicate by sharing memory; instead, share memory by communicating.
-不要通过共享内存来通信，而要通过通信来共享内存。
-```
+Go 的座右铭之一就是：**`Share memory by communicating, don't communicate by sharing memory.`**
+
+中文：**`通过通信来共享内存，而不要通过共享内存来通信。`**
+
+关于 `sync.Mutex` 和 `Channel` 的一般使用向导：
+
+Channel                                  |   Mutex
+-----------------------------------------|------------
+传送数据的所有权、分发工作单元、传递异步结果 | 缓存、状态
