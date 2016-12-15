@@ -40,7 +40,7 @@ Go语言笔记
 	- [GO1.6](./go-version.md#go16)
 	- [GO1.7](./go-version.md#go17)
 
----
+------
 
 - [Go Playground](https://wide.b3log.org/playground)
 - [Golang net.http标准库](./net-http.md)
@@ -54,3 +54,4 @@ Go语言笔记
 - [XML 动态解析样例](../../example/go/xml.go)
 - [Gopher Academy Blog](https://blog.gopheracademy.com/)
 - [Go Assembler](http://docs.studygolang.com/doc/asm)
+- [Go Data Race Detector](http://docs.studygolang.com/doc/articles/race_detector.html)

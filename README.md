@@ -127,6 +127,7 @@ DOCS
         - [XML 动态解析样例](./snippet/example/go/xml.go)
         - [Gopher Academy Blog](https://blog.gopheracademy.com/)
         - [Go Assembler](http://docs.studygolang.com/doc/asm)
+        - [Go Data Race Detector](http://docs.studygolang.com/doc/articles/race_detector.html)
 - [Java](./snippet/docs/java)
     - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)
