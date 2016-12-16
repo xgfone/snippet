@@ -30,6 +30,7 @@
     "files.eol": "\n",
     "files.trimTrailingWhitespace": true,
 
+    "go.buildFlags": ["-race"],
     "go.formatOnSave": true,
     "go.formatTool": "goreturns",
 
@@ -37,16 +38,23 @@
 
     "python.autoComplete.addBrackets": true,
     "python.linting.maxNumberOfProblems": 120,
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.pylintArgs": [
-        "-d C0111,W0703"
+        "-d C0103,C0111,E1123,W0703,W1202"
     ],
-    //"python.linting.pep8Enabled": true,
-    //"python.linting.pep8Args": [],
+    "python.linting.pep8Enabled": true,
+    "python.linting.pep8Args": [
+        "E125", "E126", "E127", "E128", "E129",
+        "E221", "E265",
+        "E309",
+        "E401", "E402"
+    ],
     "python.unitTest.nosetestsEnabled": true,
     "python.unitTest.nosetestArgs": [],
 
-    //"terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.scrollback": 10000,
+    "terminal.integrated.setLocaleVariables": true,
 
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false
@@ -82,7 +90,7 @@ Install a Package
 ```shell
 alefragnani.Bookmarks
 formulahendry.code-runner
-anseki.vscode-color
+#anseki.vscode-color
 robertohuertasm.vscode-icons
 #seanmcbreen.Spell
 #vscodevim.vim                    # It will lead to 'editor.useTabStops' to be invalid.
@@ -90,18 +98,18 @@ robertohuertasm.vscode-icons
 HookyQR.beautify                  # Format JS, JSON, CSS, HTML
 DotJoshJohnson.xml                # Format XML
 ms-vscode.cpptools                # C/C++
-msjsdiag.debugger-for-chrome      # JS Debuger
-dbaeumer.vscode-eslint            # JS Lint
+#msjsdiag.debugger-for-chrome     # JS Debuger
+#dbaeumer.vscode-eslint           # JS Lint
 donjayamanne.githistory           # Git log
 codezombiech.gitignore            # Git ignore
 lukehoban.Go                      # Golang
-abusaidm.html-snippets            # HTML 5
-redhat.java                       # Java
-georgewfraser.vscode-javac        # Java
-donjayamanne.javadebugger         # Java Debugger
+#abusaidm.html-snippets           # HTML 5
+#redhat.java                      # Java
+#georgewfraser.vscode-javac       # Java
+#donjayamanne.javadebugger        # Java Debugger
 alefragnani.project-manager       # Project Manager
 donjayamanne.python               # Python
-humao.rest-client                 # Restful Client
+#humao.rest-client                # Restful Client
 #hcyang.ctags                     # CTags
 #saviorisdead.RustyCode           # Rust
 #cssho.vscode-svgviewer           # SVG Viewer
@@ -122,7 +130,7 @@ npm install -g eslint
 
 #### For python
 ```
-pip install pylint nose
+pip install pylint nose pep8
 ```
 
 #### For Go
