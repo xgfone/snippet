@@ -214,3 +214,7 @@ Go 的座右铭之一就是：**`Share memory by communicating, don't communicat
 Channel                                  |   Mutex
 -----------------------------------------|------------
 传送数据的所有权、分发工作单元、传递异步结果 | 缓存、状态
+
+
+> Do not communicate by sharing memory; instead, share memory by communicating.
+> [《–Effective Go》](http://golang.org/doc/effective_go.html)
