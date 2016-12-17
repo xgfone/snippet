@@ -91,9 +91,23 @@
     ThinkGo 是一款 Go 语言编写的 web 快速开发框架。
     它基于开源框架 Gin 进行二次开发，旨在实现一种类 ThinkPHP 的高可用、高效率的 web 框架。
 
+##### [Negroni](https://github.com/urfave/negroni)
+    Idiomatic HTTP Middleware for Golang.
+
+##### [render](https://github.com/unrolled/render)
+    Go package for easily rendering JSON, XML, binary data, and HTML templates responses.
+
+##### [graceful](https://github.com/tylerb/graceful)
+    Graceful is a Go package enabling graceful shutdown of an http.Handler server.
+
 ##### [gin](https://github.com/gin-gonic/gin)
     Gin is a HTTP web framework written in Go (Golang). It features a Martini-like API with much better
     performance -- up to 40 times faster. If you need smashing performance, get yourself some Gin.
+
+##### [blackfriday](https://github.com/russross/blackfriday)
+    Blackfriday is a Markdown processor implemented in Go. It is paranoid about its input
+    (so you can safely feed it user-supplied data), it is fast, it supports common extensions
+    (tables, smart punctuation substitutions, etc.), and it is safe for all utf-8 (unicode) input.
 
 ##### [ini](https://github.com/go-ini/ini)
     Package ini provides INI file read and write functionality in Go.
