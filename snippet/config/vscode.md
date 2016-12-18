@@ -97,6 +97,7 @@ DotJoshJohnson.xml                # Format XML
 ms-vscode.cpptools                # C/C++
 #msjsdiag.debugger-for-chrome     # JS Debuger
 #dbaeumer.vscode-eslint           # JS Lint
+#eg2.vscode-npm-script            # Node NPM
 donjayamanne.githistory           # Git log
 codezombiech.gitignore            # Git ignore
 lukehoban.Go                      # Golang
@@ -146,14 +147,8 @@ go get -v github.com/cweill/gotests/...
 ```
 
 #### For RustyCode
-```
-racer
-racer
-using rustsym
-rustfmt
-
-check
-check-lib
-cargo-clippy
-build
+```shell
+$ cargo install racer
+$ cargo install rustsym
+$ cargo install rustfmt
 ```
