@@ -55,3 +55,4 @@ Go语言笔记
 - [Gopher Academy Blog](https://blog.gopheracademy.com/)
 - [Go Assembler](http://docs.studygolang.com/doc/asm)
 - [Go Data Race Detector](http://docs.studygolang.com/doc/articles/race_detector.html)
+- [Approximating html/template Inheritance](http://elithrar.github.io/article/approximating-html-template-inheritance/)
