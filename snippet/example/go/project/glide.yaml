@@ -1,0 +1,31 @@
+package: project
+owners:
+  - name: xgfone
+    email: xgfone@126.com
+import:
+  # The packages which have no dependence.
+  - package: github.com/jessevdk/go-flags
+    version: v1.1
+  - package: github.com/xgfone/go-tools
+    version: 0.26
+
+  # The packages which have dependency.
+  # The depended packages precede the dependent packages.
+  - package: github.com/mattn/go-isatty
+    version: v0.0.1
+  - package: github.com/mattn/go-colorable
+    version: v0.0.6
+  - package: github.com/inconshreveable/log15
+    version: 46a701a619de90c65a78c04d1a58bf02585e9701
+  - package: github.com/xgfone/go-utils
+    version: 0.1
+
+  # Others
+  # - package: golang.org/x/sys
+  #   version: 478fcf54317e52ab69f40bb4c7a1520288d7f7ea
+  #   repo: https://github.com/golang/sys
+  #   vcs: git
+  # - package: github.com/fatih/structs
+  #   version: dc3312cb1a4513a366c4c9e622ad55c32df12ed3
+  # - package: github.com/go-stack/stack
+  #   version: v1.5.2
