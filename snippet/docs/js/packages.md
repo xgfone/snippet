@@ -11,6 +11,11 @@
     The streaming build system
 
 
+## Both Node and Browser
+
+##### [lodash](https://github.com/lodash/lodash)
+    A modern JavaScript utility library delivering modularity, performance, & extras.
+
 ## NodeJS
 
 ##### [argparse](https://github.com/nodeca/argparse)
@@ -52,3 +57,6 @@
 ## Browser
 ##### [three.js](https://github.com/mrdoob/three.js)
     JavaScript 3D library.
+
+##### [Backbone.js](https://github.com/jashkenas/backbone)
+    Give your JS App some Backbone with Models, Views, Collections, and Events
