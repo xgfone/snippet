@@ -4,6 +4,8 @@
 from __future__ import print_function, absolute_import, unicode_literals, division
 
 
+# @Author: xgfone
+# @Email: xgfone@126.com
 class Configuration(object):
 
     class __Option(object):
