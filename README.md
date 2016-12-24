@@ -133,6 +133,7 @@ DOCS
     - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)
 	- [JavaScript ES6官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
+    - [ECMAScript 6 Features](https://github.com/lukehoban/es6features#readme) 或 [Babel版](https://babeljs.io/learn-es2015/)
     - [Exploring JS](http://exploringjs.com) **【重点推荐】**
         - [Speaking JavaScript (ES5)](http://speakingjs.com/)（点击 [这里](http://speakingjs.com/es5/index.html) 阅读）
         - [Exploring ES6 (ES6)](http://exploringjs.com/es6.html)（点击 [这里](http://exploringjs.com/es6/index.html) 阅读）
