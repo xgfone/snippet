@@ -38,6 +38,8 @@ DOCS
 - [Compile](./snippet/docs/compile)
     - [Parser Generator](./snippet/docs/compile/parser_generator.md)
     - [Links](./snippet/docs/compile/links.md)
+- [Compute](./snippet/docs/compute)
+    - [How to teach endian](./snippet/docs/compute/How-to-teach-endian.md)
 - [DataBase](./snippet/docs/db)
     - [SQL](./snippet/docs/db/sql)
         - [处理百万级以上的数据时，提高查询速度的方法](./snippet/docs/db/sql/million-record.md)
