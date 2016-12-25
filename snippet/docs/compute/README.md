@@ -1,2 +1,2 @@
 
-- [How to teach endian](./How-to-teach-endian.md)
+- [How to teach endian](./how-to-teach-endian.md)
