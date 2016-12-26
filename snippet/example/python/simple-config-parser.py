@@ -156,7 +156,7 @@ class Configuration(object):
 
         # Check whether the empty value options exists.
         for name, opt in self.__opts.items():
-            if not opt.ignore_empty and  name not in self.__caches:
+            if not opt.ignore_empty and name not in self.__caches:
                 raise ValueError("The option {0} does not have a value.".format(name))
 
         self.__parsed = True
