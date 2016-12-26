@@ -21,9 +21,11 @@ class Configuration(object):
         BOOL_TRUE = ["t", "true", "1"]
         BOOL_FALSE = ["f", "false", "0"]
 
-        def __init__(self, _type, default=None, nargs=1, help=None):
+        def __init__(self, _type, short=None, default=None, nargs=1, help=None, ignore_empty=False):
             self.type = self.STR2TYPE.get(_type, _type)
+            self.ignore_empty = ignore_empty
             self.default = default
+            self.short = short
             self.nargs = nargs
             self.help = help
             self._value = None
@@ -64,7 +66,7 @@ class Configuration(object):
     __Option.fix_py2()
     __DEFAULT_OPTION = __Option("str")
 
-    def __init__(self, description="", filenames=None, config_opt="config_file", strict=False):
+    def __init__(self, description="", filenames=None, config_opt="config_file", strict=None):
         """A simple configuration parser, including the file and CLI.
 
         We only support to parse the types of integer, bool, string, not list.
@@ -112,7 +114,9 @@ class Configuration(object):
 
     def __init_opts(self):
         self.__register(self.__config_opt,
-                        Configuration.__Option("str", default="", help="The path of the configuration file"))
+                        Configuration.__Option("str", ignore_empty=True, help="The path of the configuration file"))
+        self.__register("strict",
+                        Configuration.__Option("bool", default=False, help="If true, enable the strict mode."))
 
     def __get_value(self, name, value):
         opt = self.__opts.get(name, self.__DEFAULT_OPTION)
@@ -125,28 +129,34 @@ class Configuration(object):
         # Parse the CLI options
         clis = self.__parse_cli(argv=argv)
 
+        if self.__strict is None:
+            strict = getattr(clis, "strict", False)
+            self.__strict = strict
+
         # Calculate and parse all the configuration files
         # filenames = [].extend(self.__filenames)
         filenames = self.__filenames
-        _filenames = getattr(clis, self.__config_opt, [])
-        for filename in _filenames:
-            for file in filename.split(","):
-                file = file.strip()
-                if file:
-                    filenames.append(file)
+        _filenames = getattr(clis, self.__config_opt, None)
+        if _filenames:
+            for filename in _filenames:
+                for file in filename.split(","):
+                    file = file.strip()
+                    if file:
+                        filenames.append(file)
         self.__parse_files(filenames)
 
         # Place the CLI options into the parsed cache.
         # We do it after parsing configuration file, because the priority of CLI
         # is higher than the configurations file.
         for name, value in vars(clis).items():
+            value = value if value is not None else self.__opts[name].default
             if value is None:
                 continue
             self.__caches[name] = self.__get_value(name, value)
 
         # Check whether the empty value options exists.
-        for name in self.__opts.keys():
-            if name not in self.__caches:
+        for name, opt in self.__opts.items():
+            if not opt.ignore_empty and  name not in self.__caches:
                 raise ValueError("The option {0} does not have a value.".format(name))
 
         self.__parsed = True
@@ -172,15 +182,21 @@ class Configuration(object):
             _default = opt.default
             if opt.is_bool:
                 if _default:
-                    kwargs["action"] = "store_true"
-                else:
                     kwargs["action"] = "store_false"
+                else:
+                    kwargs["action"] = "store_true"
             else:
                 kwargs["nargs"] = opt.nargs
-                if _default is not None:
-                    kwargs["default"] = _default
 
-            add_option(parser, "--" + name, **kwargs)
+            names = []
+            short = opt.short
+            if short is not None and len(short) > 0:
+                if short[0] != "-":
+                    short = "-" + short
+                names.append(short)
+            names.append("--" + name)
+
+            add_option(parser, *names, **kwargs)
         args = get_args(parser)
         return args
 
@@ -242,28 +258,28 @@ class Configuration(object):
             raise KeyError("The option {0} has been regisetered".format(name))
         self.__opts[name] = opt
 
-    def register_bool(self, name, default=None, help=None):
+    def register_bool(self, name, short=None, default=None, help=None):
         """Register the bool option.
 
         The value of this option will be parsed to the type of bool.
         """
-        opt = Configuration.__Option("bool", default=default, help=help)
+        opt = Configuration.__Option("bool", short=short, default=default, help=help)
         self.__register(name, opt)
 
-    def register_int(self, name, default=None, help=None):
+    def register_int(self, name, short=None, default=None, help=None):
         """Register the int option.
 
         The value of this option will be parsed to the type of int.
         """
-        opt = Configuration.__Option("int", default=default, help=help)
+        opt = Configuration.__Option("int", short=short, default=default, help=help)
         self.__register(name, opt)
 
-    def register_str(self, name, default=None, nargs=1, help=None):
+    def register_str(self, name, short=None, default=None, nargs=1, help=None):
         """Register the str option.
 
         The value of this option will be parsed to the type of str.
         """
-        opt = Configuration.__Option("str", default=default, help=help)
+        opt = Configuration.__Option("str", short=short, default=default, help=help)
         self.__register(name, opt)
 
     def parse(self, argv=None):
@@ -279,11 +295,10 @@ class Configuration(object):
 
 
 def main():
-    strict = False
     filename = "test.conf"
-    conf = Configuration(filenames=filename, strict=strict)
-    conf.register_bool("a1", default=True)
-    conf.register_int("a4")
+    conf = Configuration(filenames=filename)
+    conf.register_bool("a1", short='a')
+    conf.register_int("a4", short='A', default=444444)
     conf.parse()
     print(type(conf.a1), conf.a1)
     # print(type(conf.a5), conf.a5)
