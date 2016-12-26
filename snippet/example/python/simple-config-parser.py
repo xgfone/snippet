@@ -149,7 +149,8 @@ class Configuration(object):
         # We do it after parsing configuration file, because the priority of CLI
         # is higher than the configurations file.
         for name, value in vars(clis).items():
-            value = value if value is not None else self.__opts[name].default
+            if value is None and name not in self.__caches:
+                value = self.__opts[name].default
             if value is None:
                 continue
             self.__caches[name] = self.__get_value(name, value)
