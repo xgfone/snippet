@@ -23,12 +23,16 @@ class Configuration(object):
 
         def __init__(self, _type, short=None, default=None, nargs=1, help=None, ignore_empty=False):
             self.type = self.STR2TYPE.get(_type, _type)
+            if self.type is self.BOOL_TYPE:
+                self.default = bool(default)
+            else:
+                self.default = default
             self.ignore_empty = ignore_empty
-            self.default = default
             self.short = short
             self.nargs = nargs
             self.help = help
             self._value = None
+
 
         @classmethod
         def fix_py2(cls):
@@ -138,6 +142,8 @@ class Configuration(object):
         filenames = self.__filenames
         _filenames = getattr(clis, self.__config_opt, None)
         if _filenames:
+            if not isinstance(_filenames, (list, tuple)):
+                _filenames = [_filenames]
             for filename in _filenames:
                 for file in filename.split(","):
                     file = file.strip()
@@ -171,7 +177,7 @@ class Configuration(object):
         except ImportError:
             import optparse
             Parser = optparse.OptionParser
-            add_option = Parser.agg_option
+            add_option = Parser.add_option
             get_args = lambda parser: parser.parse_args(args=argv)[0]
 
         parser = Parser(description=self.__description)
