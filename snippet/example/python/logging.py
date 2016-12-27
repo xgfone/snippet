@@ -16,7 +16,7 @@ def init_logging(logger, level, log_file=""):
 
     if log_file:
         Handler = logging.handlers.TimedRotatingFileHandler
-        handler = Handler(log_file, when="midnight", interval=-1, backupCount=30)
+        handler = Handler(log_file, when="midnight", interval=1, backupCount=30)
     else:
         handler = logging.StreamHandler()
     handler.setLevel(level)
