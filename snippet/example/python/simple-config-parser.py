@@ -33,7 +33,6 @@ class Configuration(object):
             self.help = help
             self._value = None
 
-
         @classmethod
         def fix_py2(cls):
             import sys
