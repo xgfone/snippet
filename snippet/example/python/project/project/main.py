@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding: utf8
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals, division
 
 import eventlet
 
