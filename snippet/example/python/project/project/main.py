@@ -2,38 +2,31 @@
 # encoding: utf8
 from __future__ import absolute_import, print_function, unicode_literals, division
 
-import eventlet
+import logging
 
-from oslo_config import cfg
 from oslo_log import log
+from oslo_config.cfg import CONF
 
-# from {PROJECT}.db import api
+from secure_log._options import global_opts
+from secure_log.common.utils import get_version
 
-CONF = cfg.CONF
-__VERSION__ = "0.1"
-
-project_opts = [
-    cfg.StrOpt("logging_config_file", default="",
-               help="The configuration file of logging for the {PROJECT}"),
-]
-CONF.register_cli_options(project_opts, group="{PROJECT}")
+LOG = logging.getLogger(__name__)
+CONF.register_cli_opts(global_opts)
 
 
-def main(project="example"):
+def main(project="example", version=None):
+    if not version:
+        version = get_version(project)
+
+    # Pasre the configuration, including CLI and the configuration file.
     log.register_options(CONF)
     # log.set_defaults(default_log_levels=None)
-    CONF(project=project, version=__VERSION__)
+    CONF(project=project, version=version)
 
-    # (TODO) Daemon
+    # Initilize the logging.
+    log.setup(CONF, project, version)
 
-    eventlet.monkey_patch(all=True)
-    if CONF.{PROJECT}.logging_config_file:
-        log._load_log_config(CONF.{PROJECT}.logging_config_file)
-    else:
-        log.setup(CONF, project, __VERSION__)
-
-    # (TODO)
-    pass
+    # TODO
 
 
 if __name__ == '__main__':
