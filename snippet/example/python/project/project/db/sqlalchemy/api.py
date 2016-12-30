@@ -6,7 +6,6 @@ import logging
 
 from oslo_config import cfg
 from oslo_db import options as oslo_db_options
-from oslo_db.sqlalchemy import utils as sqlalchemyutils
 
 from .base import get_session, get_engine
 from . import models
@@ -59,16 +58,12 @@ class RowRroxy(object):
         return not self.__eq__(other)
 
 
-def model_query(model, session):
-    return sqlalchemyutils.model_query(model, session)
-
-
 ###############################################################
 # API Interfaces
 def get_data(_id):
     model = models.TestData
     session = get_session(CONF.database)
-    query = sqlalchemyutils.model_query(model, session)
+    query = session.query(model)
     obj = query.filter_by(id=_id).first()
     if obj:
         return {
