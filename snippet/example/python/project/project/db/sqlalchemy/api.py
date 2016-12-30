@@ -15,19 +15,9 @@ CONF = cfg.CONF
 
 CONF.register_opts(oslo_db_options.database_opts, 'database')
 
-# For Test
-oslo_db_options.set_defaults(CONF, connection="sqlite:///:memory:")
-DB_INIT = False
-
 
 def get_backend():
     """The backend is this module itself."""
-    # For Test
-    global DB_INIT
-    if not DB_INIT:
-        models.TestData.metadata.create_all(get_engine(CONF.database))
-        DB_INIT = True
-
     return sys.modules[__name__]
 
 
