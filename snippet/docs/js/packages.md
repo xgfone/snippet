@@ -58,6 +58,11 @@
 ##### [task.js](https://github.com/mozilla/task.js)
     Beautiful concurrency for JavaScript.
 
+##### [xml-js] (https://github.com/nashwaan/xml-js)
+    Convert XML text to Javascript object / JSON text (and vice versa).
+
+##### [xml2json](https://github.com/buglabs/node-xml2json)
+    Converts XML to JSON using node-expat.
 
 ## Browser
 ##### [three.js](https://github.com/mrdoob/three.js)
