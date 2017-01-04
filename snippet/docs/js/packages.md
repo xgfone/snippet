@@ -67,6 +67,9 @@
 ##### [xml2json](https://github.com/buglabs/node-xml2json)
     Converts XML to JSON using node-expat.
 
+#### [zookeeper](https://github.com/yfinkelstein/node-zookeeper)
+    node.js client for Apache Zookeeper.
+
 ## Browser
 ##### [three.js](https://github.com/mrdoob/three.js)
     JavaScript 3D library.
