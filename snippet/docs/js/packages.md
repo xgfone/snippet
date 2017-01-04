@@ -21,6 +21,9 @@
     promises, symbols, collections, iterators, typed arrays, ECMAScript 7+ proposals, setImmediate, etc.
     Some additional features such as dictionaries or extended partial application.
 
+##### [immutable.js](https://github.com/facebook/immutable-js)
+    Immutable persistent data collections for Javascript which increase efficiency and simplicity.
+
 ## NodeJS
 
 ##### [argparse](https://github.com/nodeca/argparse)
