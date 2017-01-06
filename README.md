@@ -155,6 +155,11 @@ DOCS
     - [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)（点击 [这里](https://i5ting.github.io/asynchronous-flow-control) 阅读）
     - [测试框架 Mocha 实例教程](http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
     - [Packages](./snippet/docs/js/packages.md)
+    - [React](https://facebook.github.io/react)
+        - 官方的 “[快速教程](https://facebook.github.io/react/docs/installation.html)”
+        - 官方的 “[高级向导](https://facebook.github.io/react/docs/jsx-in-depth.html)”
+        - 官方的 “[参考手册](https://facebook.github.io/react/docs/react-api.html)”
+        - [Controlled vs. Uncontrolled components in Form](https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
 		- [理论篇](./snippet/docs/linux/QoS/qos-theory.md)
