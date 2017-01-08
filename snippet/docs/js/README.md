@@ -20,3 +20,5 @@
     - 官方的 “[高级向导](https://facebook.github.io/react/docs/jsx-in-depth.html)”
     - 官方的 “[参考手册](https://facebook.github.io/react/docs/react-api.html)”
     - [Controlled vs. Uncontrolled components in Form](https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/)
+- [Redux](http://redux.js.org/)
+    - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
