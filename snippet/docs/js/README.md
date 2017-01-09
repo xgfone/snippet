@@ -24,3 +24,4 @@
 - [Redux](http://redux.js.org/)
     - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
     - [React-Redux: Official React bindings for Redux](http://redux.js.org/docs/basics/UsageWithReact.html)
+    - [React & Redux](https://github.com/bailicangdu/react-pxq)

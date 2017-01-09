@@ -164,6 +164,7 @@ DOCS
     - [Redux](http://redux.js.org/)
         - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
         - [React-Redux: Official React bindings for Redux](http://redux.js.org/docs/basics/UsageWithReact.html)
+        - [React & Redux](https://github.com/bailicangdu/react-pxq)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
 		- [理论篇](./snippet/docs/linux/QoS/qos-theory.md)
