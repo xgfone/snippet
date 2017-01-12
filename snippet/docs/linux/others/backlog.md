@@ -62,7 +62,3 @@ sleep 2
 done
 ```
 顺便说一下，`listen` 函数不是阻塞式的，它只是告诉内核打开某端口监听，真正“监听”的是内核，而不是我们的服务端程序。`listen` 函数只是把第一个参数（即套接字）转换成监听套接字。
-
-------
-
-From: https://github.com/xgfone/snippet/new/master
