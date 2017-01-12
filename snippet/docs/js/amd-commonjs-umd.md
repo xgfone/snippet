@@ -146,4 +146,5 @@ module.exports = {
 -----
 
 From: http://web.jobbole.com/82238
+
 English: http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd
