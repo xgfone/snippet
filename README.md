@@ -168,6 +168,11 @@ DOCS
         - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
         - [React-Redux: Official React bindings for Redux](http://redux.js.org/docs/basics/UsageWithReact.html)
         - [React & Redux](https://github.com/bailicangdu/react-pxq)
+    - Module Definition
+        - [AMD](https://github.com/amdjs/amdjs-api)
+        - [CommonJS](http://www.commonjs.org)
+        - [UMD](https://github.com/umdjs/umd)
+        - [AMD、CMD、UMD 模块的写法](./snippet/docs/js/amd-commonjs-umd.md)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
 		- [理论篇](./snippet/docs/linux/QoS/qos-theory.md)

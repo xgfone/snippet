@@ -28,3 +28,8 @@
     - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
     - [React-Redux: Official React bindings for Redux](http://redux.js.org/docs/basics/UsageWithReact.html)
     - [React & Redux](https://github.com/bailicangdu/react-pxq)
+- Module Definition
+    - [AMD](https://github.com/amdjs/amdjs-api)
+    - [CommonJS](http://www.commonjs.org)
+    - [UMD](https://github.com/umdjs/umd)
+    - [AMD、CMD、UMD 模块的写法](./amd-commonjs-umd.md)
