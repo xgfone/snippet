@@ -24,6 +24,31 @@
 ##### [immutable.js](https://github.com/facebook/immutable-js)
     Immutable persistent data collections for Javascript which increase efficiency and simplicity.
 
+
+## APP
+
+##### [React](https://facebook.github.io/react)
+    A declarative, efficient, and flexible JavaScript library for building user interfaces.
+
+##### [React-Router](https://github.com/ReactTraining/react-router)
+    Declarative routing for React.
+
+##### [React-Native](http://facebook.github.io/react-native)
+    A framework for building native apps with React.
+
+##### [Redux](http://redux.js.org)
+    Predictable state container for JavaScript apps.
+
+##### [React-Redux](https://github.com/reactjs/react-redux)
+    Official React bindings for Redux.
+
+##### [react-router-redux](https://github.com/reactjs/react-router-redux)
+    Ruthlessly simple bindings to keep react-router and redux in sync.
+
+##### [Redux-Thunk](https://github.com/gaearon/redux-thunk)
+    Thunk middleware for Redux.
+
+
 ## NodeJS
 
 ##### [argparse](https://github.com/nodeca/argparse)
