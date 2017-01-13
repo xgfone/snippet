@@ -168,6 +168,8 @@ DOCS
         - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
         - [React-Redux: Official React bindings for Redux](http://redux.js.org/docs/basics/UsageWithReact.html)
         - [React & Redux](https://github.com/bailicangdu/react-pxq)
+        - [Redux Middleware 详解](https://zhuanlan.zhihu.com/p/20597452)
+        - [Redux Middleware: Behind the Scenes](http://briantroncone.com/?p=529)
     - Module Definition
         - [AMD](https://github.com/amdjs/amdjs-api)
         - [CommonJS](http://www.commonjs.org)
