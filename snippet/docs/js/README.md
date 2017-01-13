@@ -24,6 +24,7 @@
     - [React-Router](https://github.com/ReactTraining/react-router)
         - [官方文档的中文翻译](http://react-guide.github.io/react-router-cn/index.html)
         - [深入理解 React-Router 路由系统](https://zhuanlan.zhihu.com/p/20381597?columnSlug=purerender)
+        - [Declarative Routing for React](https://react-router.now.sh/)
 - [Redux](http://redux.js.org/)
     - [Offline Docs: PDF EPUB MOBI](https://github.com/paulkogel/redux-offline-docs)
     - [React-Redux: Official React bindings for Redux](http://redux.js.org/docs/basics/UsageWithReact.html)
