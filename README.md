@@ -29,6 +29,8 @@ DOCS
         - [HAProxy Architecture](./snippet/docs/architecture/ha-lb/haproxy-architecture.txt)
         - [HAProxy Configure](./snippet/docs/architecture/ha-lb/haproxy-configuration.txt)
         - [HAProxy Conf Example](./snippet/docs/architecture/ha-lb/haproxy-conf-example.md)
+    - RESTfull API
+        - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
 - [Assembly](./snippet/docs/assembly)
     - [Linux 汇编语言开发指南](./snippet/docs/assembly/linux-assembly-development-guide.md)
 - [Book & Atricle](./snippet/docs/book&article)
