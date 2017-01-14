@@ -350,3 +350,4 @@ DOCS
     - [大型网站技术架构的演进](./snippet/docs/web/website-evolution.md)
     - [浏览器 HTTP 协议缓存机制详解](./snippet/docs/web/browse-http-cache.md)
     - [CSS 选择器](./snippet/docs/web/css-selector.md)
+    - [URL 中的 `#`](./snippet/docs/web/url_hash.md)
