@@ -196,6 +196,8 @@ DOCS
         - [Kali](./snippet/docs/linux/distribution/kali.md)
     - [IP Route2](./snippet/docs/linux/iproute2)
     - [IPv4](./snippet/docs/linux/ipv4)
+    - [Kernel](./snippet/docs/linux/kernel)
+        - [Linux Kernel Map](./snippet/docs/linux/kernel/_static/linux-kernel-map.png)
     - [NetFilter](./snippet/docs/linux/netfilter)
         - [Linux IPtables使用入门](./snippet/docs/linux/netfilter/iptables-usage.md)
         - [TCP握手与IPtables](./snippet/docs/linux/netfilter/iptables-beginner.md)
