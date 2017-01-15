@@ -9,6 +9,7 @@
     - [Setting up ES6 (Using and configuring Babel 6 in web browsers and on Node.js.)](http://exploringjs.com/setting-up-es6.html)（点击 [这里](https://leanpub.com/setting-up-es6/read) 阅读）
 - [ECMAScript 6入门](https://github.com/ruanyf/es6tutorial) （点击 [这里](http://es6.ruanyifeng.com) 阅读）
 - [JavaScript 标准参考教程](https://github.com/ruanyf/jstutorial) （点击 [这里](http://javascript.ruanyifeng.com/) 阅读）
+- [JavaScript Promise迷你书](https://github.com/liubin/promises-book)（点击 [这里](http://liubin.org/promises-book) 阅读）
 - [Node.js ES2015 Support](http://node.green/)
 - [JavaScript 快速参考](./js-quick-reference.md)
 - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
