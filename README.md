@@ -352,6 +352,7 @@ DOCS
     - [Git rebase详解](./snippet/docs/vcs/git-rebase.md)
     - [Github Guide](./snippet/docs/vcs/github-guide.md)
     - [git-extras](https://github.com/tj/git-extras) ( [安装](https://github.com/tj/git-extras/blob/master/Installation.md) )
+    - [Git 思维导图](./snippet/docs/vcs/_static/git-shortcut.jpg)
 - [Web](./snippet/docs/web)
     - [大型网站技术架构的演进](./snippet/docs/web/website-evolution.md)
     - [浏览器 HTTP 协议缓存机制详解](./snippet/docs/web/browse-http-cache.md)

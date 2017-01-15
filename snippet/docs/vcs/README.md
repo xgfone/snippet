@@ -6,3 +6,4 @@
 - [Git rebase详解](./git-rebase.md)
 - [Github Guide](./github-guide.md)
 - [git-extras](https://github.com/tj/git-extras) ( [安装](https://github.com/tj/git-extras/blob/master/Installation.md) )
+- [Git 思维导图](./_static/git-shortcut.jpg)
