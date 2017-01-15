@@ -197,7 +197,7 @@ DOCS
     - [IP Route2](./snippet/docs/linux/iproute2)
     - [IPv4](./snippet/docs/linux/ipv4)
     - [Kernel](./snippet/docs/linux/kernel)
-        - [Linux Kernel Map](./snippet/docs/linux/kernel/_static/linux-kernel-map.png)
+        - [Linux Kernel Map](./snippet/docs/linux/kernel/_static/linux-kernel-map.png)（点击 [这里](https://github.com/xgfone/snippet/raw/master/snippet/docs/linux/kernel/_static/linux-kernel-map.png) 看大图）
     - [NetFilter](./snippet/docs/linux/netfilter)
         - [Linux IPtables使用入门](./snippet/docs/linux/netfilter/iptables-usage.md)
         - [TCP握手与IPtables](./snippet/docs/linux/netfilter/iptables-beginner.md)
