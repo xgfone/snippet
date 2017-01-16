@@ -14,6 +14,7 @@
 - [JavaScript 快速参考](./js-quick-reference.md)
 - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
 - [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)（点击 [这里](https://i5ting.github.io/asynchronous-flow-control) 阅读）
+- [JavaScript 风格指南](https://github.com/alivebao/clean-code-js)
 - [测试框架 Mocha 实例教程](http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
 - [Packages](./packages.md)
 - [React](https://facebook.github.io/react)
