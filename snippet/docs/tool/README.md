@@ -34,3 +34,10 @@
     aria2 is a lightweight multi-protocol & multi-source, cross platform download utility operated in
     command-line. It supports HTTP/HTTPS, FTP, SFTP, BitTorrent and Metalink.
 - See [dep](./script/install-aria2-dep.sh)
+
+------
+
+## Mac OS
+
+##### [IINA](https://github.com/lhc70000/iina)
+    IINA is a modern video player for macOS.
