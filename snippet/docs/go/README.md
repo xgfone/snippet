@@ -56,3 +56,4 @@ Go语言笔记
 - [Go Assembler](http://docs.studygolang.com/doc/asm)
 - [Go Data Race Detector](http://docs.studygolang.com/doc/articles/race_detector.html)
 - [Approximating html/template Inheritance](http://elithrar.github.io/article/approximating-html-template-inheritance/)
+- [深入解析Go](https://github.com/tiancaiamao/go-internals)（点击 [这里](http://www.ctolib.com/docs/sfile/go-internals/index.html) 阅读）
