@@ -374,3 +374,5 @@ DOCS
     - CSS
         - [CSS 选择器](./snippet/docs/web/css-selector.md)
         - [Bootstrap 速查表](http://www.ctolib.com/cheatsheets-Bootstrap-ch.html)
+- Others
+    - [十二要素应用宣言](https://12factor.net/)（[中文版摘录](http://www.infoq.com/cn/news/2012/09/12-factor-app)）
