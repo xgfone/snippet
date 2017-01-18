@@ -3,3 +3,4 @@
 - [MySQL 建表与索引使用规范详解](./mysql-table-and-index.md)
 - [理解MySQL——索引与优化](./mysql-index.md)
 - [SQL快速参考](./sql-quick-ref.md)
+- [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)

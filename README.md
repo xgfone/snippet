@@ -64,6 +64,7 @@ DOCS
         - [MySQL 建表与索引使用规范详解](./snippet/docs/db/sql/mysql-table-and-index.md)
         - [理解MySQL——索引与优化](./snippet/docs/db/sql/mysql-index.md)
         - [SQL快速参考](./snippet/docs/db/sql/sql-quick-ref.md)
+        - [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
     - [etcd集群实例](./snippet/docs/distributed/etcd-example.md)
