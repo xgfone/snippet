@@ -3,8 +3,9 @@ Snippets
 
 The code snippets of all kinds of languages and some docs.
 
-[Awesome](https://github.com/sindresorhus/awesome)
-=========
+- [Awesome](https://github.com/sindresorhus/awesome)
+- [Freely Available Programming Books](https://github.com/vhf/free-programming-books)
+
 
 [菜鸟教程](http://www.runoob.com) ([Sitemap](http://www.runoob.com/sitemap))
 =========
