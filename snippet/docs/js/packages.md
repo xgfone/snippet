@@ -101,3 +101,6 @@
 
 ##### [Backbone.js](https://github.com/jashkenas/backbone)
     Give your JS App some Backbone with Models, Views, Collections, and Events
+
+##### [script.js](https://github.com/ded/script.js)
+    Asyncronous JavaScript loader and dependency manager
