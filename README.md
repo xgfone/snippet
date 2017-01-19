@@ -15,6 +15,7 @@ The code snippets of all kinds of languages and some docs.
 其它一些网站
 ============
 
+- [开发文档：各种 API 查询](http://devdocs.io)
 - [CTO Lib 码库](http://www.ctolib.com)
     - [Go](http://www.ctolib.com/go)
     - [JS](http://www.ctolib.com/javascript)
