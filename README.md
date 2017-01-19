@@ -370,7 +370,9 @@ DOCS
     - [git-extras](https://github.com/tj/git-extras) ( [安装](https://github.com/tj/git-extras/blob/master/Installation.md) )
     - [Git 思维导图](./snippet/docs/vcs/_static/git-shortcut.jpg)（点击 [这里](https://github.com/xgfone/snippet/raw/master/snippet/docs/vcs/_static/git-shortcut.jpg) 看大图）
 - [Web](./snippet/docs/web)
-    - [大型网站技术架构的演进](./snippet/docs/web/website-evolution.md)
+    - 大型网站技术架构
+        - [大型网站技术架构的演进](./snippet/docs/web/website-evolution.md)
+        - [大型网站技术架构-入门梳理](./snippet/docs/web/website-evolution-summary.md)
     - [浏览器 HTTP 协议缓存机制详解](./snippet/docs/web/browse-http-cache.md)
     - [URL 中的 `#`](./snippet/docs/web/url_hash.md)
     - CSS
