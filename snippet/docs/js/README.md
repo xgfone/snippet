@@ -39,3 +39,5 @@
     - [CommonJS](http://www.commonjs.org)
     - [UMD](https://github.com/umdjs/umd)
     - [AMD、CMD、UMD 模块的写法](./amd-commonjs-umd.md)
+- [Webpack](https://webpack.js.org)
+    - [入门 Webpack，看这篇就够了](http://www.jianshu.com/p/42e11515c10f)
