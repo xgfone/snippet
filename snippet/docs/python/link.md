@@ -26,3 +26,6 @@
 
 ##### [twisted-csp](https://github.com/ubolonton/twisted-csp)
     Go-style concurrency for Twisted
+
+##### [ItChat](https://github.com/littlecodersh/ItChat)
+    A complete and graceful API for Wechat. 微信个人号接口、微信机器人及命令行微信，三十行即可自定义个人号机器人。
