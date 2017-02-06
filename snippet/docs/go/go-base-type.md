@@ -42,6 +42,7 @@ string(b)
 - Go 语言并不保证字符中中的字符是规范化的。
 
 （11）连接字符串的方法
+
 1. 使用 `+` 连接字符串。如果连接的字符串少于 6 个，官方的编译器会对此优化，所以通常使用 `+` 简便而有效。
 2. 使用 `strings` 包中的 `strings.Join` 连接字符串。
 3. 使用 `fmt` 包中的 `fmt.Sprintf`、`fmt.Sprint` 和 `fmt.Sprintln` 连接字符串。这三个方法可以将任意的类型连接成字符串。`fmt.Sprintln` 会在字符串之间加空格，在字符串尾部加新的换行符。如果两个值中的至少一个不是字符串，`fmt.Sprint` 会在它们之间加空格。
@@ -365,7 +366,9 @@ make(channelType [, capacity])
 
 
 ## 15、基本类型的开销
-基本类型的开销指该类型的变量在复制时的空间花费，即其类型的值的大小（the sizes of values of all kinds of types）。注：这不包含底层可被不同变量共享的数据的大小。
+基本类型的开销指该类型的变量在复制时的空间花费，即其类型的值的大小（the sizes of values of all kinds of types）。
+
+注：这不包含底层可被不同变量共享的数据的大小。
 
 Type                |            Cost of Value Copying(Value Size)
 --------------------|-----------------------------------------------
