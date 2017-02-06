@@ -250,6 +250,7 @@ MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
 
 ## 8、比较
 (1) `interface` 类型可以比较`相等`与`不相等`，但不能进行`大小`比较以及`加减`运算。
+
 (2) 下列类型不支持直接比较：
 
     map
@@ -265,8 +266,8 @@ MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
 
 
 ## 9、可被寻址的值和不能被寻址的值
-
-下面的值不能被寻址(addresses)：
+ 
+**下面的值不能被寻址(addresses)：**
 
 - bytes in strings：字符串中的字节
 - map elements：map中的元素
@@ -286,7 +287,7 @@ MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
 
 注意，`&T{}` 相当于 `tmp := T{}; (&tmp)` 的语法糖，所以 `&T{}` 可合法不意味着 `T{}` 可寻址。
 
-下面的值可以寻址：
+**下面的值可以寻址：**
 
 - variables
 - fields of addressable structs
