@@ -249,4 +249,47 @@ MyRunes("白鵬翔")           // []rune{0x767d, 0x9d6c, 0x7fd4}
 
 
 ## 8、比较
-(1) interface类型可以比较`相等`与`不相等`，但不能进行`大小`比较以及`加减`运算。
+(1) `interface` 类型可以比较`相等`与`不相等`，但不能进行`大小`比较以及`加减`运算。
+(2) 下列类型不支持直接比较：
+
+    map
+    slice
+    function
+    struct types containing incomparable fields
+    array types with incomparable elements
+
+**注意：**
+
+1. 这些不直接比较的类型不能用做 `map` 的 `key` 值。
+2. 尽管 `map`、`slice`、`function` 类型不支持直接比较，但是它们的值却可以和 `nil` 直接比较。如果两个接口的动态类型不能比较，运行时比较这两个接口会`panic`，除非其中一个的动态值是 `untyped nil`。
+
+
+## 9、可被寻址的值和不能被寻址的值
+
+下面的值不能被寻址(addresses)：
+
+- bytes in strings：字符串中的字节
+- map elements：map中的元素
+- dynamic values of interface values (exposed by type assertions)：接口的动态值
+- constant values：常量
+- literal values：字面值
+- package level functions：包级别的函数
+- methods (used as function values)：方法
+- intermediate values：中间值
+    - function callings
+    - explicit value conversions
+    - all sorts of operations, except pointer dereference operations, but including:
+        - channel receive operations
+        - sub-string operations
+        - sub-slice operations
+        - addition, subtraction, multiplication, and division, etc.
+
+注意，`&T{}` 相当于 `tmp := T{}; (&tmp)` 的语法糖，所以 `&T{}` 可合法不意味着 `T{}` 可寻址。
+
+下面的值可以寻址：
+
+- variables
+- fields of addressable structs
+- elements of addressable arrays
+- elements of any slices (whether the slices are addressable or not)
+- pointer dereference operations

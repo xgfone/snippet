@@ -34,12 +34,18 @@ string(b)
 
 （9）多个字符串可以相加 ，重新生成一个新的字符串。如果相加的字符串个数过多，建议使用 `strings.Join` 函数。
 
-（10）其它
+（10）杂项
 - Go源代码必须是 `UTF-8` 编码。
 - 字符串的底层可以使用任意字节表示，注：不一定都符合 `UTF-8` 编码。
 - 一个字符串字面值，没有字节级别的转义，但必须是有效的 `UTF-8` 编码序列。
 - 这些序列表示 Unicode 代码点（UCP，Unicode Code Point），叫做 `rune`。
 - Go 语言并不保证字符中中的字符是规范化的。
+
+（11）连接字符串的方法
+1. 使用 `+` 连接字符串。如果连接的字符串少于 6 个，官方的编译器会对此优化，所以通常使用 `+` 简便而有效。
+2. 使用 `strings` 包中的 `strings.Join` 连接字符串。
+3. 使用 `fmt` 包中的 `fmt.Sprintf`、`fmt.Sprint` 和 `fmt.Sprintln` 连接字符串。这三个方法可以将任意的类型连接成字符串。`fmt.Sprintln` 会在字符串之间加空格，在字符串尾部加新的换行符。如果两个值中的至少一个不是字符串，`fmt.Sprint` 会在它们之间加空格。
+4. 包 `bytes` 的 `Buffer` 类型（或者内建函数 `copy`）可以用来构建 byte slice，byte slice 可以方便地转换成字符串。
 
 ## 2、数组
 在Go中，数组是一个值对象，它在内部保存“int”指针；不同于C中的数组，**`Go中的数组在赋值是全拷贝`**。
@@ -356,3 +362,80 @@ make(channelType [, capacity])
 
 ### 14.3 `Error() string`
 任何类型都可以通过实现 `Error() string` 方法来实现 `error` interface，此时，它可以作为类型 `error` 的值。
+
+
+## 15、基本类型的开销
+基本类型的开销指该类型的变量在复制时的空间花费，即其类型的值的大小（the sizes of values of all kinds of types）。注：这不包含底层可被不同变量共享的数据的大小。
+
+Type                |            Cost of Value Copying(Value Size)
+--------------------|-----------------------------------------------
+bool                | 1 byte
+int8, uint8, byte   | 1 byte
+int16, uint16       | 2 bytes
+int32, uint32, rune | 4 bytes
+int64, uint64       | 8 bytes
+int, uint, uintptr  | 1 word
+string              | 2 words
+pointer             | 1 word
+slice               | 3 words
+map                 | 1 word
+channel             | 1 word
+function            | 1 word
+interface           | 2 words
+struct              | the sum of sizes of all fields
+array               | (element value size) * (array length)
+
+注：在 32 位系统中，一个 word 代表 4 个字节；在 64 位系统中，一个 word 代表 8 个字节。
+
+
+## 16、可使用内建函数的类型(`len`、`cap`、`close`、`delete`、`make`)
+Type                        | `len` | `cap` | `close` | `delete` | `make`
+----------------------------|-------|-------|---------|----------|-------
+`string`                    |  Yes  |       |         |          |
+`array (and array pointer)` |  Yes  |  Yes  |         |          |
+`slice`                     |  Yes  |  Yes  |         |          | Yes
+`map`                       |  Yes  |       |         |   Yes    | Yes
+`channel`                   |  Yes  |  Yes  |   Yes   |          | Yes
+
+注：上面的所有类型都可以使用 `range` 进行遍历。另外，可以用作 `len` 函数参数的类型也叫做**容器类型**。
+
+
+## 17、内建容器类型的值比较
+
+类型      | 长度可变 | 元素可更新 | 元素可寻址 | 查找会更改容器的长度 | 底层元素可以共享
+----------|---------|-----------|-----------|---------------------|---------------
+`string`  | No      | No        | No        | No                  | Yes
+`array`   | No      | Yes       | Yes       | No                  | No
+`slice`   | No      | Yes       | Yes       | No                  | Yes
+`map`     | Yes     | Yes       | No        | No                  | Yes
+`channel` | Yes     | No        | No        | Yes                 | Yes
+
+
+## 18、组合类型 `T{...}` 的值比较
+
+类型(`T`)   | `T{}` 是类型T的零值?
+------------|--------------------
+`struct`    | Yes
+`array`     | Yes
+`slice`     | No (零值是 `nil`)
+`map`       | No (零值是 `nil`)
+
+## 19、零值是 `nil` 的类型
+
+Type (`T`)  | Size Of `T`(`nil`)
+------------|-------------------
+`pointer`   | 1 word
+`slice`     | 3 words
+`map`       | 1 word
+`channel`   | 1 word
+`function`  | 1 word
+`interface` | 2 words
+
+注：这些类型的零值的大小和上面类型的大小保持一致。
+
+
+------
+
+参考：
+
+- [Golang 知识点总结](http://colobu.com/2017/02/01/golang-summaries/)

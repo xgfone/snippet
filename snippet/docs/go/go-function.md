@@ -79,3 +79,29 @@ FuncN2 := func(args ...interface{}) {
     FuncN2(args...)                      // compile error: undefined: FuncN2
 }
 ```
+
+
+## 7、编译时被执行的函数
+如果函数在编译时被执行，那么它的返回值是常量。
+
+函数           | 返回值 | 编译时便计算?
+---------------|-------|-------------
+`unsafe.Sizeof`、`unsafe.Alignof`、`unsafe.Offsetof` |  uintptr   | Yes, 总是
+`len`、`cap`   | int | 有时候是。[Go 规范中讲到](https://golang.org/ref/spec#Length_and_capacity)：如果 s 是字符串常量，则 `len(s)` 是常量；如果 s 是数组或者是数组指针，则 `len(s)` 是常量。
+`real`、`imag` | float64 (默认类型) | 有时候是。[Go 规范中讲到](https://golang.org/ref/spec#Constants)：如果 s 是复数常量，则 `real(s)` 和 `imag(s)` 是常量。
+`complex`      | complex128 (默认类型) | 有时候是。[Go 规范中讲到](https://golang.org/ref/spec#Constants)：如果 sr 和 si 都是常量，则 `complex(sr, si)` 是常量。
+
+
+## 8、可以在函数体外声明的源代码元素
+
+下列类型既可以声明在函数体内，也可以声明在函数体外：
+
+    type
+    variable
+    constant
+
+`pakcage` 的前面只能有注释，不能有其它任何语句。
+
+`import` 必须在其它元素的声明的前面，`package` 语句的后面。
+
+标签（Label）必须声明在函数体内。
