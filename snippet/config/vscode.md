@@ -97,6 +97,7 @@ DotJoshJohnson.xml                # Format XML
 ms-vscode.cpptools                # C/C++
 #msjsdiag.debugger-for-chrome     # JS Debuger
 #dbaeumer.vscode-eslint           # JS Lint
+#chenxsan.vscode-standardjs       # JS Standard Style
 #eg2.vscode-npm-script            # Node NPM
 donjayamanne.githistory           # Git log
 codezombiech.gitignore            # Git ignore
