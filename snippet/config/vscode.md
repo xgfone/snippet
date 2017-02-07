@@ -89,8 +89,12 @@ alefragnani.Bookmarks
 formulahendry.code-runner
 #anseki.vscode-color
 robertohuertasm.vscode-icons
+JerryHong.autofilename
 #seanmcbreen.Spell
 #vscodevim.vim                    # It will lead to 'editor.useTabStops' to be invalid.
+#steve8708.Align                  # Align text
+
+#christian-kohler.npm-intellisense # npm
 
 HookyQR.beautify                  # Format JS, JSON, CSS, HTML
 DotJoshJohnson.xml                # Format XML
