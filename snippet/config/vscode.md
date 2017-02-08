@@ -135,7 +135,7 @@ npm install -g eslint
 
 #### For python
 ```
-pip install pylint nose pep8
+pip install pylint nose pep8 jedi
 ```
 
 #### For Go
