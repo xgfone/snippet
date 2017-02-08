@@ -296,6 +296,7 @@ DOCS
         	- [ModelForm类](./snippet/docs/python/django-form.md#%E5%85%ABmodelform%E7%B1%BB)
 		- [修改 `pypi` 源](./snippet/docs/python/pypi_source.md)
         - [Python文件编码](./snippet/docs/python/python-file-encoding.md)
+        - [Python编码错误的本质原因](https://gold.xitu.io/post/589a9f511b69e60059a9b778)
         - [其它资源](./snippet/docs/python/link.md)
 - [Rust](./snippet/docs/rust)
     - [Rust Packages](./packages.md)
