@@ -2,14 +2,15 @@
 ## The Official Plugins
 
 - DefinePlugin | EnvironmentPlugin
+- DllPlugin
+- DedupePlugin
 - ProvidePlugin
 - UglifyJSPlugin
 - ExternalsPlugin
-- DllPlugin
 - DllReferencePlugin
 - NamedModulesPlugin
 - CommonsChunkPlugin
-- DedupePlugin
+- MinChunkSizePlugin
 - HotModuleReplacementPlugin
 
 
