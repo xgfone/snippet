@@ -175,7 +175,7 @@ DOCS
     - [测试框架 Mocha 实例教程](http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
     - [Packages](./snippet/docs/js/packages.md)
     - **Promise**
-        - [官方规范](https://promisesaplus.com/) | [中文版](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
+        - [ES6 Promise 规范](https://promisesaplus.com/) | [中文版](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
         - [JavaScript Promise迷你书](https://github.com/liubin/promises-book)（点击 [这里](http://liubin.org/promises-book) 阅读）
     - [React](https://facebook.github.io/react)
         - 官方的 “[快速教程](https://facebook.github.io/react/docs/installation.html)”
