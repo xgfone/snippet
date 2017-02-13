@@ -33,6 +33,7 @@
     "go.buildFlags": ["-race"],
     "go.formatOnSave": true,
     "go.formatTool": "goreturns",
+    "go.lintTool": "gometalinter",
 
     "html.format.indentInnerHtml": true,
 
@@ -46,6 +47,7 @@
     ],
     "python.linting.pep8Enabled": true,
     "python.linting.pep8Args": [
+        "--max-line-length=140",
         "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402"
     ],
     "python.unitTest.nosetestsEnabled": true,
@@ -54,6 +56,8 @@
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
+
+    "vsicons.presets.angular": false,
 
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false
