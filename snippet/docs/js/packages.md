@@ -92,8 +92,12 @@
 ##### [xml2json](https://github.com/buglabs/node-xml2json)
     Converts XML to JSON using node-expat.
 
-#### [zookeeper](https://github.com/yfinkelstein/node-zookeeper)
+##### [zookeeper](https://github.com/yfinkelstein/node-zookeeper)
     node.js client for Apache Zookeeper.
+
+##### [cross-env](https://github.com/kentcdodds/cross-env)
+    Cross platform setting of environment scripts.
+
 
 ## Browser
 ##### [three.js](https://github.com/mrdoob/three.js)
