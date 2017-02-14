@@ -31,3 +31,7 @@
 - [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 
     Simplifies creation of HTML files to serve your webpack bundles.
+
+- [chunk-manifest-webpack-plugin](https://github.com/soundcloud/chunk-manifest-webpack-plugin)
+    Allows exporting a manifest that maps entry chunk names to their output files,
+    instead of keeping the mapping inside the webpack bootstrap.
