@@ -35,3 +35,7 @@
 - [chunk-manifest-webpack-plugin](https://github.com/soundcloud/chunk-manifest-webpack-plugin)
     Allows exporting a manifest that maps entry chunk names to their output files,
     instead of keeping the mapping inside the webpack bootstrap.
+
+- [stats-webpack-plugin](https://github.com/unindented/stats-webpack-plugin)
+
+    Write the stats of a build to a file.
