@@ -1,0 +1,19 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+
+  "scripts": {
+    "clean": "echo 'clean ....'",
+    "start": "npm run clean && npm run build:dll && npm run build:dev",
+    "build": "webpack --progress --colors --config build/webpack.production.config.js",
+    "build:dev": "webpack --progress --colors --config build/webpack.dev.config.js",
+    "build:dll": "webpack --progress --colors --config build/webpack.dll.config.js",
+    "build:all": "npm run clean && npm run build:dll && npm run build"
+  },
+
+  "devDependencies": {
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+  }
+}
