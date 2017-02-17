@@ -99,19 +99,19 @@
     Cross platform setting of environment scripts.
 
 ##### [shelljs](https://github.com/shelljs/shelljs)
-   Portable Unix shell commands for Node.js.
+    Portable Unix shell commands for Node.js.
 
 ##### [ora](https://github.com/sindresorhus/ora)
-   Elegant terminal spinner.
+    Elegant terminal spinner.
 
 ##### [chalk](https://github.com/chalk/chalk)
-   Terminal string styling done right.
+    Terminal string styling done right.
 
 ##### [semver](https://github.com/npm/node-semver)
-   The semver parser for node (the one npm uses)
+    The semver parser for node (the one npm uses)
 
 ##### [opn](https://github.com/sindresorhus/opn)
-   A better node-open. Opens stuff like websites, files, executables. Cross-platform.
+    A better node-open. Opens stuff like websites, files, executables. Cross-platform.
 
 
 ## Browser
