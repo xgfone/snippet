@@ -4,7 +4,7 @@ const config = require('./config');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const webpack_base_config = {
     cache: true,
@@ -29,38 +29,39 @@ const webpack_base_config = {
     // The Loaders
     module: {
         rules: [
-            // Handle JSON files
             {
                 test: /\.(json)$/,
                 exclude: /node_modules/,
                 loader: 'json-loader',
+            }, {
+                test: /\.(less|css)$/,
+                loader: ExtractTextPlugin.extract('style', 'css?module&localIdentName=[hash:base64:7]!less'),
+            }, {
+                test: /\.(jsx?)$/,
+                exclude: /node_modules/,
+                include: config.resolve_path('src'),
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            cacheDirectory: true,
+                            presets: ['es2015'],
+                            plugins: ['transform-runtime'],
+                        }
+                    },
+                    {loader: 'eslint-loader'},
+                ]
+            }, {
+                test: /\.(?:png|jpe?g|git)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ]
             },
-            // Handle JS files
-            // {
-            //     test: /\.(js)$/,
-            //     exclude: /node_modules/,
-            //     use: [
-            //         {loader: 'babel-loader'},
-            //         {loader: 'eslint-loader'},
-            //     ]
-            // },
-            // Handle Image files
-            // {
-            //     test: /\.(?:png|jpe?g|git)$/,
-            //     use: [
-            //         {
-            //             loader: 'url-loader',
-            //             options: {
-            //                 limit: 8192,
-            //             },
-            //         },
-            //     ]
-            // },
-            // Handle CSS/LESS files
-            // {
-            //     test: /\.(less|css)$/,
-            //     loader: ExtractTextPlugin.extract('style', 'css?module&localIdentName=[hash:base64:7]!less'),
-            // },
         ],
     },
 
@@ -71,16 +72,21 @@ const webpack_base_config = {
             // context: config.DLL_OUTPUT_PATH,
         });
     }).concat([
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'common',
+            minChunks: 3,
+        }),
+        new ExtractTextPlugin('[name]-[contenthash].css', {allChunks: true}),
         // new CopyWebpackPlugin([{from: 'string', to: 'string'}]),
-        // new ExtractTextPlugin('[name]-[contenthash].css', {allChunks: true}),
         // new HtmlWebpackPlugin({
         //     template: config.path_join(config.HTML_TEMPLATE_PATH, 'index.html'),
         // }),
     ]),
 
-    // resolve: {
-    //     alias: {}, // See https://webpack.js.org/configuration/resolve/#resolve-alias
-    // },
+    resolve: {
+        root: config.resolve_path('src'),
+        alias: {}, // See https://webpack.js.org/configuration/resolve/#resolve-alias
+    },
 
     externals: {
         // Webpack can pack up lodash, but can't compress it, or throw an exception when using.
