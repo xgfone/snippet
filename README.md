@@ -27,6 +27,9 @@ The code snippets of all kinds of languages and some docs.
 =======
 - [前端开发知识结构](https://github.com/JacksonTian/fks)
 - [Frontend Development](https://github.com/dypsilon/frontend-dev-bookmarks)
+- [前端资源教程](https://github.com/jsfront/src/blob/master/qq.md#五-资源教程)
+- [免费的编程中文书籍索引](https://github.com/justjavac/free-programming-books-zh_CN)
+- [Freely Available Programming Books](https://github.com/vhf/free-programming-books)
 
 
 DOCS
