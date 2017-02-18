@@ -123,3 +123,6 @@
 
 ##### [script.js](https://github.com/ded/script.js)
     Asyncronous JavaScript loader and dependency manager
+
+##### [Web Uploader](http://fex.baidu.com/webuploader)
+    WebUploader是一个简单的以HTML5为主，FLASH为辅的现代文件上传组件。
