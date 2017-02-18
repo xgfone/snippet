@@ -99,33 +99,33 @@ JerryHong.autofilename
 christian-kohler.path-intellisense
 IBM.output-colorizer
 #seanmcbreen.Spell
-#vscodevim.vim                    # It will lead to 'editor.useTabStops' to be invalid.
-#steve8708.Align                  # Align text
+#vscodevim.vim                          # It will lead to 'editor.useTabStops' to be invalid.
+#steve8708.Align                        # Align text
 
-#christian-kohler.npm-intellisense # npm
+#christian-kohler.npm-intellisense      # npm
 
-formulahendry.auto-close-tag      # HTML/XML
-formulahendry.auto-rename-tag     # HTML/XML
-HookyQR.beautify                  # Format JS, JSON, CSS, HTML
-DotJoshJohnson.xml                # Format XML
-ms-vscode.cpptools                # C/C++
-#msjsdiag.debugger-for-chrome     # JS Debuger
-#dbaeumer.vscode-eslint           # JS Lint
-#chenxsan.vscode-standardjs       # JS Standard Style
-#eg2.vscode-npm-script            # Node NPM
-donjayamanne.githistory           # Git log
-codezombiech.gitignore            # Git ignore
-lukehoban.Go                      # Golang
-#abusaidm.html-snippets           # HTML 5
-#redhat.java                      # Java
-#georgewfraser.vscode-javac       # Java
-#donjayamanne.javadebugger        # Java Debugger
-alefragnani.project-manager       # Project Manager
-donjayamanne.python               # Python
-#humao.rest-client                # Restful Client
-#hcyang.ctags                     # CTags
-#saviorisdead.RustyCode           # Rust
-#cssho.vscode-svgviewer           # SVG Viewer
+formulahendry.auto-close-tag            # HTML/XML
+formulahendry.auto-rename-tag           # HTML/XML
+HookyQR.beautify                        # Format JS, JSON, CSS, HTML
+DotJoshJohnson.xml                      # Format XML
+ms-vscode.cpptools                      # C/C++
+#msjsdiag.debugger-for-chrome           # JS Debuger
+#dbaeumer.vscode-eslint                 # JS Lint
+#chenxsan.vscode-standardjs             # JS Standard Style
+#eg2.vscode-npm-script                  # Node NPM
+donjayamanne.githistory                 # Git log
+codezombiech.gitignore                  # Git ignore
+lukehoban.Go                            # Golang
+#abusaidm.html-snippets                 # HTML 5
+#redhat.java                            # Java
+#georgewfraser.vscode-javac             # Java
+#donjayamanne.javadebugger              # Java Debugger
+alefragnani.project-manager             # Project Manager
+donjayamanne.python                     # Python
+#humao.rest-client                      # Restful Client
+#hcyang.ctags                           # CTags
+#saviorisdead.RustyCode                 # Rust
+#cssho.vscode-svgviewer                 # SVG Viewer
 ```
 
 #### For Windows
