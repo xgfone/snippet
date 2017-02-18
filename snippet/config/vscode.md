@@ -96,12 +96,16 @@ formulahendry.code-runner
 #anseki.vscode-color
 robertohuertasm.vscode-icons
 JerryHong.autofilename
+christian-kohler.path-intellisense
+IBM.output-colorizer
 #seanmcbreen.Spell
 #vscodevim.vim                    # It will lead to 'editor.useTabStops' to be invalid.
 #steve8708.Align                  # Align text
 
 #christian-kohler.npm-intellisense # npm
 
+formulahendry.auto-close-tag      # HTML/XML
+formulahendry.auto-rename-tag     # HTML/XML
 HookyQR.beautify                  # Format JS, JSON, CSS, HTML
 DotJoshJohnson.xml                # Format XML
 ms-vscode.cpptools                # C/C++
