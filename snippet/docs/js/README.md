@@ -47,3 +47,5 @@
     - [入门 Webpack，看这篇就够了](http://www.jianshu.com/p/42e11515c10f)
     - [细说webpack之流程篇](http://www.cnblogs.com/yxy99/p/5852987.html) | 点击看 [大图](https://github.com/xgfone/snippet/raw/master/snippet/docs/js/_static/1.jpg)
     - [常用 Webpack 插件](./webpack-plugins.md)
+- [VueJS](http://vuejs.org)
+    - [剖析 VUE 实现原理](https://github.com/DMQ/mvvm)
