@@ -3,7 +3,7 @@ const config = require('./config');
 
 const webpack_dll_config = {
     cache: true,
-    target: 'web',
+    target: config.TARGET,
     context: config.ROOT,
     devtool: 'cheap-module-source-map',
 

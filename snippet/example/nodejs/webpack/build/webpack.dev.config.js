@@ -7,16 +7,20 @@ const webpack_dev_config = {
     // How Source Maps are generated.
     devtool: 'cheap-module-eval-source-map',
 
+    output: {
+        filename: '[name]-[hash].js', // webpack-dev-server does not support [chunkhash].
+    },
+
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
     ],
 
     devServer: {
         port: config.DEV_PORT,
         host: config.DEV_HOST,
         publicPath: config.OUTPUT_PUBLIC_PATH,
-        contentBase: [config.DEV_BUILD_PATH],
+        contentBase: [config.ROOT],
 
         watchContentBase: true,
         watchOptions: {
@@ -26,7 +30,6 @@ const webpack_dev_config = {
         },
 
         hot: true,
-        colors: true,
         inline: true, // Livereload
         historyApiFallback: true,
     },

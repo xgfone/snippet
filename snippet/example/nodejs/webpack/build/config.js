@@ -1,7 +1,9 @@
-// import * as path from 'path';
 const path = require('path');
 const process = require('process');
 const _ = require('lodash');
+
+const DEV_DIR = 'dev';
+const DIST_DIR = 'dist';
 
 const ROOT = path.join(__dirname, '..');
 const resolve_path = (...dirs) => path.join(ROOT, ...dirs);
@@ -9,20 +11,28 @@ const resolve_dll = (file) => path.join(config.DLL_OUTPUT_PATH, file);
 
 const config = {
     ROOT,
+    ESLINT: false,
+    APP_ROOT: resolve_path('src'),
     get DEBUG() {
         return process.env.NODE_ENV != 'production';
     },
 
-    // For Enter Points
+    TARGET: 'web',
+
+    // For Entry Points
     // The path is the relative path to ROOT.
-    entry: {
-        index: './src/index.js',
+    ENTRY: {
+        index1: ['./src/index1.js'],
+        index2: ['./src/index2.js'],
     },
 
     // For Output
-    OUTPUT_PUBLIC_PATH: '/dist/', // http://static.example.com/
+    get OUTPUT_PUBLIC_PATH() {
+        // const DIST_DIR = 'http://static.example.com/static/';
+        return config.DEBUG ? `/${DEV_DIR}/` : `/${DIST_DIR}/`;
+    },
     get OUTPUT_PATH() {
-        const subdir = config.DEBUG ? 'dev' : 'dist';
+        const subdir = config.DEBUG ? DEV_DIR : DIST_DIR;
         return resolve_path(subdir);
     },
 
@@ -49,5 +59,4 @@ const config = {
     path_join: path.join,
 }
 
-// export default config;
 module.exports = config;

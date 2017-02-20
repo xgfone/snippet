@@ -2,62 +2,89 @@ const path = require('path');
 const webpack = require('webpack');
 const config = require('./config');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const loaders = [];
+if (config.ESLINT) {
+    loaders.push({
+        test: /\.(jsx?)$/,
+        exclude: /node_modules/,
+        enforce: 'pre',
+        loader: 'eslint-loader',
+        options: {
+            configFile: config.resolve_path('.eslintrc.js'),
+        },
+    });
+}
 
 const webpack_base_config = {
     cache: true,
-    target: 'web',
+    target: config.TARGET,
 
     // The home directory for webpack.
     // The entry and module.rules.loader option is resolved relative to this directory.
     context: config.ROOT,
 
     // The Entry Points
-    entry: config.entry,
+    entry: config.ENTRY,
 
     // The output
     output: {
         path: config.OUTPUT_PATH,
         publicPath: config.OUTPUT_PUBLIC_PATH,
         filename: '[name]-[chunkhash].js',
-        //chunkFilename: '[name]-[chunkhash].js',
+        chunkFilename: '[name]-[chunkhash].js',
         //crossOriginLoading: false | "anonymous" | "use-credentials",
     },
 
     // The Loaders
     module: {
         rules: [
+            ...loaders,
             {
-                test: /\.(json)$/,
-                exclude: /node_modules/,
-                loader: 'json-loader',
-            }, {
-                test: /\.(less|css)$/,
-                loader: ExtractTextPlugin.extract('style', 'css?module&localIdentName=[hash:base64:7]!less'),
-            }, {
                 test: /\.(jsx?)$/,
                 exclude: /node_modules/,
-                include: config.resolve_path('src'),
                 use: [
                     {
                         loader: 'babel-loader',
                         options: {
+                            babelrc: true,
                             cacheDirectory: true,
                             presets: ['es2015'],
                             plugins: ['transform-runtime'],
                         }
-                    },
-                    {loader: 'eslint-loader'},
+                    }
                 ]
+            // }, {  // ExtractTextPlugin doesn't work under webpack 2. Wait 2.0.0 to be released.
+            //     test: /\.(css|less)$/,
+            //     loader: ExtractTextPlugin.extract({
+            //         fallback: 'style-loader',
+            //         use: [
+            //             {
+            //                 loader: 'css-loader',
+            //                 options: {
+            //                     modules: true,
+            //                     minimize: true,
+            //                     importLoaders: 1,
+            //                     localIdentName: '[hash:base64:7]',
+            //                 }
+            //             },
+            //             'less-loader',
+            //         ]
+            //     }),
             }, {
-                test: /\.(?:png|jpe?g|git)$/,
+                test: /\.(png|jpe?g|git)$/,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
                             limit: 8192,
+                            // For file-loader
+                            name: '[name]-[hash].[ext]',
+                            outputPath: config.OUTPUT_PATH,
+                            publicPath: config.OUTPUT_PUBLIC_PATH,
                         },
                     },
                 ]
@@ -73,25 +100,29 @@ const webpack_base_config = {
         });
     }).concat([
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'common',
-            minChunks: 3,
+            names: ['common', 'manifest'],
+            minChunks: 2,
         }),
-        new ExtractTextPlugin('[name]-[contenthash].css', {allChunks: true}),
-        // new CopyWebpackPlugin([{from: 'string', to: 'string'}]),
-        // new HtmlWebpackPlugin({
-        //     template: config.path_join(config.HTML_TEMPLATE_PATH, 'index.html'),
+        // new ExtractTextPlugin({
+        //     filename: '[name]-[contenthash].css',
+        //     options: {
+        //         allChunks: true,
+        //     }
         // }),
+        // new CopyWebpackPlugin([{from: 'string', to: 'string'}]),
+        new HtmlWebpackPlugin({
+            template: config.path_join(config.HTML_TEMPLATE_PATH, 'index.html'),
+        }),
     ]),
 
     resolve: {
-        root: config.resolve_path('src'),
-        alias: {}, // See https://webpack.js.org/configuration/resolve/#resolve-alias
+        modules: ['node_modules', config.APP_ROOT],
+        extensions: ['.js', '.json', '.jsx', '.css'],
+        alias: {  // See https://webpack.js.org/configuration/resolve/#resolve-alias
+        },
     },
 
     externals: {
-        // Webpack can pack up lodash, but can't compress it, or throw an exception when using.
-        lodash: 'lodash',
-        _: 'lodash',
     },
 };
 
