@@ -210,6 +210,7 @@ DOCS
         - [常用 Webpack 插件](./snippet/docs/js/webpack-plugins.md)
     - [VueJS](http://vuejs.org)
         - [剖析 VUE 实现原理](https://github.com/DMQ/mvvm)
+    - [FAQ](./snippet/docs/js/faq.md)
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
 		- [理论篇](./snippet/docs/linux/QoS/qos-theory.md)
