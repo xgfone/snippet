@@ -21,6 +21,8 @@
 - **Promise**
     - [ES6 Promise 规范](https://promisesaplus.com/) | [中文版](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
     - [JavaScript Promise迷你书](https://github.com/liubin/promises-book)（点击 [这里](http://liubin.org/promises-book) 阅读）
+- [Babel](https://babeljs.io)
+    - [Babel Handbook](https://github.com/thejameskyle/babel-handbook)
 - [React](https://facebook.github.io/react)
     - 官方的 “[快速教程](https://facebook.github.io/react/docs/installation.html)”
     - 官方的 “[高级向导](https://facebook.github.io/react/docs/jsx-in-depth.html)”
