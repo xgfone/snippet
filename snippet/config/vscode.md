@@ -103,7 +103,9 @@ IBM.output-colorizer
 #steve8708.Align                        # Align text
 
 #christian-kohler.npm-intellisense      # npm
+#vsmobile.vscode-react-native           # React Native
 
+#dzannotti.vscode-babel-coloring        # Babel ES6/ES7/JSX
 formulahendry.auto-close-tag            # HTML/XML
 formulahendry.auto-rename-tag           # HTML/XML
 HookyQR.beautify                        # Format JS, JSON, CSS, HTML
