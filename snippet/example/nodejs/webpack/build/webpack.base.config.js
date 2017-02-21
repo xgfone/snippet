@@ -6,6 +6,26 @@ const config = require('./config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+// Remove CommonJS from ES2015
+const ES2015_PLUGINS = () => {
+    let plugins = require( 'babel-preset-es2015' ).plugins.slice();
+    const commonjsPlugin = require('babel-plugin-transform-es2015-modules-commonjs');
+    let i = plugins.length;
+    let found = false;
+    while (i--) {
+        let plugin = plugins[i];
+        if (plugin === commonjsPlugin || plugin[0] === commonjsPlugin) {
+            plugins.splice(i, 1);
+            found = true;
+        }
+    }
+    if (!found) {
+        console.error("Can't remove babel-plugin-transform-es2015-modules-commonjs from babel-preset-es2015");
+        require('process').exit(1);
+    }
+    return plugins;
+};
+
 const loaders = [];
 if (config.ESLINT) {
     loaders.push({
@@ -52,8 +72,8 @@ const webpack_base_config = {
                         options: {
                             babelrc: true,
                             cacheDirectory: true,
-                            presets: ['es2015'],
-                            plugins: ['transform-runtime'],
+                            presets: ['react', 'es2016', 'es2017'],
+                            plugins: [...ES2015_PLUGINS(), 'transform-runtime'],
                         }
                     }
                 ]

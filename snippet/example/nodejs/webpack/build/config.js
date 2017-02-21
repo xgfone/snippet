@@ -22,6 +22,9 @@ const config = {
     // For Entry Points
     // The path is the relative path to ROOT.
     ENTRY: {
+        // Set up an ES6-ish environment
+        // babel: 'babel-polyfill',
+
         index1: ['./src/index1.js'],
         index2: ['./src/index2.js'],
     },
