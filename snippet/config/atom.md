@@ -14,7 +14,7 @@ merge-conflicts
 #pigments
 project-viewer
 repl
-script
+#script
 terminal-plus / platformio-atom-ide-terminal
 vim-mode-plus
 ```
@@ -43,19 +43,10 @@ linter-gcc
 
 ### Go
 ```
-autocomplete-go
-builder-go
-go-config
-go-debug
-go-get
 go-outline
+go-debug
 go-plus
-godoc
-gofmt
-gometalinter-linter
-gorename
-navigator-go
-tester-go
+#go-signature-statusbar
 
 ## We will use go-guru in future.
 ## Don't use rubyist/go-oracle, but smo921/go-oracle@branch:guru_cli_args
@@ -69,6 +60,7 @@ $ go install golang.org/x/tools/cmd/guru
 
 ### JS
 ```shell
+js-hyperclick
 #linter-eslint
 #language-javascript-jsx
 #linter-js-standard
@@ -193,11 +185,12 @@ wrap-guide
 ## `config.cson`
 ```cson
 "*":
-  #"autocomplete-go":
-  #  snippetMode: "nameAndType"
   #"autocomplete-python":
   #  useKite: false
   #  useSnippets: "required"
+  #"clang-format":
+  #  formatCOnSave: false
+  #  formatCPlusPlusOnSave: false
   "command-palette":
     preserveLastSearch: true
   core:
@@ -238,6 +231,7 @@ wrap-guide
       "metrics"
       "open-on-github"
       "package-generator"
+      "script"
       "spell-check"
       "styleguide"
       "welcome"
@@ -258,13 +252,6 @@ wrap-guide
     preserveLastSearch: true
   "git-diff":
     showIconsInEditorGutter: true
-  #"go-config":
-  #  gopath: "~/go"
-  #"go-oracle":
-  #  goPath: "~/go"
-  #  oraclePath: "$GOPATH/bin/guru"
-  #gofmt:
-  #  formatTool: "goreturns"
   linter:
     showErrorTabLine: true
   #"linter-python-pep257":
