@@ -69,7 +69,7 @@ class Configuration(object):
     __Option.fix_py2()
     __DEFAULT_OPTION = __Option("str")
 
-    def __init__(self, description="", filenames=None, config_opt="config_file", strict=None):
+    def __init__(self, description="", filenames=None, config_opt="config_file", strict=False):
         """A simple configuration parser, including the file and CLI.
 
         We only support to parse the types of integer, bool, string, not list.
