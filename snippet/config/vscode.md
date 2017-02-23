@@ -37,6 +37,10 @@
 
     "html.format.indentInnerHtml": true,
 
+    "projectManager.openInNewWindow": true,
+    "projectManager.git.baseFolders": [],
+    "projectManager.svn.baseFolders": [],
+
     "python.autoComplete.addBrackets": true,
     "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
     //"python.jediPath": "/home/USER_NAME/.Jedi",  // For Unix/Linux/Mac
