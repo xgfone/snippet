@@ -4,8 +4,8 @@
 #### Setting.json
 ```json
 {
-    "bookmarks.saveBookmarksBetweenSessions": true,
-    "bookmarks.navigateThroughAllFiles": true,
+    // "bookmarks.saveBookmarksBetweenSessions": true,
+    // "bookmarks.navigateThroughAllFiles": true,
 
     "debug.allowBreakpointsEverywhere": true,
     "debug.openExplorerOnEnd": true,
@@ -24,6 +24,7 @@
     "editor.tabCompletion": true,
     "editor.renderWhitespace": "boundary",
 
+    "explorer.openEditors.visible": 0,
     "extensions.autoUpdate": true,
 
     "files.encoding": "utf8",
@@ -63,8 +64,12 @@
 
     "vsicons.presets.angular": false,
 
+    "window.openFoldersInNewWindow": "on",
+    "window.showFullPath": true,
+
     "workbench.editor.enablePreview": false,
-    "workbench.editor.enablePreviewFromQuickOpen": false
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.welcome.enabled": false
 }
 ```
 
