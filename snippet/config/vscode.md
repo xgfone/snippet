@@ -102,6 +102,7 @@ IBM.output-colorizer
 #vscodevim.vim                          # It will lead to 'editor.useTabStops' to be invalid.
 #steve8708.Align                        # Align text
 
+akamud.vscode-caniuse                   # Can I Use
 #christian-kohler.npm-intellisense      # npm
 #vsmobile.vscode-react-native           # React Native
 
@@ -111,6 +112,8 @@ formulahendry.auto-rename-tag           # HTML/XML
 HookyQR.beautify                        # Format JS, JSON, CSS, HTML
 DotJoshJohnson.xml                      # Format XML
 ms-vscode.cpptools                      # C/C++
+pranaygp.vscode-css-peek                # CSS
+abierbaum.vscode-file-peek              # JS/TypeScript
 #msjsdiag.debugger-for-chrome           # JS Debuger
 #dbaeumer.vscode-eslint                 # JS Lint
 #chenxsan.vscode-standardjs             # JS Standard Style
