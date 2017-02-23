@@ -74,6 +74,9 @@
 #### keybindings.json
 ```json
 [
+    { "key": "shift+alt+e", "command": "projectManager.editProjects"},
+    { "key": "shift+alt+s", "command": "projectManager.saveProject"},
+    { "key": "shift+alt+o", "command": "projectManager.listProjectsNewWindow" },
     { "key": "ctrl+a", "command": "editor.action.selectAll" },
     { "key": "ctrl+f", "command": "actions.find" },
     { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
