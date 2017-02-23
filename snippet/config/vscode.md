@@ -53,7 +53,7 @@
     "python.linting.pep8Enabled": true,
     "python.linting.pep8Args": [
         "--max-line-length=140",
-        "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402"
+        "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
     ],
     "python.unitTest.nosetestsEnabled": true,
     "python.unitTest.nosetestArgs": [],
