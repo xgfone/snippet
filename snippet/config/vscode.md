@@ -44,7 +44,7 @@
 
     "python.autoComplete.addBrackets": true,
     "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
-    //"python.jediPath": "/home/USER_NAME/.Jedi",  // For Unix/Linux/Mac
+    //"python.jediPath": "~/Library/Caches/Jedi",  // For Unix/Linux/Mac
     "python.linting.maxNumberOfProblems": 120,
     "python.linting.pylintEnabled": false,
     "python.linting.pylintArgs": [
