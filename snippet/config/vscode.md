@@ -103,27 +103,27 @@ Install a Package
 
 #### Common Packages
 ```shell
-alefragnani.Bookmarks
+#alefragnani.Bookmarks
 formulahendry.code-runner
 #anseki.vscode-color
 robertohuertasm.vscode-icons
-JerryHong.autofilename
-christian-kohler.path-intellisense
-IBM.output-colorizer
+#JerryHong.autofilename
+#christian-kohler.path-intellisense
+#IBM.output-colorizer
 #seanmcbreen.Spell
 #vscodevim.vim                          # It will lead to 'editor.useTabStops' to be invalid.
 #steve8708.Align                        # Align text
 
 akamud.vscode-caniuse                   # Can I Use
-#christian-kohler.npm-intellisense      # npm
+christian-kohler.npm-intellisense      # npm
 #vsmobile.vscode-react-native           # React Native
 
 #dzannotti.vscode-babel-coloring        # Babel ES6/ES7/JSX
-formulahendry.auto-close-tag            # HTML/XML
-formulahendry.auto-rename-tag           # HTML/XML
-HookyQR.beautify                        # Format JS, JSON, CSS, HTML
-DotJoshJohnson.xml                      # Format XML
-ms-vscode.cpptools                      # C/C++
+#formulahendry.auto-close-tag            # HTML/XML
+#formulahendry.auto-rename-tag           # HTML/XML
+#HookyQR.beautify                        # Format JS, JSON, CSS, HTML
+#DotJoshJohnson.xml                      # Format XML
+#ms-vscode.cpptools                      # C/C++
 pranaygp.vscode-css-peek                # CSS
 abierbaum.vscode-file-peek              # JS/TypeScript
 #msjsdiag.debugger-for-chrome           # JS Debuger
@@ -131,14 +131,14 @@ abierbaum.vscode-file-peek              # JS/TypeScript
 #chenxsan.vscode-standardjs             # JS Standard Style
 #eg2.vscode-npm-script                  # Node NPM
 donjayamanne.githistory                 # Git log
-codezombiech.gitignore                  # Git ignore
+#codezombiech.gitignore                  # Git ignore
 lukehoban.Go                            # Golang
 #abusaidm.html-snippets                 # HTML 5
 #redhat.java                            # Java
 #georgewfraser.vscode-javac             # Java
 #donjayamanne.javadebugger              # Java Debugger
 alefragnani.project-manager             # Project Manager
-donjayamanne.python                     # Python
+#donjayamanne.python                     # Python
 #humao.rest-client                      # Restful Client
 #hcyang.ctags                           # CTags
 #saviorisdead.RustyCode                 # Rust
