@@ -338,7 +338,7 @@ Go1基准测试套件比 Go1.5 更快了，GC停顿时间比 Go1.5 更短了。
 1. 在标准库的很多包中添加了样例。
 2. `sort` 包中添加三个便捷函数 `Slice`、`SliceStable`、`SliceIsSorted`。
 3. `net/http` 包添加 `HTTP/2 Push` 机制。
-4. `net/http` 已经支持 **优雅关闭** Socket 机制（通过 `Server.Shutdown` 方法）和 **立即关闭** Socket 机制（通过 `Server.Close` 方法）。**外部参考：**https://github.com/Scalingo/go-graceful-restart-example.
+4. `net/http` 已经支持 **优雅关闭** Socket 机制（通过 `Server.Shutdown` 方法）和 **立即关闭** Socket 机制（通过 `Server.Close` 方法）。*外部参考：* https://github.com/Scalingo/go-graceful-restart-example.
 5. 一些标准库支持 `context.Context` 参数，如：`Server.Shutdown`、`database/sql`、`net.Resolver`，等等。
 6. 添加对 `Mutex` 争用的 `profile`。
-7. 其它一些标准库的改变。**参见：**https://golang.org/doc/go1.8#minor_library_changes。
+7. 其它一些标准库的改变。*参见：*https://golang.org/doc/go1.8#minor_library_changes。
