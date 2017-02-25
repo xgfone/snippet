@@ -302,6 +302,43 @@ Go1基准测试套件比 Go1.5 更快了，GC停顿时间比 Go1.5 更短了。
 1.7 中：
 
     A statement list ends in a terminating statement if the list is not empty and
-    its final non-empty statement is terminating. 
+    its final non-empty statement is terminating.
 
 即：1.7 中多了个 `non-empty` 词，强调语句列表中的最后一个语句必须是 `非空的`。
+
+
+# Go1.8
+
+## 语言规范
+1. 当把一个值从一个类型转换到另一个类型时，tags 将被忽略。也就是说，只有 tags 不同的两个结构体可以互相转换。
+2. 语言规范现在最低要求实现支持 16 位（16-bit）指数的浮点常量。注：这并不影响 `gc` 或 `gccgo`，因为它们仍都支持 32 位(32-bit)指数。
+
+## 移植
+1. 在 Linux 大小端上，现在支持 32 位 MIPS。另外，对 ARMv5E 和 ARMv6 处理器，Go 1.8 是最后一个支持 Linux 的版本。从 Go 1.9 开始，至少要求 ARMv6K 及以后的处理器。
+
+## 工具
+
+1. 在 64-bit x86 和 PPC 系统上，添加一些汇编指令。
+2. 从 Go 1.7 开始，Go 编译器已不再使用 Yacc 工具； 因此，从 Go 1.8 开始，Yacc 工具已经被移除。
+3. 新的编译器后端将产生更加简洁、有效的代码，并提供更好优化，如边界检查消除。
+4. 相比于 Go 1.7，编译器和链接器被优化地更快，快了大约 15%。
+5. `GOPATH` 现在有了一个默认值了，在 Unix/Linux/Mac 上是 `$HOME/go`，在 Windows 上是 `%USERPROFILE%/go`。
+6. 新增 `go bug` 命令。
+7. 现在已初步开始支持 `plugin`（即可以将软件包构建为一个插件，然后通过标准库 `plugin` 包在运行时加载），但目前只支持 Linux 系统。
+
+## 运行时
+1. 提升对 Map 并发误用的侦测，并给出更详细的信息。
+
+## 性能
+1. 垃圾回收停顿时长比 Go 1.7 明显更短，通常在 100 us 以下，甚至达到 10 us，Go 1.9 会做更多优化工作。注：Go 1.6 和 1.7 的垃圾回收停顿被控制在 10 ms 以下。
+2. `defer` 函数调用的开销 **降低** 了一半。
+3. 从 `Go` 到 `C` 的调用开销也 **降低** 了一半。
+
+## 标准库
+1. 在标准库的很多包中添加了样例。
+2. `sort` 包中添加三个便捷函数 `Slice`、`SliceStable`、`SliceIsSorted`。
+3. `net/http` 包添加 `HTTP/2 Push` 机制。
+4. `net/http` 已经支持 **优雅关闭** Socket 机制（通过 `Server.Shutdown` 方法）和 **立即关闭** Socket 机制（通过 `Server.Close` 方法）。**外部参考：**https://github.com/Scalingo/go-graceful-restart-example.
+5. 一些标准库支持 `context.Context` 参数，如：`Server.Shutdown`、`database/sql`、`net.Resolver`，等等。
+6. 添加对 `Mutex` 争用的 `profile`。
+7. 其它一些标准库的改变。**参见：**https://golang.org/doc/go1.8#minor_library_changes。
