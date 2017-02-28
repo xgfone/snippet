@@ -72,8 +72,8 @@ DOCS
         - [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
+    - [分布式一致性算法](./snippet/docs/distributed/consistency.md)
     - [etcd集群实例](./snippet/docs/distributed/etcd-example.md)
-    - [Links](./snippet/docs/distributed/link.md)
     - [ZooKeeper原理](./snippet/docs/distributed/zookeeper-theory.md)
 - [Docker](./snippet/docs/docker)
     - [Docker — 从入门到实践](https://github.com/yeasy/docker_practice) （点击 [GitBook](https://www.gitbook.io/book/yeasy/docker_practice) 或 [Github](https://github.com/yeasy/docker_practice/blob/master/SUMMARY.md) 阅读）
