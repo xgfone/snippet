@@ -75,6 +75,7 @@ DOCS
     - [分布式一致性算法](./snippet/docs/distributed/consistency.md)
     - [etcd集群实例](./snippet/docs/distributed/etcd-example.md)
     - [ZooKeeper原理](./snippet/docs/distributed/zookeeper-theory.md)
+    - [基于 Redis 的分布式锁到底安全吗?](https://gold.xitu.io/post/58b3a93c1b69e60058b49767)
 - [Docker](./snippet/docs/docker)
     - [Docker — 从入门到实践](https://github.com/yeasy/docker_practice) （点击 [GitBook](https://www.gitbook.io/book/yeasy/docker_practice) 或 [Github](https://github.com/yeasy/docker_practice/blob/master/SUMMARY.md) 阅读）
 - [Document](./snippet/docs/document)
