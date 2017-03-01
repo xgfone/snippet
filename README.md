@@ -21,6 +21,7 @@ The code snippets of all kinds of languages and some docs.
     - [JS](http://www.ctolib.com/javascript)
     - [Python](http://www.ctolib.com/python)
     - [React](http://www.ctolib.com/react)
+- [Libraries.io: The Open Source Discovery Service](https://libraries.io)
 
 
 前端开发
