@@ -42,6 +42,7 @@
     - [React 之 Redux 架构模式](https://gmiam.com/post/react-redux.html)
     - [Redux Middleware 详解](https://zhuanlan.zhihu.com/p/20597452)
     - [Redux Middleware: Behind the Scenes](http://briantroncone.com/?p=529)
+    - [React、Redux、React-Redux 之间的关系](./_static/3.png)
 - Module Definition
     - [AMD](https://github.com/amdjs/amdjs-api)
     - [CommonJS](http://www.commonjs.org)
