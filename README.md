@@ -166,7 +166,8 @@ DOCS
     - [Can I Use](http://caniuse.com/#index)
     - [JavaScript Documents](https://developer.mozilla.org/en-US/docs/Web/JavaScript) | [中文版](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
         - [JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference) | [中文版](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference)
-	- [JavaScript ES6官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
+	- [JavaScript ES6(ES2015) 官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
+    - [JavaScript ES7(ES2016) 官方国际标准](http://www.ecma-international.org/ecma-262/7.0)
     - [ECMAScript 6 Features](https://github.com/lukehoban/es6features#readme) 或 [Babel版](https://babeljs.io/learn-es2015/)
     - [Exploring JS](http://exploringjs.com) **【重点推荐】**
         - [Speaking JavaScript (ES5)](http://speakingjs.com/)（点击 [这里](http://speakingjs.com/es5/index.html) 阅读）
@@ -207,7 +208,7 @@ DOCS
         - [Redux Middleware 详解](https://zhuanlan.zhihu.com/p/20597452)
         - [Redux Middleware: Behind the Scenes](http://briantroncone.com/?p=529)
         - [React、Redux、React-Redux 之间的关系](./snippet/docs/js/_static/3.png)
-    - Module Definition
+    - **Module Definition**
         - [AMD](https://github.com/amdjs/amdjs-api)
         - [CommonJS](http://www.commonjs.org)
         - [UMD](https://github.com/umdjs/umd)
