@@ -113,6 +113,9 @@
 ##### [opn](https://github.com/sindresorhus/opn)
     A better node-open. Opens stuff like websites, files, executables. Cross-platform.
 
+##### [restify](https://github.com/restify/node-restify)
+    node.js REST framework specifically meant for web service APIs.
+
 
 ## Browser
 ##### [three.js](https://github.com/mrdoob/three.js)
