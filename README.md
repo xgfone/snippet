@@ -166,6 +166,7 @@ DOCS
     - [Can I Use](http://caniuse.com/#index)
     - [JavaScript Documents](https://developer.mozilla.org/en-US/docs/Web/JavaScript) | [中文版](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
         - [JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference) | [中文版](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference)
+    - [JavaScript ES5 官方国际标准](http://www.ecma-international.org/ecma-262/5.1)（点击 [这里](http://yanhaijing.com/es5) 阅读中文版）
 	- [JavaScript ES6(ES2015) 官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
     - [JavaScript ES7(ES2016) 官方国际标准](http://www.ecma-international.org/ecma-262/7.0)
     - [ECMAScript 6 Features](https://github.com/lukehoban/es6features#readme) 或 [Babel版](https://babeljs.io/learn-es2015/)
@@ -176,6 +177,7 @@ DOCS
         - [Setting up ES6 (Using and configuring Babel 6 in web browsers and on Node.js.)](http://exploringjs.com/setting-up-es6.html)（点击 [这里](https://leanpub.com/setting-up-es6/read) 阅读）
 	- [ECMAScript 6入门](https://github.com/ruanyf/es6tutorial) （点击 [这里](http://es6.ruanyifeng.com) 阅读）
 	- [JavaScript 标准参考教程](https://github.com/ruanyf/jstutorial) （点击 [这里](http://javascript.ruanyifeng.com/) 阅读）
+    - [一个很好的博客](https://github.com/jawil/blog)
 	- [Node.js ES2015 Support](http://node.green/)
     - [JavaScript ES3/ES5 快速参考](./snippet/docs/js/js-quick-reference.md)
     - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
