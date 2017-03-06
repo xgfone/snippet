@@ -15,10 +15,10 @@
     "editor.rulers": [
         80, 100, 120
     ],
-    "editor.wordWrap": true,
+    "editor.wordWrap": "on",
     "editor.mouseWheelZoom": true,
+    "editor.minimap.enabled": true,
     "editor.renderIndentGuides": true,
-    "editor.wrappingColumn": 140,
     "editor.useTabStops": true,
     "editor.detectIndentation": true,
     "editor.tabCompletion": true,
@@ -42,21 +42,21 @@
     "projectManager.git.baseFolders": [],
     "projectManager.svn.baseFolders": [],
 
-    "python.autoComplete.addBrackets": true,
-    "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
-    //"python.jediPath": "~/Library/Caches/Jedi",  // For Unix/Linux/Mac
-    "python.linting.maxNumberOfProblems": 120,
-    "python.linting.pylintEnabled": false,
-    "python.linting.pylintArgs": [
-        "-d C0103,C0111,E1123,W0703,W1202"
-    ],
-    "python.linting.pep8Enabled": true,
-    "python.linting.pep8Args": [
-        "--max-line-length=140",
-        "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
-    ],
-    "python.unitTest.nosetestsEnabled": true,
-    "python.unitTest.nosetestArgs": [],
+    // "python.autoComplete.addBrackets": true,
+    // "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
+    // //"python.jediPath": "~/Library/Caches/Jedi",  // For Unix/Linux/Mac
+    // "python.linting.maxNumberOfProblems": 120,
+    // "python.linting.pylintEnabled": false,
+    // "python.linting.pylintArgs": [
+    //     "-d C0103,C0111,E1123,W0703,W1202"
+    // ],
+    // "python.linting.pep8Enabled": true,
+    // "python.linting.pep8Args": [
+    //     "--max-line-length=140",
+    //     "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
+    // ],
+    // "python.unitTest.nosetestsEnabled": true,
+    // "python.unitTest.nosetestArgs": [],
 
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
@@ -65,7 +65,7 @@
     "vsicons.presets.angular": false,
 
     "window.openFoldersInNewWindow": "on",
-    "window.showFullPath": true,
+    "window.title": "${rootPath}${separator}${activeEditorMedium}${dirty}",
 
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
