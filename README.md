@@ -178,7 +178,6 @@ DOCS
 	- [ECMAScript 6入门](https://github.com/ruanyf/es6tutorial) （点击 [这里](http://es6.ruanyifeng.com) 阅读）
 	- [JavaScript 标准参考教程](https://github.com/ruanyf/jstutorial) （点击 [这里](http://javascript.ruanyifeng.com/) 阅读）
     - [一个很好的博客](https://github.com/jawil/blog)
-	- [Node.js ES2015 Support](http://node.green/)
     - [JavaScript ES3/ES5 快速参考](./snippet/docs/js/js-quick-reference.md)
     - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
     - [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)（点击 [这里](https://i5ting.github.io/asynchronous-flow-control) 阅读）
@@ -188,6 +187,9 @@ DOCS
     - **Promise**
         - [ES6 Promise 规范](https://promisesaplus.com/) | [中文版](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
         - [JavaScript Promise迷你书](https://github.com/liubin/promises-book)（点击 [这里](http://liubin.org/promises-book) 阅读）
+    - [NodeJS](https://nodejs.org)
+        - [Node.js ES2015 Support](http://node.green/)
+        - [《深入理解Node.js：核心思想与源码分析》](https://github.com/yjhjstz/deep-into-node)（点击 [这里](https://www.gitbook.com/book/yjhjstz/deep-into-node/details) 阅读）
     - [Babel](https://babeljs.io)
         - [Babel Handbook](https://github.com/thejameskyle/babel-handbook) （点击阅读 [用户手册(中)](https://github.com/thejameskyle/babel-handbook/blob/master/translations/zh-Hans/user-handbook.md) 或 [插件手册(中)](https://github.com/thejameskyle/babel-handbook/blob/master/translations/zh-Hans/plugin-handbook.md)）
     - [React](https://facebook.github.io/react)
