@@ -49,6 +49,7 @@
     - [Redux Middleware 详解](https://zhuanlan.zhihu.com/p/20597452)
     - [Redux Middleware: Behind the Scenes](http://briantroncone.com/?p=529)
     - [React、Redux、React-Redux 之间的关系](./_static/3.png)
+    - [React and Redux 性能优化](https://github.com/asd0102433/blog/issues/2)
 - **Module Definition**
     - [AMD](https://github.com/amdjs/amdjs-api)
     - [CommonJS](http://www.commonjs.org)
