@@ -416,3 +416,4 @@ DOCS
 - Others
     - [十二要素应用宣言](https://12factor.net/)（[中文版摘录](http://www.infoq.com/cn/news/2012/09/12-factor-app)）
     - [提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md)（点击 [这里](http://www.catb.org/~esr/faqs/smart-questions.html) 阅读英文原版）
+    - [通过 GitHub 代码库总结出来的代码书写习惯](http://alloyteam.github.io/CodeGuide)

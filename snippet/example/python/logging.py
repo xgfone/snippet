@@ -40,6 +40,6 @@ def init_logging(logger=None, level="DEBUG", log_file="", file_config=None, dict
         logging.config.dictConfig(dict_config)
 
 
-if __main__ == "__name__":
+if __name__ == '__main__':
     init_logging(LOG, logging.INFO, log_file="/tmp/test.log")
     LOG.info("test log")
