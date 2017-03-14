@@ -387,6 +387,7 @@ DOCS
         - [37 脚本编写](./snippet/docs/shell/shell-others.md#37-脚本编写)
     - [附录](./snippet/docs/shell/shell-appendix.md)
 - [Swift](./snippet/docs/swift)
+    - [Ownership Manifesto(所有权宣言)](https://github.com/apple/swift/blob/master/docs/OwnershipManifesto.md)（阅读 [中文版](https://onevcat.com/2017/02/ownership)）
 	- [Packages](./snippet/docs/swift/packages.md)
 - [Tool](./snippet/docs/tool)
     - [Diff & Patch](./snippet/docs/tool/diff&patch.md)

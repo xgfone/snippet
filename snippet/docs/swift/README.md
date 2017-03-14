@@ -1,0 +1,2 @@
+- [Ownership Manifesto(所有权宣言)](https://github.com/apple/swift/blob/master/docs/OwnershipManifesto.md)（阅读 [中文版](https://onevcat.com/2017/02/ownership)）
+- [Packages](./packages.md)
