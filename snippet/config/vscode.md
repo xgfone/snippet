@@ -34,7 +34,7 @@
     "go.buildFlags": ["-race"],
     "go.formatOnSave": true,
     "go.formatTool": "goreturns",
-    "go.lintTool": "gometalinter",
+    //"go.lintTool": "gometalinter",
 
     "html.format.indentInnerHtml": true,
 
@@ -42,21 +42,21 @@
     "projectManager.git.baseFolders": [],
     "projectManager.svn.baseFolders": [],
 
-    // "python.autoComplete.addBrackets": true,
-    // "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
-    // //"python.jediPath": "~/Library/Caches/Jedi",  // For Unix/Linux/Mac
-    // "python.linting.maxNumberOfProblems": 120,
-    // "python.linting.pylintEnabled": false,
-    // "python.linting.pylintArgs": [
-    //     "-d C0103,C0111,E1123,W0703,W1202"
-    // ],
-    // "python.linting.pep8Enabled": true,
-    // "python.linting.pep8Args": [
-    //     "--max-line-length=140",
-    //     "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
-    // ],
-    // "python.unitTest.nosetestsEnabled": true,
-    // "python.unitTest.nosetestArgs": [],
+    "python.autoComplete.addBrackets": true,
+    "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
+    //"python.jediPath": "~/Library/Caches/Jedi",  // For Unix/Linux/Mac
+    "python.linting.maxNumberOfProblems": 120,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "-d C0103,C0111,E1123,W0703,W1202"
+    ],
+    "python.linting.pep8Enabled": true,
+    "python.linting.pep8Args": [
+        "--max-line-length=140",
+        "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
+    ],
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.nosetestArgs": [],
 
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
@@ -126,6 +126,7 @@ christian-kohler.npm-intellisense        # npm
 #HookyQR.beautify                        # Format JS, JSON, CSS, HTML
 #DotJoshJohnson.xml                      # Format XML
 #ms-vscode.cpptools                      # C/C++
+#austin.code-gnu-global                  # C++ Intellisense
 #pranaygp.vscode-css-peek                # CSS
 abierbaum.vscode-file-peek               # JS/TypeScript
 #msjsdiag.debugger-for-chrome            # JS Debuger
