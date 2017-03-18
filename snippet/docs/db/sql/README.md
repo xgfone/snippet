@@ -4,3 +4,4 @@
 - [理解MySQL——索引与优化](./mysql-index.md)
 - [SQL快速参考](./sql-quick-ref.md)
 - [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)
+- [MySQL 连表查询](https://blog.ansheng.me/article/python-full-stack-way-mysql-even-table-query)

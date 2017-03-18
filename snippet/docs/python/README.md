@@ -34,6 +34,7 @@ Python学习笔记摘要
 - [SQLAlchemy分析](./sqlalchemy-analysis.md)
 	- [SQLAlchemy Expression Language](./sqlalchemy-analysis.md#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86--sqlalchemy-expression-language)
 	- [SQLAlchemy ORM](./sqlalchemy-analysis.md#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86--sqlalchemy-orm)
+	- [SQLAlchemy 简单教程](https://blog.ansheng.me/article/python-full-stack-way-sqlalchemy)
 - [PasteDeploy](./pastedeploy.md)
 - [Django Form工作流程](./django-form.md)
 	- [Form类](./django-form.md#%E4%B8%80form%E7%B1%BB)
