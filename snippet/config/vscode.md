@@ -48,11 +48,12 @@
     "python.linting.maxNumberOfProblems": 120,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
+        "--max-line-length=120",
         "-d C0103,C0111,E1123,W0703,W1202"
     ],
     "python.linting.pep8Enabled": true,
     "python.linting.pep8Args": [
-        "--max-line-length=140",
+        "--max-line-length=120",
         "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
     ],
     "python.unitTest.nosetestsEnabled": false,
