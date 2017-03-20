@@ -63,12 +63,14 @@
     "terminal.integrated.setLocaleVariables": true,
 
     "vsicons.presets.angular": false,
+    "vsicons.dontShowNewVersionMessage": true,
 
     "window.openFoldersInNewWindow": "on",
     "window.title": "${rootPath}${separator}${activeEditorMedium}${dirty}",
 
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.iconTheme": "vscode-icons",
     "workbench.welcome.enabled": false
 }
 ```
