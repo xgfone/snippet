@@ -8,3 +8,5 @@
     - [HAProxy Conf Example](./ha-lb/haproxy-conf-example.md)
 - RESTfull API
     - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
+    - [REST接口设计规范](http://wangwei.info/about-rest-api)
+    - [跟着 Github 学习 Restful HTTP API 设计](http://cizixs.com/2016/12/12/restful-api-design-guide)
