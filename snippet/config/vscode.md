@@ -7,6 +7,14 @@
     // "bookmarks.saveBookmarksBetweenSessions": true,
     // "bookmarks.navigateThroughAllFiles": true,
 
+    "clang.completion.triggerChars": [
+        ".", ":", ">",
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
+        "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+        "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    ],
+
     "debug.allowBreakpointsEverywhere": true,
     "debug.openExplorerOnEnd": true,
 
@@ -129,6 +137,7 @@ christian-kohler.npm-intellisense        # npm
 #HookyQR.beautify                        # Format JS, JSON, CSS, HTML
 #DotJoshJohnson.xml                      # Format XML
 #ms-vscode.cpptools                      # C/C++
+#mitaki28.vscode-clang                   # C/C++ Completion and Diagnostic
 #austin.code-gnu-global                  # C++ Intellisense
 #pranaygp.vscode-css-peek                # CSS
 abierbaum.vscode-file-peek               # JS/TypeScript
@@ -182,6 +191,12 @@ go get -v github.com/tpng/gopkgs
 go get -v github.com/newhook/go-symbols
 go get -v golang.org/x/tools/cmd/guru
 go get -v github.com/cweill/gotests/...
+```
+
+#### For C/C++
+```shell
+$ sudo yum install clang
+$ sudo apt-get install clang
 ```
 
 #### For RustyCode
