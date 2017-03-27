@@ -32,3 +32,6 @@
 
 ##### [fire](https://github.com/google/python-fire)
     Python Fire is a library for automatically generating command line interfaces (CLIs) from absolutely any Python object.
+
+##### [dpkt](https://github.com/kbandla/dpkt)
+    fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols.
