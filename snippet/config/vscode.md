@@ -54,9 +54,10 @@
 
     "html.format.indentInnerHtml": true,
 
-    "projectManager.openInNewWindow": true,
     "projectManager.git.baseFolders": [],
     "projectManager.svn.baseFolders": [],
+    "projectManager.openInNewWindow": true,
+    "projectManager.showProjectNameInStatusBar": true,
 
     "python.autoComplete.addBrackets": true,
     "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
@@ -65,7 +66,7 @@
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
         "--max-line-length=120",
-        "-d C0103,C0111,E1123,W0703,W1202"
+        "-d C0103,C0111,C0411,C0413,E1123,W0613,W0621,W0622,W0703,W1202"
     ],
     "python.linting.pep8Enabled": true,
     "python.linting.pep8Args": [
