@@ -127,6 +127,7 @@ Install a Package
 formulahendry.code-runner
 #anseki.vscode-color
 robertohuertasm.vscode-icons
+ybaumes.highlight-trailing-white-spaces
 #JerryHong.autofilename
 #christian-kohler.path-intellisense
 #IBM.output-colorizer
