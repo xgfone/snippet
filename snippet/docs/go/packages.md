@@ -37,6 +37,17 @@
 ##### [go-arg](https://github.com/alexflint/go-arg)
     Struct-based argument parsing in Go
 
+##### [yaml](https://github.com/go-yaml/yaml)
+    YAML support for the Go language.
+
+##### [yaml](https://github.com/ghodss/yaml)
+    A wrapper around go-yaml designed to enable a better way of handling YAML when marshaling to and
+    from structs.
+
+    In short, this library first converts YAML to JSON using go-yaml and then uses json.Marshal and
+    json.Unmarshal to convert to or from the struct. This means that it effectively reuses the JSON
+    struct tags as well as the custom JSON methods MarshalJSON and UnmarshalJSON unlike go-yaml.
+
 ##### [structs](https://github.com/fatih/structs)
     Utilities for Go structs.
 
