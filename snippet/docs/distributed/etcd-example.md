@@ -10,7 +10,7 @@ $ etcd -name                    node1 \
 -data-dir                       ./node1-data-dir \
 -initial-advertise-peer-urls    http://10.0.0.101:2380 \
 -listen-peer-urls               http://10.0.0.101:2380 \
--listen-client-urls             http://10.0.0.101:2379 \
+-listen-client-urls             http://10.0.0.101:2379,127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.101:2379 \
 -initial-cluster-token          etcd-cluster-1 \
 -initial-cluster                node1=http://10.0.0.101:2380,\
@@ -25,7 +25,7 @@ $ etcd -name                    node2 \
 -data-dir                       ./node2-data-dir \
 -initial-advertise-peer-urls    http://10.0.0.102:2380 \
 -listen-peer-urls               http://10.0.0.102:2380 \
--listen-client-urls             http://10.0.0.102:2379 \
+-listen-client-urls             http://10.0.0.102:2379,http://127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.102:2379 \
 -initial-cluster-token          etcd-cluster-1 \
 -initial-cluster                node1=http://10.0.0.101:2380,\
@@ -40,7 +40,7 @@ $ etcd -name                    node3 \
 -data-dir                       ./node3-data-dir \
 -initial-advertise-peer-urls    http://10.0.0.103:2380 \
 -listen-peer-urls               http://10.0.0.103:2380 \
--listen-client-urls             http://10.0.0.103:2379 \
+-listen-client-urls             http://10.0.0.103:2379,http://127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.103:2379 \
 -initial-cluster-token          etcd-cluster-1 \
 -initial-cluster                node1=http://10.0.0.101:2380,\
@@ -79,7 +79,7 @@ $ curl -X PUT http://myetcd.local/v2/keys/discovery/9295d70238b112a74ac40223c47c
 $ etcd -name                    node1 \
 -initial-advertise-peer-urls    http://10.0.0.101:2380 \
 -listen-peer-urls               http://10.0.0.101:2380 \
--listen-client-urls             http://10.0.0.101:2379 \
+-listen-client-urls             http://10.0.0.101:2379,http://127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.101:2379 \
 -discovery                      http://myetcd.local/v2/keys/discovery/9295d70238b112a74ac40223c47cb843
 ```
@@ -89,7 +89,7 @@ $ etcd -name                    node1 \
 $ etcd -name                    node2 \
 -initial-advertise-peer-urls    http://10.0.0.102:2380 \
 -listen-peer-urls               http://10.0.0.102:2380 \
--listen-client-urls             http://10.0.0.102:2379 \
+-listen-client-urls             http://10.0.0.102:2379,http://127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.102:2379 \
 -discovery                      http://myetcd.local/v2/keys/discovery/9295d70238b112a74ac40223c47cb843
 ```
@@ -99,7 +99,7 @@ $ etcd -name                    node2 \
 $ etcd -name                    node3 \
 -initial-advertise-peer-urls    http://10.0.0.103:2380 \
 -listen-peer-urls               http://10.0.0.103:2380 \
--listen-client-urls             http://10.0.0.103:2379 \
+-listen-client-urls             http://10.0.0.103:2379,http://127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.103:2379 \
 -discovery                      http://myetcd.local/v2/keys/discovery/9295d70238b112a74ac40223c47cb843
 ```
@@ -139,7 +139,7 @@ $ etcd -name                    node4 \
 -data-dir                       ./node4-data-dir \
 -initial-advertise-peer-urls    http://10.0.0.104:2380 \
 -listen-peer-urls               http://10.0.0.104:2380 \
--listen-client-urls             http://10.0.0.104:2379 \
+-listen-client-urls             http://10.0.0.104:2379,http://127.0.0.1:2379 \
 -advertise-client-urls          http://10.0.0.104:2379 \
 -initial-cluster                node1=http://10.0.0.101:2380,\
                                 node2=http://10.0.0.102:2380,\
@@ -172,7 +172,7 @@ The proxy will be listening on "**`listen-client-urls`**" and forward requests t
 ```shell
 $ etcd \
 -proxy                  on \
--listen-client-urls     http://10.0.0.104:2379 \
+-listen-client-urls     http://10.0.0.104:2379,http://127.0.0.1:2379 \
 -initial-cluster        node1=http://10.0.0.101:2380,\
                         node2=http://10.0.0.102:2380,\
                         node3=http://10.0.0.103:2380
