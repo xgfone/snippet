@@ -167,6 +167,7 @@ alefragnani.project-manager              # Project Manager
 #hcyang.ctags                            # CTags
 #saviorisdead.RustyCode                  # Rust
 #cssho.vscode-svgviewer                  # SVG Viewer
+#Togusa09.tmlanguage                     # YAML
 ```
 
 #### For Windows
