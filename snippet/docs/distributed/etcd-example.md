@@ -55,6 +55,99 @@ $ etcd -name                    node3 \
     be added to the list of initial cluster member. That is, the option,
     '-initial-cluster', contains the configuration of 'node3'.
 
+**脚本样例**
+```shell
+#!/bin/sh
+#
+# This script starts a member of a new etcd v3 cluster.
+#
+
+# The value is "new" or "existing".
+CLUSTER_STATUS=new
+CURRENT_NODE=node1
+CURRENT_HOST=10.0.0.101
+ALL_HOSTS=node1=10.0.0.101,node2=10.0.0.102,node3=10.0.0.103
+
+PROTOCOL=http
+CLIENT_PORT=2379
+ADVERTISE_PORT=2380
+CLUSTER_NAME=etcd_cluster
+DATA_DIR=/data/${CLUSTER_NAME}
+WAL_DIR=
+
+ETCD_CMD=`which etcd`
+ENABLE_OLD_CLIENT_PORT=0
+
+#######################################################################
+CURRENT_DIR=${PWD}
+
+if [[ "CMD_$1" == "CMD_add" ]]; then
+    CLUSTER_STATUS=existing
+fi
+
+if [[ -z $CURRENT_NODE ]]; then
+    CURRENT_NODE=`hostname`
+fi
+
+if [[ -z $DATA_DIR ]]; then
+    DATA_DIR=${CURRENT_DIR}
+fi
+
+CLUSTER_HOST_URLS=
+for node in `echo $ALL_HOSTS | sed "s/,/ /g"`
+do
+    key=`echo $node | awk -F'=' '{print $1}'`
+    value=`echo $node | awk -F'=' '{print $2}'`
+    if [[ -z $CLUSTER_HOST_URLS ]]; then
+        CLUSTER_HOST_URLS=${key}=${PROTOCOL}://${value}:${ADVERTISE_PORT}
+    else
+        CLUSTER_HOST_URLS=${CLUSTER_HOST_URLS},${key}=${PROTOCOL}://${value}:${ADVERTISE_PORT}
+    fi
+done
+
+CLUSTER_LISTEN_CLIENT_URLS_OLD=${PROTOCOL}://127.0.0.1:4001
+CLUSTER_LISTEN_CLIENT_URLS=${PROTOCOL}://${CURRENT_HOST}:${CLIENT_PORT},${PROTOCOL}://127.0.0.1:${CLIENT_PORT}
+# CLUSTER_LISTEN_CLIENT_URLS_OLD=${PROTOCOL}://0.0.0.0:4001
+# CLUSTER_LISTEN_CLIENT_URLS=${PROTOCOL}://0.0.0.0:${CLIENT_PORT}
+
+# if [[ ${CLIENT_PORT} -ne 4001 ]]; then
+if [[ ENABLE_OLD_CLIENT_PORT -ne 0 ]]; then
+    CLUSTER_LISTEN_CLIENT_URLS=${CLUSTER_LISTEN_CLIENT_URLS},${CLUSTER_LISTEN_CLIENT_URLS_OLD}
+fi
+
+# CLUSTER_LISTEN_PEER_URLS=${PROTOCOL}://0.0.0.0:${ADVERTISE_PORT}
+CLUSTER_LISTEN_PEER_URLS=${PROTOCOL}://${CURRENT_HOST}:${ADVERTISE_PORT}
+
+#######################################################################
+### Member
+export ETCD_NAME=${CURRENT_NODE}
+export ETCD_DATA_DIR=${DATA_DIR}
+export ETCD_WAL_DIR=${WAL_DIR}
+export ETCD_LISTEN_PEER_URLS=${CLUSTER_LISTEN_PEER_URLS}
+export ETCD_LISTEN_CLIENT_URLS=${CLUSTER_LISTEN_CLIENT_URLS}
+
+### Cluster
+# ETCD_ADVERTISE_CLIENT_URLS and ETCD_INITIAL_ADVERTISE_PEER_URLS can contain
+# domain names, not 0.0.0.0 or 127.0.0.1.
+#export ETCD_AUTO_COMPACTION_RETENTION=24
+export ETCD_ADVERTISE_CLIENT_URLS=${PROTOCOL}://${CURRENT_HOST}:${CLIENT_PORT}
+export ETCD_INITIAL_CLUSTER_STATE=${CLUSTER_STATUS}
+export ETCD_INITIAL_CLUSTER_TOKEN=${CLUSTER_NAME}
+export ETCD_INITIAL_ADVERTISE_PEER_URLS=${PROTOCOL}://${CURRENT_HOST}:${ADVERTISE_PORT}
+export ETCD_INITIAL_CLUSTER=${CLUSTER_HOST_URLS}
+
+### Logging
+#export ETCD_DEBUG=false
+
+# Start the ECTD cluster.
+$ETCD_CMD
+
+if [[ $? -ne 0 ]]; then {
+    echo "Failed to start the member[${CURRENT_NODE}] in the cluster[${CLUSTER_NAME}]"
+    exit 1
+}
+```
+
 
 ## 二、集群发现——Etcd Discovery
 
