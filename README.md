@@ -80,6 +80,7 @@ DOCS
     - [etcd集群实例](./snippet/docs/distributed/etcd-example.md)
     - [ZooKeeper原理](./snippet/docs/distributed/zookeeper-theory.md)
     - [基于 Redis 的分布式锁到底安全吗?](https://gold.xitu.io/post/58b3a93c1b69e60058b49767)
+    - [Dapper, a Large-Scale Distributed Systems Tracing Infrastructure](https://github.com/bigbully/Dapper-translation) | [英文原版论文下载](https://github.com/bigbully/Dapper-translation/raw/master/dapper%E5%88%86%E5%B8%83%E5%BC%8F%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%8E%9F%E6%96%87.pdf) | [中文翻译阅读](http://bigbully.github.io/Dapper-translation)
 - [Docker](./snippet/docs/docker)
     - [Docker — 从入门到实践](https://github.com/yeasy/docker_practice) （点击 [GitBook](https://www.gitbook.io/book/yeasy/docker_practice) 或 [Github](https://github.com/yeasy/docker_practice/blob/master/SUMMARY.md) 阅读）
 - [Document](./snippet/docs/document)
