@@ -1,4 +1,4 @@
-package project
+package conf
 
 import (
 	"fmt"
@@ -10,11 +10,8 @@ import (
 // Config is the type of the global configuration.
 type Config struct {
 	Version bool   `short:"v" long:"version" description:"Print the version information"`
-	Workers int    `short:"w" long:"workers" value-name:"WORKERS" default:"" description:"The number of CPU to use"`
 	Level   string `short:"l" long:"level" value-name:"LEVEL" default:"debug" description:"The level of the logging"`
-	LogFile string `short:"f" long:"logfile" value-name:"LOGFILE" default:"/log/project/asg.log" description:"The path of the logging file"`
-
-	// ...
+	LogFile string `short:"f" long:"logfile" value-name:"LOGFILE" default:"" description:"The path of the logging file"`
 }
 
 // Conf is the global configuration option.
