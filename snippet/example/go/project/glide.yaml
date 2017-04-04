@@ -7,7 +7,7 @@ import:
   - package: github.com/jessevdk/go-flags
     version: v1.1
   - package: github.com/xgfone/go-tools
-    version: 0.26
+    version: 0.32
 
   # The packages which have dependency.
   # The depended packages precede the dependent packages.
