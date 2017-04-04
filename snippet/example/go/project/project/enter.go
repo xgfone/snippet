@@ -5,10 +5,10 @@ import (
 	"os"
 	"os/signal"
 	"project/project/conf"
-	"project/utils"
 	"syscall"
 
 	"github.com/xgfone/go-tools/lifecycle"
+	"github.com/xgfone/go-tools/lifecycle/server"
 	"github.com/xgfone/go-utils/log"
 )
 
@@ -31,11 +31,11 @@ func Main() {
 		ss := make(chan os.Signal, 1)
 		signal.Notify(ss, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)
 		<-ss
-		utils.Shutdown()
+		server.Shutdown()
 	}()
 
 	// Run for ever
-	utils.RunForever()
+	server.RunForever()
 	lifecycle.Stop()
 	log.Info("The program exits")
 }
