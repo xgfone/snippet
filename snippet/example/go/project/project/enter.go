@@ -7,7 +7,6 @@ import (
 	"project/project/conf"
 	"syscall"
 
-	"github.com/xgfone/go-tools/lifecycle"
 	"github.com/xgfone/go-tools/lifecycle/server"
 	"github.com/xgfone/go-utils/log"
 )
@@ -34,8 +33,9 @@ func Main() {
 		server.Shutdown()
 	}()
 
+	// TODO
+
 	// Run for ever
 	server.RunForever()
-	lifecycle.Stop()
 	log.Info("The program exits")
 }
