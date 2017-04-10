@@ -16,10 +16,12 @@
     // ],
 
     "[c]": {
+        "editor.insertSpaces": false,
         "editor.quickSuggestions": true
     },
 
     "[cpp]": {
+        "editor.insertSpaces": false,
         "editor.quickSuggestions": true
     },
 
