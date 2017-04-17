@@ -28,7 +28,7 @@ The method described here has five steps:
 
 1. Select the required protocol number.
 2. Create the raw socket.
-3. Optionally, set the IP_HDRINCL socket option.
+3. Optionally, set the `IP_HDRINCL` socket option.
 4. Construct the datagram.
 5. Send the datagram.
 
@@ -52,7 +52,7 @@ All IPv4 traffic is labelled with a protocol number to distinguish between the v
 
 There are several sources from which protocol numbers can be obtained:
 
-- Some protocol numbers are defined as constants by the API. POSIX defines IPPROTO_TCP, IPPROTO_UDP and IPPROTO_ICMP, and glibc defines many more.
+- Some protocol numbers are defined as constants by the API. POSIX defines `IPPROTO_TCP`, `IPPROTO_UDP` and `IPPROTO_ICMP`, and glibc defines many more.
 - Protocol numbers can be looked up at run time by calling the function getprotobyname.
 - IANA maintains a [list of assigned protocol numbers](http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml).
 
@@ -74,8 +74,8 @@ Note that `getprotobyname` is not thread-safe. In a multi-threaded program it wo
 
 The socket that will be used to send the IP datagram should be created using the `socket` function. This takes three arguments:
 
-1. the domain (AF_INET in this case, meaning IPv4),
-2. the socket type (SOCK_RAW in this case, meaning that the socket should provide direct access to the network layer without any transport-layer protocol), and
+1. the domain (`AF_INET` in this case, meaning IPv4),
+2. the socket type (`SOCK_RAW` in this case, meaning that the socket should provide direct access to the network layer without any transport-layer protocol), and
 3. the protocol (normally corresponding to the protocol field in the Internet Protocol header).
 
 An alternative to specifying the protocol number as the third argument is to use the value `IPPROTO_RAW`. POSIX does not generally allow this, but some implementations use it as a wildcard or a dummy value. (In the case of Linux it allows any protocol to be sent (with headers) but nothing can be received.)
@@ -88,12 +88,12 @@ if (fd == -1) {
 }
 ```
 
-### Optionally, set the IP_HDRINCL socket option
+### Optionally, set the `IP_HDRINCL` socket option
 
 POSIX does not specify the format in which a datagram should be written to a raw socket, however the following behaviour is typical:
 
 - By default the header is generated automatically, therefore only the payload should be written.
-- If the IP_HDRINCL socket option is set then the header should be constructed by the caller and both header and payload written to the socket.
+- If the `IP_HDRINCL` socket option is set then the header should be constructed by the caller and both header and payload written to the socket.
 
 The protocol level for `IP_HDRINCL` is `IPPROTO_IP`. The parameter is a boolean value that is usually represented by an int. It should be set to zero to disable header inclusion or non-zero to enable it:
 ```c
