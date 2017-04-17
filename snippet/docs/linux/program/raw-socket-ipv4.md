@@ -47,7 +47,7 @@ Note that POSIX-compatible operating systems are not obliged to support raw sock
 
 All IPv4 traffic is labelled with a protocol number to distinguish between the various transport-layer protocols (such as TCP and UDP) that IPv4 can carry. You will need this number:
 
-- when opening the raw socket (unless you choose IPPROTO_RAW for the protocol number on a system that interprets this as a wildcard), and/or
+- when opening the raw socket (unless you choose `IPPROTO_RAW` for the protocol number on a system that interprets this as a wildcard), and/or
 - when constructing the IP datagram header (if you choose to do this yourself instead of allowing it to be added automatically).
 
 There are several sources from which protocol numbers can be obtained:
@@ -179,7 +179,7 @@ If you wish to pass any flags into `sendmsg` then this cannot be done using `msg
 
 ### Sending to the IPv4 broadcast address
 
-By default, attempts to send a datagram to the broadcast address are rejected with an error (typically EACCES, however it is not obvious from the POSIX specification which error should occur). This is a safety measure intended to reduce the risk of making unintended broadcasts. It can be overridden by setting the `SO_BROADCAST` socket option:
+By default, attempts to send a datagram to the broadcast address are rejected with an error (typically `EACCES`, however it is not obvious from the POSIX specification which error should occur). This is a safety measure intended to reduce the risk of making unintended broadcasts. It can be overridden by setting the `SO_BROADCAST` socket option:
 ```c
 int broadcast = 1;
 if (setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) == -1) {
