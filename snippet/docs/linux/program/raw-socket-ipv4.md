@@ -11,8 +11,8 @@ To send an arbitrary IPv4 datagram using a raw socket in C.
 
 Most programs that communicate using the Internet Protocol do so through a transport-layer protocol such as TCP or UDP and have no need to deal directly with Internet Protocol datagrams, but there are some circumstances where it is necessary to interact with the network stack at a lower level. These include:
 
-    - implementation of transport-layer protocols that are not built in to the network stack, and
-    - production of malformed or otherwise non-standard datagrams for testing purposes.
+- implementation of transport-layer protocols that are not built in to the network stack, and
+- production of malformed or otherwise non-standard datagrams for testing purposes.
 
 ## Scenario
 
@@ -26,11 +26,11 @@ There is no POSIX API call that provides this functionality per se. You therefor
 
 The method described here has five steps:
 
-    1. Select the required protocol number.
-    2. Create the raw socket.
-    3. Optionally, set the IP_HDRINCL socket option.
-    4. Construct the datagram.
-    5. Send the datagram.
+1. Select the required protocol number.
+2. Create the raw socket.
+3. Optionally, set the IP_HDRINCL socket option.
+4. Construct the datagram.
+5. Send the datagram.
 
 The following header files will be needed:
 ```c
@@ -47,17 +47,14 @@ Note that POSIX-compatible operating systems are not obliged to support raw sock
 
 All IPv4 traffic is labelled with a protocol number to distinguish between the various transport-layer protocols (such as TCP and UDP) that IPv4 can carry. You will need this number:
 
-    - when opening the raw socket (unless you choose IPPROTO_RAW for the protocol number on a system that interprets
-      this as a wildcard), and/or
-    - when constructing the IP datagram header (if you choose to do this yourself instead of allowing it to be
-      added automatically).
+- when opening the raw socket (unless you choose IPPROTO_RAW for the protocol number on a system that interprets this as a wildcard), and/or
+- when constructing the IP datagram header (if you choose to do this yourself instead of allowing it to be added automatically).
 
 There are several sources from which protocol numbers can be obtained:
 
-    - Some protocol numbers are defined as constants by the API. POSIX defines IPPROTO_TCP, IPPROTO_UDP and
-      IPPROTO_ICMP, and glibc defines many more.
-    - Protocol numbers can be looked up at run time by calling the function getprotobyname.
-    - IANA maintains a [list of assigned protocol numbers](http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml).
+- Some protocol numbers are defined as constants by the API. POSIX defines IPPROTO_TCP, IPPROTO_UDP and IPPROTO_ICMP, and glibc defines many more.
+- Protocol numbers can be looked up at run time by calling the function getprotobyname.
+- IANA maintains a [list of assigned protocol numbers](http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml).
 
 Unlike a TCP or UDP port number there is little risk of an assigned IP protocol number ever needing to change, especially for a widely-used protocol such as ICMP. For this reason there is no real need to look up the protocol number at runtime, and it is quite reasonable for the required value to be hard-coded.
 
@@ -77,10 +74,9 @@ Note that `getprotobyname` is not thread-safe. In a multi-threaded program it wo
 
 The socket that will be used to send the IP datagram should be created using the `socket` function. This takes three arguments:
 
-    1. the domain (AF_INET in this case, meaning IPv4),
-    2. the socket type (SOCK_RAW in this case, meaning that the socket should provide direct access to
-       the network layer without any transport-layer protocol), and
-    3. the protocol (normally corresponding to the protocol field in the Internet Protocol header).
+1. the domain (AF_INET in this case, meaning IPv4),
+2. the socket type (SOCK_RAW in this case, meaning that the socket should provide direct access to the network layer without any transport-layer protocol), and
+3. the protocol (normally corresponding to the protocol field in the Internet Protocol header).
 
 An alternative to specifying the protocol number as the third argument is to use the value `IPPROTO_RAW`. POSIX does not generally allow this, but some implementations use it as a wildcard or a dummy value. (In the case of Linux it allows any protocol to be sent (with headers) but nothing can be received.)
 
@@ -96,9 +92,8 @@ if (fd == -1) {
 
 POSIX does not specify the format in which a datagram should be written to a raw socket, however the following behaviour is typical:
 
-    - By default the header is generated automatically, therefore only the payload should be written.
-    - If the IP_HDRINCL socket option is set then the header should be constructed by the caller and
-      both header and payload written to the socket.
+- By default the header is generated automatically, therefore only the payload should be written.
+- If the IP_HDRINCL socket option is set then the header should be constructed by the caller and both header and payload written to the socket.
 
 The protocol level for `IP_HDRINCL` is `IPPROTO_IP`. The parameter is a boolean value that is usually represented by an int. It should be set to zero to disable header inclusion or non-zero to enable it:
 ```c
@@ -110,9 +105,8 @@ if (setsockopt(fd, IPPROTO_IP, IP_HDRINCL, &hdrincl, sizeof(hdrincl)) == -1) {
 
 Support for `IP_HDRINCL` is quite common, but the details vary as to:
 
-    - the byte order that should be used for each of the header fields (which is not necessarily the same
-      for all fields), and
-    - which fields (if any) are filled in automatically.
+- the byte order that should be used for each of the header fields (which is not necessarily the same for all fields), and
+- which fields (if any) are filled in automatically.
 
 Some operating systems set `IP_HDRINCL` implicitly when `IPPROTO_RAW` is selected (on the grounds that it would make little sense not to supply a header in that case) but others require an explicit call to setsockopt. If you want to enable header inclusion then it is prudent to set it regardless, in order to accommodate either behaviour.
 
@@ -120,9 +114,8 @@ Some operating systems set `IP_HDRINCL` implicitly when `IPPROTO_RAW` is selecte
 
 Raw datagrams can in principle be sent using any function that is capable of writing to a file descriptor, however it is often necessary to use either `sendto` or `sendmsg` so that a destination address can be specified. There are two possible reasons for this:
 
-    - If the header will be constructed automatically then the network stack needs to know what the destination
-      address field should be set to.
-    - You may want to route the datagram towards an address that differs from the one specified in the IP header.
+- If the header will be constructed automatically then the network stack needs to know what the destination address field should be set to.
+- You may want to route the datagram towards an address that differs from the one specified in the IP header.
 
 Of `sendto` and `sendmsg` the latter is the more flexible option, but at the cost of a signficiantly more complex interface. Details for each function are given below.
 
@@ -208,12 +201,9 @@ Raw sockets of the type described above operate at the network layer. An alterna
 
 This approach makes it possible to implement any network-layer protocol, whether or not it is explicitly supported by the network stack, but also brings a number of disadvantages which result from operating at a lower level of abstraction:
 
-    - The sender must construct the network layer header, and depending on the method of injection, perhaps also
-      the link layer header.
-    - The sender must take responsibility for routing and link-layer address resolution (although it may be possible
-      to delegate these tasks back to the operating system rather than implementing them from scratch).
-    - The above cannot normally be done without knowledge of the link layer protocol, which will typically need to
-      be coded into the sending program on a case-by-case basis.
+- The sender must construct the network layer header, and depending on the method of injection, perhaps also the link layer header.
+- The sender must take responsibility for routing and link-layer address resolution (although it may be possible to delegate these tasks back to the operating system rather than implementing them from scratch).
+- The above cannot normally be done without knowledge of the link layer protocol, which will typically need to be coded into the sending program on a case-by-case basis.
 
 For these reasons, use of a raw socket is recommended unless you specifically need the extra functionality provided by working at the link layer.
 
@@ -225,10 +215,10 @@ For these reasons, use of a raw socket is recommended unless you specifically ne
 
 ## Further reading
 
-    raw(7) (Linux manpage)
-    The Open Group, sendto, Base Specifications Issue 6
-    The Open Group, sendmsg, Base Specifications Issue 6
-    ithilgore, [SOCK_RAW Demystified](http://sock-raw.org/papers/sock_raw), May 2008
+- raw(7) (Linux manpage)
+- The Open Group, sendto, Base Specifications Issue 6
+- The Open Group, sendmsg, Base Specifications Issue 6
+- ithilgore, [SOCK_RAW Demystified](http://sock-raw.org/papers/sock_raw), May 2008
 
 ---
 
