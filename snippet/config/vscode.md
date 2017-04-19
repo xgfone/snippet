@@ -56,8 +56,9 @@
 
     "html.format.indentInnerHtml": true,
 
-    "projectManager.git.baseFolders": [],
     "projectManager.svn.baseFolders": [],
+    "projectManager.git.baseFolders": [],
+    "projectManager.git.maxDepthRecursion": 4,
     "projectManager.openInNewWindow": true,
     "projectManager.showProjectNameInStatusBar": true,
 
