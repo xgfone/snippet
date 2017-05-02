@@ -74,6 +74,7 @@ DOCS
         - [SQL快速参考](./snippet/docs/db/sql/sql-quick-ref.md)
         - [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)
         - [MySQL 连表查询](https://blog.ansheng.me/article/python-full-stack-way-mysql-even-table-query)
+        - [我必须得告诉大家的MySQL优化原理](http://www.jianshu.com/p/d7665192aaaf)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
     - [分布式一致性算法](./snippet/docs/distributed/consistency.md)
