@@ -16,3 +16,6 @@
 
 ##### [build-web-application-with-golang](https://github.com/astaxie/build-web-application-with-golang)
     A golang ebook intro how to build a web with golang
+
+##### EBook
+- [free tech ebooks from packtpub](https://github.com/tahmid-choyon/free-tech-ebooks-from-packtpub)

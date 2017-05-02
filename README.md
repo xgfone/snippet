@@ -52,6 +52,7 @@ DOCS
 - [Assembly](./snippet/docs/assembly)
     - [Linux 汇编语言开发指南](./snippet/docs/assembly/linux-assembly-development-guide.md)
 - [Book & Atricle](./snippet/docs/book&article)
+    - [free tech ebooks from packtpub](https://github.com/tahmid-choyon/free-tech-ebooks-from-packtpub)
 - [BitTorrent](./snippet/docs/bt)
     - [DHT中文版](./snippet/docs/bt/dht-proto-chinese.md)
 - [C & C++](./snippet/docs/c&c++)
