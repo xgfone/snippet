@@ -38,6 +38,7 @@ DOCS
 
 - [Algorithm](./snippet/docs/algorithm)
 - [Architecture](./snippet/docs/architecture)
+    - [system Design Primer](https://github.com/donnemartin/system-design-primer)
     - [High Availability & Load Balance](./snippet/docs/architecture/ha-lb)
         - [Keepalived](./snippet/docs/architecture/ha-lb/keepalived.md)
         - [Keepalived Config](./snippet/docs/architecture/ha-lb/keepalived-conf.md)
