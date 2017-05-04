@@ -123,8 +123,11 @@ class Configuration(object):
         self.__register(r1)
         self.__register(r2)
 
-    def __uniformize_name(self, name):
+    def __uniformize(self, name):
         return name.strip().replace("-", "_")
+
+    def __hyphen(self, name):
+        return name.strip().replace("_", "-")
 
     def __get_value(self, name, value):
         opt = self.__opts.get(name, self.__DEFAULT_OPTION)
@@ -144,7 +147,7 @@ class Configuration(object):
         # Calculate and parse all the configuration files
         # filenames = [].extend(self.__filenames)
         filenames = self.__filenames
-        _filenames = getattr(clis, self.__config_opt, None)
+        _filenames = getattr(clis, self.__uniformize(self.__config_opt), None)
         if _filenames:
             if not isinstance(_filenames, (list, tuple)):
                 _filenames = [_filenames]
@@ -159,7 +162,7 @@ class Configuration(object):
         # We do it after parsing configuration file, because the priority of CLI
         # is higher than the configurations file.
         for name, value in vars(clis).items():
-            name = self.__uniformize_name(name)
+            name = self.__uniformize(name)
             if value is None and name not in self.__caches:
                 value = self.__opts[name].default
             if value is None:
@@ -207,9 +210,7 @@ class Configuration(object):
                 if short[0] != "-":
                     short = "-" + short
                 names.append(short)
-            name = opt.name
-            if self.__use_hyphen:
-                name = name.replace("_", "-")
+            name = self.__hyphen(opt.name) if self.__use_hyphen else opt.name
             names.append("--" + name)
 
             add_option(parser, *names, **kwargs)
@@ -231,12 +232,13 @@ class Configuration(object):
                 continue
 
             items = line.split("=", 1)
-            if len(items) != 2 and self.__strict:
-                continue
-            else:
-                items.append("")  # We don't use it when len(items)==2.
+            if len(items) != 2:
+                if self.__strict:
+                    continue
+                else:
+                    items.append("")
 
-            name, value = self.__uniformize_name(items[0]), items[1].strip()
+            name, value = self.__uniformize(items[0]), items[1].strip()
             if name not in self.__opts and self.__strict:
                 continue
             if name in self.__caches:
@@ -270,7 +272,7 @@ class Configuration(object):
         return getattr(self, name, default)
 
     def __register(self, opt):
-        name = self.__uniformize_name(opt.name)
+        name = self.__uniformize(opt.name)
         if name in self.__opts:
             raise KeyError("The option {0} has been regisetered".format(name))
         self.__opts[name] = opt
