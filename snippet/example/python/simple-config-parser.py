@@ -1,7 +1,8 @@
-
 #!/usr/bin/env python
-
+# ecoding: utf-8
 from __future__ import print_function, absolute_import, unicode_literals, division
+
+import sys
 
 
 # @Author: xgfone
@@ -21,7 +22,9 @@ class Configuration(object):
         BOOL_TRUE = ["t", "true", "1"]
         BOOL_FALSE = ["f", "false", "0"]
 
-        def __init__(self, _type, short=None, default=None, nargs=1, help=None, ignore_empty=False):
+        def __init__(self, _type, name, short=None, default=None, nargs=1,
+                     help=None, ignore_empty=False):
+            self.name = name
             self.type = self.STR2TYPE.get(_type, _type)
             if self.type is self.BOOL_TYPE:
                 self.default = bool(default)
@@ -35,7 +38,6 @@ class Configuration(object):
 
         @classmethod
         def fix_py2(cls):
-            import sys
             if sys.version_info[0] == 2:
                 cls.STR_TYPE = unicode
                 cls.STR2TYPE["str"] = cls.STR_TYPE
@@ -59,46 +61,43 @@ class Configuration(object):
                 elif value in self.BOOL_FALSE:
                     return False
                 else:
-                    raise ValueError("{0} is invalid! Only t, true, f, false, 1, 0 are valid".format(value))
+                    m = "{0} is invalid! Only t, true, f, false, 1, 0 are valid"
+                    raise ValueError(m.format(value))
 
             try:
                 return self.type(value)
             except Exception:
-                raise ValueError("{0} can not be converted to {1}".format(value, self.type))
+                m = "{0} can not be converted to {1}".format(value, self.type)
+                raise ValueError(m)
 
     __Option.fix_py2()
-    __DEFAULT_OPTION = __Option("str")
+    __DEFAULT_OPTION = __Option("str", "default")
 
-    def __init__(self, description="", filenames=None, config_opt="config_file", strict=False):
+    def __init__(self, description="", filenames=None, config_opt="config-file",
+                 strict=False, use_hyphen=True):
         """A simple configuration parser, including the file and CLI.
-
         We only support to parse the types of integer, bool, string, not list.
         And we don't support the group or section. It is just used in one simple
         script, not a big project. If it's the case, please use the package,
         oslo.config.
-
         When parsing the file or CLI, you can get the configuration option by
         the attribution or the dict key, such as conf.option or conf["option"].
         If the option does not exist, they will raise AttributeError or KeyError
         respectively.
-
-        When an configuration option does not exist, for getting one default value,
-        not raising an exception, please use the method of get(), or the builtin
-        function of getattr().
-
+        When an configuration option does not exist, for getting one default
+        value, not raising an exception, please use the method of get(), or the
+        builtin function of getattr().
         Notice: In principle, This class should support Python 2.6, 2.7 and 3.X.
         And it should not have any dependencies. In Python 2.X, the str type is
         unicode; In 3.X, it's str.
-
         @param description(string): A brief description about this program.
         @param filename(string):    The path of the configuration file.
-        @param config_opt(string):  The CLI option name of the configuration file.
-                                    Use it if @filename is not given.
-        @param strict(bool):        If True, not parse the options, which are not
-                                    registered, or whose value don't have the
-                                    symbol of "=". This param only affects those
-                                    options in the configuration file.
-
+        @param config_opt(string):  The CLI option name of the configuration
+                                    file. Use it if @filename is not given.
+        @param strict(bool):        If True, not parse the options, which are
+                                    not registered, or whose value don't have
+                                    the symbol of "=". This param only affects
+                                    those options in the configuration file.
         """
         if not filenames:
             filenames = []
@@ -108,6 +107,7 @@ class Configuration(object):
         self.__filenames = filenames
         self.__description = description
         self.__config_opt = config_opt
+        self.__use_hyphen = use_hyphen
         self.__strict = strict
         self.__caches = {}
         self.__opts = {}
@@ -116,10 +116,15 @@ class Configuration(object):
         self.__init_opts()
 
     def __init_opts(self):
-        self.__register(self.__config_opt,
-                        Configuration.__Option("str", ignore_empty=True, help="The path of the configuration file"))
-        self.__register("strict",
-                        Configuration.__Option("bool", default=False, help="If true, enable the strict mode."))
+        r1 = Configuration.__Option("str", self.__config_opt, ignore_empty=True,
+                                    help="The path of the configuration file")
+        r2 = Configuration.__Option("bool", "strict", default=False,
+                                    help="If true, enable the strict mode.")
+        self.__register(r1)
+        self.__register(r2)
+
+    def __uniformize_name(self, name):
+        return name.strip().replace("-", "_")
 
     def __get_value(self, name, value):
         opt = self.__opts.get(name, self.__DEFAULT_OPTION)
@@ -154,6 +159,7 @@ class Configuration(object):
         # We do it after parsing configuration file, because the priority of CLI
         # is higher than the configurations file.
         for name, value in vars(clis).items():
+            name = self.__uniformize_name(name)
             if value is None and name not in self.__caches:
                 value = self.__opts[name].default
             if value is None:
@@ -163,7 +169,8 @@ class Configuration(object):
         # Check whether the empty value options exists.
         for name, opt in self.__opts.items():
             if not opt.ignore_empty and name not in self.__caches:
-                raise ValueError("The option {0} does not have a value.".format(name))
+                m = "The option {0} does not have a value.".format(name)
+                raise ValueError(m)
 
         self.__parsed = True
 
@@ -180,7 +187,7 @@ class Configuration(object):
             get_args = lambda parser: parser.parse_args(args=argv)[0]
 
         parser = Parser(description=self.__description)
-        for name, opt in self.__opts.items():
+        for opt in self.__opts.values():
             kwargs = {}
             if opt.help is not None:
                 kwargs["help"] = opt.help
@@ -200,6 +207,9 @@ class Configuration(object):
                 if short[0] != "-":
                     short = "-" + short
                 names.append(short)
+            name = opt.name
+            if self.__use_hyphen:
+                name = name.replace("_", "-")
             names.append("--" + name)
 
             add_option(parser, *names, **kwargs)
@@ -217,7 +227,7 @@ class Configuration(object):
 
         for line in lines:
             line = line.strip()
-            if not line or line[0] in ("#", "="):
+            if not line or line[0] in ("#", "=", ";"):
                 continue
 
             items = line.split("=", 1)
@@ -226,7 +236,7 @@ class Configuration(object):
             else:
                 items.append("")  # We don't use it when len(items)==2.
 
-            name, value = items[0].strip(), items[1].strip()
+            name, value = self.__uniformize_name(items[0]), items[1].strip()
             if name not in self.__opts and self.__strict:
                 continue
             if name in self.__caches:
@@ -235,7 +245,8 @@ class Configuration(object):
 
     def __getattr__(self, name):
         if not self.__parsed:
-            raise Exception("Not parsed, can not get the value of the option of {0}".format(name))
+            msg = "Not parsed, can not get the value of the option of {0}"
+            raise Exception(msg.format(name))
 
         try:
             return self.__caches[name]
@@ -247,50 +258,49 @@ class Configuration(object):
             raise Exception("Not parsed")
 
         try:
+            name = name.replace("-", "_")
             return self.__caches[name]
         except KeyError:
             raise IndexError(name)
 
     def get(self, name, default=None):
         """Get the value of the configuration option of name.
-
         If there is not this option, return default, which is None by default.
         """
         return getattr(self, name, default)
 
-    def __register(self, name, opt):
-        name = name.strip()
+    def __register(self, opt):
+        name = self.__uniformize_name(opt.name)
         if name in self.__opts:
             raise KeyError("The option {0} has been regisetered".format(name))
         self.__opts[name] = opt
 
     def register_bool(self, name, short=None, default=None, help=None):
         """Register the bool option.
-
         The value of this option will be parsed to the type of bool.
         """
-        opt = Configuration.__Option("bool", short=short, default=default, help=help)
-        self.__register(name, opt)
+        opt = Configuration.__Option("bool", name, short=short, default=default,
+                                     help=help)
+        self.__register(opt)
 
     def register_int(self, name, short=None, default=None, help=None):
         """Register the int option.
-
         The value of this option will be parsed to the type of int.
         """
-        opt = Configuration.__Option("int", short=short, default=default, help=help)
-        self.__register(name, opt)
+        opt = Configuration.__Option("int", name, short=short, default=default,
+                                     help=help)
+        self.__register(opt)
 
     def register_str(self, name, short=None, default=None, nargs=1, help=None):
         """Register the str option.
-
         The value of this option will be parsed to the type of str.
         """
-        opt = Configuration.__Option("str", short=short, default=default, help=help)
-        self.__register(name, opt)
+        opt = Configuration.__Option("str", name, short=short, default=default,
+                                     help=help)
+        self.__register(opt)
 
     def parse(self, argv=None):
         """Parse the configuration file and CLI.
-
         It will raise an execption if having been parsed.
         """
         self.__parse(argv)
@@ -301,14 +311,14 @@ class Configuration(object):
 
 
 def main():
-    filename = "test.conf"
-    conf = Configuration(filenames=filename)
+    conf = Configuration()
     conf.register_bool("a1", short='a')
-    conf.register_int("a4", short='A', default=444444)
+    conf.register_int("a2", short='A', default=111)
+    conf.register_str("a3", default="a3-value")
     conf.parse()
-    print(type(conf.a1), conf.a1)
-    # print(type(conf.a5), conf.a5)
-    print(type(getattr(conf, "a4")), conf.a4)
+    print("a1", type(conf.a1), conf.a1)
+    print("a2", type(getattr(conf, "a2")), conf.a2)
+    print("a3", type(conf["a3"]), conf["a3"])
 
 
 if __name__ == "__main__":
