@@ -106,11 +106,13 @@
 #### keybindings.json
 ```json
 [
+    { "key": "ctrl+l", "command": "HookyQR.beautifyFile"},
     { "key": "shift+alt+e", "command": "projectManager.editProjects"},
     { "key": "shift+alt+s", "command": "projectManager.saveProject"},
     { "key": "shift+alt+o", "command": "projectManager.listProjectsNewWindow" },
-    { "key": "ctrl+a", "command": "editor.action.selectAll" },
+
     { "key": "ctrl+f", "command": "actions.find" },
+    { "key": "ctrl+a", "command": "editor.action.selectAll" },
     { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
     { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
     { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
