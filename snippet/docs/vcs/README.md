@@ -7,3 +7,4 @@
 - [Github Guide](./github-guide.md)
 - [git-extras](https://github.com/tj/git-extras) ( [安装](https://github.com/tj/git-extras/blob/master/Installation.md) )
 - [Git 思维导图](./_static/git-shortcut.jpg)（点击 [这里](https://github.com/xgfone/snippet/raw/master/snippet/docs/vcs/_static/git-shortcut.jpg) 看大图）
+- [使用 `5W1H` 写出高可读的 Git Commit Message](./git-commit-message.md)
