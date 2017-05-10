@@ -79,6 +79,7 @@ DOCS
         - [我必须得告诉大家的MySQL优化原理](http://www.jianshu.com/p/d7665192aaaf)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
+    - [分布式系统常见的事务处理机制](./snippet/docs/distributed/distributed-transaction.md)
     - [分布式一致性算法](./snippet/docs/distributed/consistency.md)
     - [etcd集群实例](./snippet/docs/distributed/etcd-example.md)
     - [ZooKeeper原理](./snippet/docs/distributed/zookeeper-theory.md)
