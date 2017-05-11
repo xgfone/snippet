@@ -8,5 +8,6 @@
     - [CSS 选择器](./css-selector.md)
     - [Bootstrap 速查表](http://www.ctolib.com/cheatsheets-Bootstrap-ch.html)
     - [16种方法实现水平居中垂直居中](http://louiszhai.github.io/2016/03/12/css-center/)
+    - [CSS实战之Flex详解以及其在微信中的兼容实现](https://segmentfault.com/a/1190000004139009)
 - Other
     - [HTML5 大文件上传](https://hhqqnu.github.io/2017/02/08/Html5%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/) | [BaiDu Web Uploader](http://fex.baidu.com/webuploader)
