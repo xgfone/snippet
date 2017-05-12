@@ -197,6 +197,7 @@ DOCS
     - [JavaScript 风格指南](https://github.com/alivebao/clean-code-js)
     - [测试框架 Mocha 实例教程](http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
     - [Ajax 知识体系大梳理](http://louiszhai.github.io/2016/11/02/ajax)
+    - [Tail call optimization in ECMAScript 6](http://2ality.com/2015/06/tail-call-optimization.html)
     - [Packages](./snippet/docs/js/packages.md)
     - **Promise**
         - [ES6 Promise 规范](https://promisesaplus.com/) | [中文版](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
