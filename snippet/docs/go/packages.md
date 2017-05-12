@@ -48,6 +48,10 @@
     json.Unmarshal to convert to or from the struct. This means that it effectively reuses the JSON
     struct tags as well as the custom JSON methods MarshalJSON and UnmarshalJSON unlike go-yaml.
 
+##### [viper](https://github.com/spf13/viper)
+    Go configuration with fangs!
+    It supoorts JSON, TOML, YAML, HCL, and Java properties config files.
+
 ##### [structs](https://github.com/fatih/structs)
     Utilities for Go structs.
 
@@ -274,3 +278,14 @@
 
 ##### [gjson](https://github.com/tidwall/gjson)
     Get JSON values very quickly in Go
+
+##### [GoDS](https://github.com/emirpasic/gods)
+    Implementation of various data structures and algorithms in Go.
+
+    GoDS (Go Data Structures). Containers (Sets, Lists, Stacks, Maps, Trees), Sets (HashSet, TreeSet),
+    Lists (ArrayList, SinglyLinkedList, DoublyLinkedList), Stacks (LinkedListStack, ArrayStack),
+    Maps (HashMap, TreeMap, HashBidiMap, TreeBidiMap), Trees (RedBlackTree, AVLTree, BTree, BinaryHeap),
+    Comparators, Iterators, Enumerables, Sort, JSON.
+
+##### [ffjson](https://github.com/pquerna/ffjson)
+    faster JSON serialization for Go.
