@@ -417,6 +417,7 @@ DOCS
     - [git-extras](https://github.com/tj/git-extras) ( [安装](https://github.com/tj/git-extras/blob/master/Installation.md) )
     - [Git 思维导图](./snippet/docs/vcs/_static/git-shortcut.jpg)（点击 [这里](https://github.com/xgfone/snippet/raw/master/snippet/docs/vcs/_static/git-shortcut.jpg) 看大图）
     - [使用 `5W1H` 写出高可读的 Git Commit Message](./snippet/docs/vcs/git-commit-message.md)
+    - [图解Git](https://marklodato.github.io/visual-git-guide/index-zh-cn.html)
 - [Web](./snippet/docs/web)
     - 大型网站技术架构
         - [大型网站技术架构的演进](./snippet/docs/web/website-evolution.md)
