@@ -28,6 +28,8 @@
 - **Promise**
     - [ES6 Promise 规范](https://promisesaplus.com/) | [中文版](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/)
     - [JavaScript Promise迷你书](https://github.com/liubin/promises-book)（点击 [这里](http://liubin.org/promises-book) 阅读）
+- **DOM**
+    - [前端新手必看的JavaScript常用DOM操作方法和函数](http://www.admin10000.com/document/13594.html)
 - [NodeJS](https://nodejs.org)
     - [Node.js ES2015 Support](http://node.green/)
     - [《深入理解Node.js：核心思想与源码分析》](https://github.com/yjhjstz/deep-into-node)（点击 [这里](https://www.gitbook.com/book/yjhjstz/deep-into-node/details) 阅读）
