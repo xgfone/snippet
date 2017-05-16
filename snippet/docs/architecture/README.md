@@ -7,6 +7,7 @@
     - [HAProxy Architecture](./ha-lb/haproxy-architecture.txt)
     - [HAProxy Configure](./ha-lb/haproxy-configuration.txt)
     - [HAProxy Conf Example](./ha-lb/haproxy-conf-example.md)
+    - [究竟啥才是互联网架构 `高可用`](https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651959728&idx=1&sn=933227840ec8cdc35d3a33ae3fe97ec5&chksm=bd2d046c8a5a8d7a13551124af36bedf68f7a6e31f6f32828678d2adb108b86b7e08c678f22f&scene=21#wechat_redirect)
 - RESTfull API
     - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
     - [REST接口设计规范](http://wangwei.info/about-rest-api)
