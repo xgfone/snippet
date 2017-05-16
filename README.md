@@ -46,7 +46,7 @@ DOCS
         - [HAProxy Architecture](./snippet/docs/architecture/ha-lb/haproxy-architecture.txt)
         - [HAProxy Configure](./snippet/docs/architecture/ha-lb/haproxy-configuration.txt)
         - [HAProxy Conf Example](./snippet/docs/architecture/ha-lb/haproxy-conf-example.md)
-        - [究竟啥才是互联网架构 `高可用`](https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651959728&idx=1&sn=933227840ec8cdc35d3a33ae3fe97ec5&chksm=bd2d046c8a5a8d7a13551124af36bedf68f7a6e31f6f32828678d2adb108b86b7e08c678f22f&scene=21#wechat_redirect)
+        - [究竟啥才是互联网架构 `高可用`](http://mp.weixin.qq.com/s/7nfSvxZ4vJAxpIN5rCdaCw)
     - RESTfull API
         - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
         - [REST接口设计规范](http://wangwei.info/about-rest-api)
@@ -81,6 +81,8 @@ DOCS
         - [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)
         - [MySQL 连表查询](https://blog.ansheng.me/article/python-full-stack-way-mysql-even-table-query)
         - [我必须得告诉大家的MySQL优化原理](http://www.jianshu.com/p/d7665192aaaf)
+        - [一分钟掌握数据库垂直拆分](http://mp.weixin.qq.com/s/ezD0CWHAr0RteC9yrwqyZA)
+        - [数据库秒级平滑扩容架构方案](https://mp.weixin.qq.com/s/BLOneOs-cPxP_9b5eH8oQA)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
     - [分布式系统常见的事务处理机制](./snippet/docs/distributed/distributed-transaction.md)

@@ -6,3 +6,5 @@
 - [高性能的 MySQL](http://www.ctolib.com/docs-high-performance-mysql-c-index)
 - [MySQL 连表查询](https://blog.ansheng.me/article/python-full-stack-way-mysql-even-table-query)
 - [我必须得告诉大家的MySQL优化原理](http://www.jianshu.com/p/d7665192aaaf)
+- [一分钟掌握数据库垂直拆分](http://mp.weixin.qq.com/s/ezD0CWHAr0RteC9yrwqyZA)
+- [数据库秒级平滑扩容架构方案](https://mp.weixin.qq.com/s/BLOneOs-cPxP_9b5eH8oQA)
