@@ -13,10 +13,12 @@ class Configuration(object):
         INT_TYPE = int
         STR_TYPE = str
         BOOL_TYPE = bool
+        FLOAT_TYPE = float
         STR2TYPE = {
             "str": STR_TYPE,
             "int": INT_TYPE,
             "bool": BOOL_TYPE,
+            "float": FLOAT_TYPE,
         }
 
         BOOL_TRUE = ["t", "true", "1"]
@@ -47,7 +49,7 @@ class Configuration(object):
             return self.type is self.BOOL_TYPE
 
         def get_value(self, value):
-            if isinstance(value, (self.BOOL_TYPE, self.INT_TYPE)):
+            if isinstance(value, (self.BOOL_TYPE, self.INT_TYPE, self.FLOAT_TYPE)):
                 return value
 
             if isinstance(value, list) and len(value) > 0:
@@ -76,6 +78,7 @@ class Configuration(object):
     def __init__(self, description="", filenames=None, config_opt="config-file",
                  strict=False, use_hyphen=True):
         """A simple configuration parser, including the file and CLI.
+
         We only support to parse the types of integer, bool, string, not list.
         And we don't support the group or section. It is just used in one simple
         script, not a big project. If it's the case, please use the package,
@@ -267,6 +270,7 @@ class Configuration(object):
 
     def get(self, name, default=None):
         """Get the value of the configuration option of name.
+
         If there is not this option, return default, which is None by default.
         """
         return getattr(self, name, default)
@@ -277,8 +281,18 @@ class Configuration(object):
             raise KeyError("The option {0} has been regisetered".format(name))
         self.__opts[name] = opt
 
+    def register_float(self, name, short=None, default=None, help=None):
+        """Register the float option.
+
+        The value of this option will be parsed to the type of float.
+        """
+        opt = Configuration.__Option("float", name, short=short, default=default,
+                                     help=help)
+        self.__register(opt)
+
     def register_bool(self, name, short=None, default=None, help=None):
         """Register the bool option.
+
         The value of this option will be parsed to the type of bool.
         """
         opt = Configuration.__Option("bool", name, short=short, default=default,
@@ -287,6 +301,7 @@ class Configuration(object):
 
     def register_int(self, name, short=None, default=None, help=None):
         """Register the int option.
+
         The value of this option will be parsed to the type of int.
         """
         opt = Configuration.__Option("int", name, short=short, default=default,
@@ -295,6 +310,7 @@ class Configuration(object):
 
     def register_str(self, name, short=None, default=None, nargs=1, help=None):
         """Register the str option.
+
         The value of this option will be parsed to the type of str.
         """
         opt = Configuration.__Option("str", name, short=short, default=default,
@@ -303,6 +319,7 @@ class Configuration(object):
 
     def parse(self, argv=None):
         """Parse the configuration file and CLI.
+
         It will raise an execption if having been parsed.
         """
         self.__parse(argv)
