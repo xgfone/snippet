@@ -83,16 +83,20 @@ class Configuration(object):
         And we don't support the group or section. It is just used in one simple
         script, not a big project. If it's the case, please use the package,
         oslo.config.
+
         When parsing the file or CLI, you can get the configuration option by
         the attribution or the dict key, such as conf.option or conf["option"].
         If the option does not exist, they will raise AttributeError or KeyError
         respectively.
+
         When an configuration option does not exist, for getting one default
         value, not raising an exception, please use the method of get(), or the
         builtin function of getattr().
+
         Notice: In principle, This class should support Python 2.6, 2.7 and 3.X.
         And it should not have any dependencies. In Python 2.X, the str type is
         unicode; In 3.X, it's str.
+
         @param description(string): A brief description about this program.
         @param filename(string):    The path of the configuration file.
         @param config_opt(string):  The CLI option name of the configuration
