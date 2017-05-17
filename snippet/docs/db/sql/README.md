@@ -8,3 +8,4 @@
 - [我必须得告诉大家的MySQL优化原理](http://www.jianshu.com/p/d7665192aaaf)
 - [一分钟掌握数据库垂直拆分](http://mp.weixin.qq.com/s/ezD0CWHAr0RteC9yrwqyZA)
 - [数据库秒级平滑扩容架构方案](https://mp.weixin.qq.com/s/BLOneOs-cPxP_9b5eH8oQA)
+- [100亿数据1万属性数据架构设计](http://mp.weixin.qq.com/s/77rfe-vJ0Q4c1UgwSUJa8Q)
