@@ -85,6 +85,7 @@ DOCS
         - [数据库秒级平滑扩容架构方案](https://mp.weixin.qq.com/s/BLOneOs-cPxP_9b5eH8oQA)
         - [100亿数据1万属性数据架构设计](http://mp.weixin.qq.com/s/77rfe-vJ0Q4c1UgwSUJa8Q)
         - [58到家数据库30条军规解读](http://mp.weixin.qq.com/s/LElskWCs4d2ChGQANZ70Iw)
+        - [业界难题：`跨库分页` 的四种方案](http://mp.weixin.qq.com/s/cMAXYBxmevFV_fwysZqP8w)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
     - [分布式系统常见的事务处理机制](./snippet/docs/distributed/distributed-transaction.md)
