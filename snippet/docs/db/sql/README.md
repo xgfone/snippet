@@ -12,3 +12,4 @@
 - [58到家数据库30条军规解读](http://mp.weixin.qq.com/s/LElskWCs4d2ChGQANZ70Iw)
 - [业界难题：`跨库分页` 的四种方案](http://mp.weixin.qq.com/s/cMAXYBxmevFV_fwysZqP8w)
 - [100亿数据平滑数据迁移,不影响服务](https://mp.weixin.qq.com/s/EpxicEJWRyEOoa9V5UOOpg)
+- [细聊冗余表数据一致性](http://mp.weixin.qq.com/s/ALSDqOslGXx2Qz7e5YKtFg)
