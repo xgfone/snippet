@@ -88,6 +88,7 @@ DOCS
         - [业界难题：`跨库分页` 的四种方案](http://mp.weixin.qq.com/s/cMAXYBxmevFV_fwysZqP8w)
         - [100亿数据平滑数据迁移,不影响服务](https://mp.weixin.qq.com/s/EpxicEJWRyEOoa9V5UOOpg)
         - [细聊冗余表数据一致性](http://mp.weixin.qq.com/s/ALSDqOslGXx2Qz7e5YKtFg)
+        - [mysql并行复制降低主从同步延时的思路与启示](http://mp.weixin.qq.com/s/t58Rwgiz_9ikqSuHvDAAZg)
 - [Distributed](./snippet/docs/distributed)
     - [分布式系统——CAP理论](./snippet/docs/distributed/cap-theory.md)
     - [分布式系统常见的事务处理机制](./snippet/docs/distributed/distributed-transaction.md)
