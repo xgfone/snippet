@@ -7,14 +7,6 @@
     // "bookmarks.saveBookmarksBetweenSessions": true,
     // "bookmarks.navigateThroughAllFiles": true,
 
-    // "clang.completion.triggerChars": [
-    //     ".", ":", ">",
-    //     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
-    //     "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-    //     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
-    //     "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-    // ],
-
     "[c]": {
         "editor.insertSpaces": false,
         "editor.quickSuggestions": true
@@ -129,51 +121,94 @@ Install a Package
 #### Common Packages
 ```shell
 #alefragnani.Bookmarks
-formulahendry.code-runner
-#anseki.vscode-color
-robertohuertasm.vscode-icons
-ybaumes.highlight-trailing-white-spaces
 #JerryHong.autofilename
-#christian-kohler.path-intellisense
 #IBM.output-colorizer
 #seanmcbreen.Spell
-#vscodevim.vim                           # It will lead to 'editor.useTabStops' to be invalid.
 #steve8708.Align                         # Align text
+#humao.rest-client                       # Restful Client
+#searKing.preview-vscode                 # Preview Markdown, HTML, CSS, Image, etc.
+#vscodevim.vim                           # It will lead to 'editor.useTabStops' to be invalid.
+#anseki.vscode-color                     # Helper with GUI to generate color codes such as CSS color notations.
+#christian-kohler.path-intellisense
+formulahendry.code-runner
+robertohuertasm.vscode-icons
+ybaumes.highlight-trailing-white-spaces
+alefragnani.project-manager              # Project Manager
+CoenraadS.bracket-pair-colorizer         # A customizable extension for colorizing matching brackets.
 
-akamud.vscode-caniuse                    # Can I Use
+
+## Format
+HookyQR.beautify                         # Format JS, JSON, CSS, HTML
+DotJoshJohnson.xml                       # Format XML
+
+
+## Git
+#codezombiech.gitignore                  # Git ignore
+donjayamanne.githistory                  # Git log
+eamodio.gitlens                          # Supercharge Visual Studio Code's Git capabilities.
+
+
+## Python
+donjayamanne.python                      # Python
+
+
+## Go
+lukehoban.Go                             # Golang
+
+
+## C/C++
+ms-vscode.cpptools                       # C/C++
+#mitaki28.vscode-clang                   # C/C++ Completion and Diagnostic
+#austin.code-gnu-global                  # C++ Intellisense
+
+
+## JS/Node
 christian-kohler.npm-intellisense        # npm
-#searKing.preview-vscode                 # Preview　Markdown, HTML, CSS, Image, etc.
+eg2.vscode-npm-script                    # Node NPM
+dzannotti.vscode-babel-coloring          # Babel ES6/ES7/JSX
+abierbaum.vscode-file-peek               # JS/TypeScript
+#dbaeumer.vscode-eslint                  # JS Lint
+#chenxsan.vscode-standardjs              # JS Standard Style
+
+#donjayamanne.jquerysnippets             # Over 130 jQuery Code Snippets for JavaScript code.
 #flowtype.flow-for-vscode                # FlowType
 #vsmobile.vscode-react-native            # React Native
 
-#dzannotti.vscode-babel-coloring         # Babel ES6/ES7/JSX
+
+## HTML/CSS
+ecmel.vscode-html-css                    # CSS support for HTML documents.
+mkaufman.htmlhint                        # Integrates the HTMLHnt static analysis tool into Visual Studio Code.
+pranaygp.vscode-css-peek                 # CSS
+abusaidm.html-snippets                   # HTML 5
 #formulahendry.auto-close-tag            # HTML/XML
 #formulahendry.auto-rename-tag           # HTML/XML
-#HookyQR.beautify                        # Format JS, JSON, CSS, HTML
-#DotJoshJohnson.xml                      # Format XML
-#ms-vscode.cpptools                      # C/C++
-#mitaki28.vscode-clang                   # C/C++ Completion and Diagnostic
-#austin.code-gnu-global                  # C++ Intellisense
-#pranaygp.vscode-css-peek                # CSS
-abierbaum.vscode-file-peek               # JS/TypeScript
+
+
+## Browser
+#akamud.vscode-caniuse                   # Can I Use
 #msjsdiag.debugger-for-chrome            # JS Debuger
-#dbaeumer.vscode-eslint                  # JS Lint
-#chenxsan.vscode-standardjs              # JS Standard Style
-#eg2.vscode-npm-script                   # Node NPM
-donjayamanne.githistory                  # Git log
-#codezombiech.gitignore                  # Git ignore
-lukehoban.Go                             # Golang
-#abusaidm.html-snippets                  # HTML 5
+
+
+## Rust
+#saviorisdead.RustyCode                  # Rust
+
+
+## Java
 #redhat.java                             # Java
 #georgewfraser.vscode-javac              # Java
 #donjayamanne.javadebugger               # Java Debugger
-alefragnani.project-manager              # Project Manager
-#donjayamanne.python                     # Python
-#humao.rest-client                       # Restful Client
-#hcyang.ctags                            # CTags
-#saviorisdead.RustyCode                  # Rust
+
+
+## SVG
 #cssho.vscode-svgviewer                  # SVG Viewer
+
+
+## YAML
 #Togusa09.tmlanguage                     # YAML
+
+
+## Others
+#hcyang.ctags                            # CTags
 ```
 
 #### For Windows
