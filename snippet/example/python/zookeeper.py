@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals, divisi
 
 import zookeeper
 
+
 def refactor_path(f):
     def wrapper(*args, **kwargs):
         _refactor = kwargs.pop("refactor", True)
