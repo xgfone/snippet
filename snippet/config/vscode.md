@@ -149,6 +149,9 @@ DotJoshJohnson.xml                       # Format XML
 #codezombiech.gitignore                  # Git ignore
 donjayamanne.githistory                  # Git log
 eamodio.gitlens                          # Supercharge Visual Studio Code's Git capabilities.
+howardzuo.vscode-gitk                    # Show git commit log for selected source code information.
+pprice.better-merge                      # Improved git merge conflict support.
+lamartire.git-indicators                 # Atom like git counters.
 
 
 ## Python
