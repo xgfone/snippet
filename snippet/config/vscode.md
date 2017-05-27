@@ -26,6 +26,7 @@
     "editor.wordWrap": "on",
     "editor.mouseWheelZoom": true,
     "editor.minimap.enabled": true,
+    "editor.minimap.maxColumn": 80,
     "editor.renderIndentGuides": true,
     "editor.useTabStops": true,
     "editor.detectIndentation": true,
