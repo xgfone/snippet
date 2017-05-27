@@ -8,13 +8,11 @@
     // "bookmarks.navigateThroughAllFiles": true,
 
     "[c]": {
-        "editor.insertSpaces": false,
-        "editor.quickSuggestions": true
+        "editor.insertSpaces": false
     },
 
     "[cpp]": {
-        "editor.insertSpaces": false,
-        "editor.quickSuggestions": true
+        "editor.insertSpaces": false
     },
 
     "debug.allowBreakpointsEverywhere": true,
@@ -51,7 +49,6 @@
     "projectManager.svn.baseFolders": [],
     "projectManager.git.baseFolders": [],
     "projectManager.git.maxDepthRecursion": 4,
-    "projectManager.openInNewWindow": true,
     "projectManager.showProjectNameInStatusBar": true,
 
     "python.autoComplete.addBrackets": true,
@@ -74,6 +71,11 @@
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
+
+    "vim.leader": ";",
+    "vim.useSystemClipboard": true,
+    "vim.easymotion": true,
+    "vim.hlsearch": true,
 
     "vsicons.presets.angular": false,
     "vsicons.dontShowNewVersionMessage": true,
