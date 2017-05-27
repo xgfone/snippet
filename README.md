@@ -100,7 +100,7 @@ DOCS
     - [到底什么时候该使用MQ？](http://mp.weixin.qq.com/s/LqViglTO_h8UJqi3aD6P6w)
     - **gRPC**
         - [Protobuf 语法](https://segmentfault.com/a/1190000007917576)
-        - [gRPC 服务发现 & 负载均衡](https://segmentfault.com/a/1190000008672912#articleHeader0)
+        - [gRPC 服务发现 & 负载均衡](https://segmentfault.com/a/1190000008672912)
         - [gRPC 拦截器 Interceptor](https://segmentfault.com/a/1190000007997759)
         - [gRPC HTTP/JSON 协议转换](https://segmentfault.com/a/1190000008106582)
 - [Docker](./snippet/docs/docker)
