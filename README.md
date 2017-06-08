@@ -231,6 +231,7 @@ DOCS
         - 官方的 “[快速教程](https://facebook.github.io/react/docs/installation.html)”
         - 官方的 “[高级向导](https://facebook.github.io/react/docs/jsx-in-depth.html)”
         - 官方的 “[参考手册](https://facebook.github.io/react/docs/react-api.html)”
+        - [React.js 小书](http://huziketang.com/books/react)
         - [Controlled vs. Uncontrolled components in Form](https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/)
         - [React Lifecycle](./snippet/docs/js/_static/2.jpg)
         - [React Native: LEARN ONCE, WRITE ANYWHERE: BUILD MOBILE APPS WITH REACT](https://facebook.github.io/react-native/docs/getting-started.html)
