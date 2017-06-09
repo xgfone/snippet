@@ -33,6 +33,8 @@
     "editor.tabCompletion": true,
     "editor.renderWhitespace": "boundary",
 
+    "emmet.useNewEmmet": true,
+
     "explorer.openEditors.visible": 0,
     "extensions.autoUpdate": true,
 
@@ -53,8 +55,8 @@
     "projectManager.showProjectNameInStatusBar": true,
 
     "python.autoComplete.addBrackets": true,
-    "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi", // For Windows
-    //"python.jediPath": "~/Library/Caches/Jedi",  // For Unix/Linux/Mac
+    // "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi",
+    // "python.jediPath": "~/Library/Caches/Jedi",
     "python.linting.maxNumberOfProblems": 120,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
@@ -87,6 +89,7 @@
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
     "workbench.iconTheme": "vscode-icons",
+    "workbench.colorTheme": "Quiet Light",
     "workbench.welcome.enabled": false
 }
 ```
@@ -131,7 +134,7 @@ Install a Package
 #humao.rest-client                       # Restful Client
 #searKing.preview-vscode                 # Preview Markdown, HTML, CSS, Image, etc.
 #vscodevim.vim                           # It will lead to 'editor.useTabStops' to be invalid.
-#anseki.vscode-color                     # Helper with GUI to generate color codes such as CSS color notations.
+#anseki.vscode-color                     # Helper with GUI to generate color codes.
 #christian-kohler.path-intellisense
 formulahendry.code-runner
 robertohuertasm.vscode-icons
@@ -183,7 +186,7 @@ abierbaum.vscode-file-peek               # JS/TypeScript
 
 ## HTML/CSS
 ecmel.vscode-html-css                    # CSS support for HTML documents.
-mkaufman.htmlhint                        # Integrates the HTMLHnt static analysis tool into Visual Studio Code.
+mkaufman.htmlhint                        # Integrates the HTMLHnt static analysis tool into VS Code.
 pranaygp.vscode-css-peek                 # CSS
 abusaidm.html-snippets                   # HTML 5
 #formulahendry.auto-close-tag            # HTML/XML
@@ -218,9 +221,10 @@ abusaidm.html-snippets                   # HTML 5
 ```
 
 #### For Windows
-```
+```shell
 fantasytyx.tortoise-svn
 ms-vscode.PowerShell
+ms-mssql.mssql                           # Develop Microsoft SQL Server, Azure SQL Database.
 ```
 
 ### Install the commands depended on by the plugins above.
