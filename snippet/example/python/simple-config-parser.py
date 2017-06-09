@@ -76,7 +76,7 @@ class Configuration(object):
     __DEFAULT_OPTION = __Option("str", "default")
 
     def __init__(self, description="", filenames=None, config_opt="config-file",
-                 strict=False, use_hyphen=True):
+                 strict=False, use_hyphen=True, ignore_empty=True):
         """A simple configuration parser, including the file and CLI.
 
         We only support to parse the types of integer, bool, string, not list.
@@ -115,6 +115,7 @@ class Configuration(object):
         self.__description = description
         self.__config_opt = config_opt
         self.__use_hyphen = use_hyphen
+        self.__ignore_empty = ignore_empty
         self.__strict = strict
         self.__caches = {}
         self.__opts = {}
@@ -176,13 +177,18 @@ class Configuration(object):
                 continue
             self.__caches[name] = self.__get_value(name, value)
 
+        self.__check_empty()
+        self.__parsed = True
+
+    def __check_empty(self):
+        if self.__ignore_empty:
+            return
+
         # Check whether the empty value options exists.
         for name, opt in self.__opts.items():
             if not opt.ignore_empty and name not in self.__caches:
                 m = "The option {0} does not have a value.".format(name)
                 raise ValueError(m)
-
-        self.__parsed = True
 
     def __parse_cli(self, argv=None):
         try:
