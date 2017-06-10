@@ -71,6 +71,7 @@
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.nosetestArgs": [],
 
+    "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
@@ -89,8 +90,7 @@
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
     "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Quiet Light",
-    "workbench.welcome.enabled": false
+    "workbench.colorTheme": "Quiet Light"
 }
 ```
 
