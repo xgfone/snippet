@@ -54,6 +54,13 @@ const config = {
         sourceMap: true,
         comments: false,
         mangle: false,
+        beautify: false,
+        compress: {
+            warnings: false,
+            drop_console: true,
+            collapse_vars: true,
+            reduce_vars: true,
+        },
     },
 
     // Some convenient functions
