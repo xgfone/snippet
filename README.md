@@ -298,6 +298,9 @@ DOCS
         - [跟我一起修改 Gnome Shell theme](./snippet/docs/linux/others/customize-gnome-shell.md)
         - [Linux性能分析与调优](./snippet/docs/linux/others/linux-performance-analysis-and-optimization.md)
         - [设置 Linux 的分辨率](http://blog.csdn.net/smilematch/article/details/50482530)【[脚本](./snippet/bin/shell/set_display_resolution.py)】
+    - **Systemd**
+        - [Systemd 入门教程：命令篇](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)
+        - [Systemd 入门教程：实战篇](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html)
 - [Network](./snippet/docs/network)
     - [DDOS](./snippet/docs/network/ddos)
     - [NAT](./snippet/docs/network/nat)
