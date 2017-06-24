@@ -63,6 +63,9 @@
 ##### [go-stack](https://github.com/go-stack/stack)
     Package stack implements utilities to capture, manipulate, and format call stacks.
 
+##### [errors](https://github.com/pkg/errors)
+    Simple error handling primitives.
+
 ##### [go-restful](https://github.com/emicklei/go-restful)
     package for building REST-style Web Services using Google Go.
 
