@@ -130,6 +130,9 @@
 ##### [ini](https://github.com/go-ini/ini)
     Package ini provides INI file read and write functionality in Go.
 
+##### [glog](https://github.com/golang/glog)
+    Leveled execution logs for Go.
+
 ##### [log15](https://github.com/inconshreveable/log15)
     Powerful, composable logging for Go.
 
