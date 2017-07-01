@@ -261,6 +261,8 @@ DOCS
     - [VueJS](http://vuejs.org)
         - [剖析 VUE 实现原理](https://github.com/DMQ/mvvm)
     - [FAQ](./snippet/docs/js/faq.md)
+- [Kubernetes](./snippet/docs/kubernetes)
+    - [Kubernetes Handbook](https://github.com/feiskyer/kubernetes-handbook)（点击 [阅读](https://kubernetes.feisky.xyz/)）
 - [Linux](./snippet/docs/linux)
     - [QoS](./snippet/docs/linux/QoS)
 		- [理论篇](./snippet/docs/linux/QoS/qos-theory.md)
