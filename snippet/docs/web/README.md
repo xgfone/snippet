@@ -1,5 +1,6 @@
 - [浏览器 HTTP 协议缓存机制详解](./browse-http-cache.md)
 - [URL 中的 `#`](./url_hash.md)
+- [URL 编码的奥秘](https://aotu.io/notes/2017/06/15/The-mystery-of-URL-encoding)
 - **大型网站技术架构**
     - [大型网站技术架构的演进](./website-evolution.md)
     - [大型网站技术架构-入门梳理](./website-evolution-summary.md)
