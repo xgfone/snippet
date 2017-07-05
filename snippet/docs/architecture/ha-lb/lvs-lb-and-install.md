@@ -116,6 +116,29 @@ LVS 由 2 部分程序组成，包括 `ipvs` 和 `ipvsadm`。
 - RS 的系统必须支持隧道。
 
 
+## LVS FullNAT 模式的原理
+
+LVS FullNAT 模式几乎和 LVS NAT 模式相同，不同之处即是：引入 Local Address（内网 IP 地址）。CIP->VIP 转换换为 LIP->RIP，而 LIP 和 RIP 均为 IDC 内网 IP，因此可以跨 VLAN 通讯。
+
+注：IN/OUT 的数据流全部经过 LVS，为了保证带宽，建议采用万兆（10G）网卡。
+
+
+## LVS 集群部署方式
+
+LVS集群部署方式实现的主要方式为：
+
+- LVS 和上联交换机间运行 OSPF 协议。
+- 上联交换机通过 ECMP 等价路由，将数据流分发给 LVS 集群。
+- LVS 集群再转发给业务服务器。
+
+集群方式部署极大地保证了异常情况下，负载均衡服务的稳定性：
+
+- **健壮性**：LVS 和交换机间运行 OSPF 心跳。1 个VIP配置在集群的所有 LVS 上。当一台 LVS 宕掉，交换机会自动发现并将其从 ECMP 等价路由中剔除。
+- **可扩展**：如果当前 LVS 集群无法支撑某个 VIP 的流量，LVS 集群可以进行水平扩容。
+
+![lvs-5](./_static/lvs-5.png)
+
+
 ## LVS 八种调度算法
 
 ### 轮叫调度 rr
@@ -402,14 +425,14 @@ arp_announce - INTEGER
             This mode is useful when target hosts reachable via this interface require the source IP
             address in ARP requests to be part of their logical network configured on the receiving
             interface. When we generate the request we will check all our subnets that include the
-            target IP and will preserve the source address if it is from such subnet. 
+            target IP and will preserve the source address if it is from such subnet.
             If there is no such subnet we select source address according to the rules for level 2.
-        2 - Always use the best local address for this target. In this mode we ignore the source 
-            address in the IP packet and try to select local address that we prefer for talks 
+        2 - Always use the best local address for this target. In this mode we ignore the source
+            address in the IP packet and try to select local address that we prefer for talks
             with the target host. Such local address is selected by looking for primary IP addresses
             on all our subnets on the outgoing interface that include the target IP address.
-            If no suitable local address is found we select the first local address we have on the 
-            outgoing interface or on all other interfaces, with the hope we will receive reply 
+            If no suitable local address is found we select the first local address we have on the
+            outgoing interface or on all other interfaces, with the hope we will receive reply
             for our request and even sometimes no matter the source IP address we announce.
 
     The max value from conf/{all,interface}/arp_announce is used.
@@ -421,12 +444,12 @@ arp_announce - INTEGER
 关于对 `arp_announce` 理解的一点补充：
 ```
 Assume that a linux box X has three interfaces - eth0, eth1 and eth2. Each interface has an IP address
-IP0, IP1 and IP2. When a local application tries to send an IP packet with IP0 through the eth2. 
+IP0, IP1 and IP2. When a local application tries to send an IP packet with IP0 through the eth2.
 Unfortunately, the target node’s mac address is not resolved. Thelinux box X will send the ARP request
 to know the mac address of the target(or the gateway). In this case what is the IP source address of
 the “ARP request message”? The IP0- the IP source address of the transmitting IP or IP2 - the outgoing
 interface? Until now(actually just 3 hours before) ARP request uses the IP address assigned to the
-outgoing interface(IP2 in the above example) However the linux’s behavior is a little bit different. 
+outgoing interface(IP2 in the above example) However the linux’s behavior is a little bit different.
 Actually the  selection of source address in ARP request is totally configurable bythe proc variable
 “arp_announce”.
 
@@ -434,6 +457,10 @@ If we want to use the IP2 not the IP0 in the ARP request, we should change the v
 
 The default value is 0 - allow IP0 is used for ARP request.
 ```
+
+## NAT、FullNAT、DR、Tunnel 对比
+
+![lvs-6](./_static/lvs-6.png)
 
 ------
 
