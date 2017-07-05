@@ -7,6 +7,7 @@
     - [HAProxy Architecture](./ha-lb/haproxy-architecture.txt)
     - [HAProxy Configure](./ha-lb/haproxy-configuration.txt)
     - [HAProxy Conf Example](./ha-lb/haproxy-conf-example.md)
+    - [LVS 负载均衡原理及安装配置详解](./ha-lb/lvs-lb-and-install.md)
     - [究竟啥才是互联网架构 `高可用`](http://mp.weixin.qq.com/s/7nfSvxZ4vJAxpIN5rCdaCw)
 - RESTfull API
     - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
