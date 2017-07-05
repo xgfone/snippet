@@ -7,6 +7,7 @@
     - [HAProxy Architecture](./ha-lb/haproxy-architecture.txt)
     - [HAProxy Configure](./ha-lb/haproxy-configuration.txt)
     - [HAProxy Conf Example](./ha-lb/haproxy-conf-example.md)
+    - [LVS 技术原理](https://help.aliyun.com/knowledge_detail/39444.html)
     - [LVS 负载均衡原理及安装配置详解](./ha-lb/lvs-lb-and-install.md)
     - [究竟啥才是互联网架构 `高可用`](http://mp.weixin.qq.com/s/7nfSvxZ4vJAxpIN5rCdaCw)
 - RESTfull API
