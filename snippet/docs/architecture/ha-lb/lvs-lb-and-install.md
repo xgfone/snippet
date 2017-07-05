@@ -7,7 +7,7 @@
 
 LB 集群的架构和原理很简单，就是当用户的请求过来时，会直接分发到 Director Server 上，然后它把用户的请求根据设置好的调度算法，智能均衡地分发到后端真正服务器（real server）上。为了避免不同机器上用户请求得到的数据不一样，需要用到了共享存储，这样保证所有用户请求的数据是一样的。
 
-LVS 是 Linux Virtual Server 的简称，也就是 Linux 虚拟服务器。这是一个由章文嵩博士发起的一个开源项目，它的官方网站是 http://www.linuxvirtualserver.org。现在 LVS 已经是 Linux 内核标准的一部分。使用 LVS 可以达到的技术目标是：通过 LVS 达到的负载均衡技术和 Linux 操作系统实现一个高性能高可用的 Linux 服务器集群，它具有良好的可靠性、可扩展性和可操作性。从而以低廉的成本实现最优的性能。LVS 是一个实现负载均衡集群的开源软件项目，LVS 架构从逻辑上可分为 `调度层`、`Server集群层` 和 `共享存储`。
+LVS 是 Linux Virtual Server 的简称，也就是 Linux 虚拟服务器。这是一个由章文嵩博士发起的一个开源项目，它的官方网站是 http://www.linuxvirtualserver.org 。现在 LVS 已经是 Linux 内核标准的一部分。使用 LVS 可以达到的技术目标是：通过 LVS 达到的负载均衡技术和 Linux 操作系统实现一个高性能高可用的 Linux 服务器集群，它具有良好的可靠性、可扩展性和可操作性。从而以低廉的成本实现最优的性能。LVS 是一个实现负载均衡集群的开源软件项目，LVS 架构从逻辑上可分为 `调度层`、`Server集群层` 和 `共享存储`。
 
 
 ## LVS 的基本工作原理
@@ -193,7 +193,7 @@ ipvsadm -ln
 
 ### 验证结果
 
-通过浏览器测试 2 台机器上的 we b内容 http://172.16.254.200。为了区分开，我们可以把 nginx 的默认页修改一下：
+通过浏览器测试 2 台机器上的 we b内容 http://172.16.254.200 。为了区分开，我们可以把 nginx 的默认页修改一下：
 
 在 RS1 上执行 `echo "rs1rs1" >/usr/share/nginx/html/index.html`。
 
@@ -257,7 +257,7 @@ echo "2" >/proc/sys/net/ipv4/conf/all/arp_announce
 
 ### 验证结果
 
-测试方式同上，浏览器访问 http://192.168.0.38。
+测试方式同上，浏览器访问 http://192.168.0.38 。
 
 注意：在 DR 模式下，2 台 RS 节点的 Gateway 不需要设置成 DS 节点的 IP。
 
@@ -353,15 +353,15 @@ service keepalived start
 
 ##### 实验 1
 
-手动关闭 192.168.0.18 节点的 nginx（`service nginx stop`），然后在客户端上去测试访问 http://192.168.0.38。结果正常，不会出现访问 18 节点，一直访问的是 28 节点的内容。
+手动关闭 192.168.0.18 节点的 nginx（`service nginx stop`），然后在客户端上去测试访问 http://192.168.0.38 。结果正常，不会出现访问 18 节点，一直访问的是 28 节点的内容。
 
 ##### 实验 2
 
-手动重新开启 192.168.0.18 节点的 nginx（`service nginx start`），然后在客户端上去测试访问 http://192.168.0.38。结果正常，按照 rr 调度算法访问 18 节点和 28 节点。
+手动重新开启 192.168.0.18 节点的 nginx（`service nginx start`），然后在客户端上去测试访问 http://192.168.0.38 。结果正常，按照 rr 调度算法访问 18 节点和 28 节点。
 
 ##### 实验 3
 
-测试 keepalived 的 HA 特性，首先在 master 上执行命令 `ip addr`，可以看到 38 的 vip 在 master 节点上的；这时如果在 master 上执行 `service keepalived stop` 命令，这时 vip 已经不再 master 上，在 slave 节点上执行 `ip addr` 命令可以看到 vip 已经正确漂到 slave 节点，这时客户端去访问 http://192.168.0.38。访问依然正常，验证了 keepalived 的 HA 特性。
+测试 keepalived 的 HA 特性，首先在 master 上执行命令 `ip addr`，可以看到 38 的 vip 在 master 节点上的；这时如果在 master 上执行 `service keepalived stop` 命令，这时 vip 已经不再 master 上，在 slave 节点上执行 `ip addr` 命令可以看到 vip 已经正确漂到 slave 节点，这时客户端去访问 http://192.168.0.38 。访问依然正常，验证了 keepalived 的 HA 特性。
 
 
 ## LVS 负载均衡中 `arp_ignore` 和 `arp_annonuce` 参数配置的含义
@@ -390,7 +390,8 @@ arp_ignore - INTEGER
         4-7 - reserved
         8 - do not reply for all local addresses
 
-    The max value from conf/{all,interface}/arp_ignore is used when ARP request is received on the {interface}
+    The max value from conf/{all,interface}/arp_ignore is used
+    when ARP request is received on the {interface}
 
 
 arp_announce - INTEGER
@@ -398,18 +399,18 @@ arp_announce - INTEGER
     from IP packets in ARP requests sent on interface:
         0 - (default) Use any local address, configured on any interface
         1 - Try to avoid local addresses that are not in the target's subnet for this interface.
-            This mode is useful when target hosts reachable via this interface require the source IP address
-            in ARP requests to be part of their logical network configured on the receiving interface.
-            When we generate the request we will check all our subnets that include the target IP and
-            will preserve the source address if it is from such subnet. If there is no such subnet
-            we select source address according to the rules for level 2.
-        2 - Always use the best local address for this target. In this mode we ignore the source address
-            in the IP packet and try to select local address that we prefer for talks with the target host.
-            Such local address is selected by looking for primary IP addresses on all our subnets
-            on the outgoing interface that include the target IP address. If no suitable local address is found
-            we select the first local address we have on the outgoing interface or on all other interfaces,
-            with the hope we will receive reply for our request and even sometimes
-            no matter the source IP address we announce.
+            This mode is useful when target hosts reachable via this interface require the source IP
+            address in ARP requests to be part of their logical network configured on the receiving
+            interface. When we generate the request we will check all our subnets that include the
+            target IP and will preserve the source address if it is from such subnet. 
+            If there is no such subnet we select source address according to the rules for level 2.
+        2 - Always use the best local address for this target. In this mode we ignore the source 
+            address in the IP packet and try to select local address that we prefer for talks 
+            with the target host. Such local address is selected by looking for primary IP addresses
+            on all our subnets on the outgoing interface that include the target IP address.
+            If no suitable local address is found we select the first local address we have on the 
+            outgoing interface or on all other interfaces, with the hope we will receive reply 
+            for our request and even sometimes no matter the source IP address we announce.
 
     The max value from conf/{all,interface}/arp_announce is used.
 
@@ -419,14 +420,15 @@ arp_announce - INTEGER
 
 关于对 `arp_announce` 理解的一点补充：
 ```
-Assume that a linux box X has three interfaces - eth0, eth1 and eth2. Each interface has an IP address IP0,
-IP1 and IP2. When a local application tries to send an IP packet with IP0 through the eth2. Unfortunately,
-the target node’s mac address is not resolved. Thelinux box X will send the ARP request to know the mac address
-of the target(or the gateway). In this case what is the IP source address of the “ARP request message”?
-The IP0- the IP source address of the transmitting IP or IP2 - the outgoing interface? Until now(actually
-just 3 hours before) ARP request uses the IP address assigned to the outgoing interface(IP2 in the above example)
-However the linux’s behavior is a little bit different. Actually the selection of source address in ARP request is
-totally configurable bythe proc variable “arp_announce”.
+Assume that a linux box X has three interfaces - eth0, eth1 and eth2. Each interface has an IP address
+IP0, IP1 and IP2. When a local application tries to send an IP packet with IP0 through the eth2. 
+Unfortunately, the target node’s mac address is not resolved. Thelinux box X will send the ARP request
+to know the mac address of the target(or the gateway). In this case what is the IP source address of
+the “ARP request message”? The IP0- the IP source address of the transmitting IP or IP2 - the outgoing
+interface? Until now(actually just 3 hours before) ARP request uses the IP address assigned to the
+outgoing interface(IP2 in the above example) However the linux’s behavior is a little bit different. 
+Actually the  selection of source address in ARP request is totally configurable bythe proc variable
+“arp_announce”.
 
 If we want to use the IP2 not the IP0 in the ARP request, we should change the value to 1 or 2.
 
