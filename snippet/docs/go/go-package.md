@@ -109,4 +109,6 @@ import   _     ImportPath
 
 ![package init](./_static/package-init.png)
 
+因此，所有的 `init` 函数都结束后才会执行 `main` 包中的 `main` 函数。
+
 注：第（9）条及上图来源于谢大的《[Go Web 编程](https://github.com/astaxie/build-web-application-with-golang/blob/master/ebook/02.3.md#main%E5%87%BD%E6%95%B0%E5%92%8Cinit%E5%87%BD%E6%95%B0)》。
