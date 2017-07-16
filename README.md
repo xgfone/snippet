@@ -212,6 +212,7 @@ DOCS
     - [JavaScript ES3/ES5 快速参考](./snippet/docs/js/js-quick-reference.md)
     - [Understanding ECMAScript 6](https://github.com/nzakas/understandinges6)（点击 [这里](https://leanpub.com/understandinges6/read/) 阅读）
     - [JavaScript 编程精解（英文原版阅读）](http://eloquentjavascript.net/)
+    - [Practical Node.js (2nd)](https://github.com/azat-co/practicalnode)
     - [深入浅出js（Node.js）异步流程控制](https://github.com/i5ting/asynchronous-flow-control)（点击 [这里](https://i5ting.github.io/asynchronous-flow-control) 阅读）
     - [JavaScript 中至关重要的 Apply, Call 和 Bind](./snippet/docs/js/apply-call-bind.md)
     - [JavaScript 风格指南](https://github.com/alivebao/clean-code-js)
