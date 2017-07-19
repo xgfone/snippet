@@ -190,6 +190,8 @@ DOCS
         - [Go Data Race Detector](http://docs.studygolang.com/doc/articles/race_detector.html)
         - [Approximating html/template Inheritance](http://elithrar.github.io/article/approximating-html-template-inheritance/)
         - [深入解析Go](https://github.com/tiancaiamao/go-internals)（点击 [这里](http://www.ctolib.com/docs/sfile/go-internals/index.html) 阅读）
+- [GraphQL](http://facebook.github.io/graphql)
+    - [The Fullstack Tutorial for GraphQL](https://github.com/howtographql/howtographql)（点击 [这里](https://www.howtographql.com/) 阅读 ）
 - [Java](./snippet/docs/java)
     - [Packages](./snippet/docs/java/packages.md)
 - [JavaSript](./snippet/docs/js)
@@ -199,6 +201,7 @@ DOCS
     - [JavaScript ES5 官方国际标准](http://www.ecma-international.org/ecma-262/5.1)（点击 [这里](http://yanhaijing.com/es5) 阅读中文版）
 	- [JavaScript ES6(ES2015) 官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
     - [JavaScript ES7(ES2016) 官方国际标准](http://www.ecma-international.org/ecma-262/7.0)
+    - [JavaScript ES8(ES2017) 官方国际标准](https://www.ecma-international.org/ecma-262/8.0)
     - [ECMAScript 6 Features](https://github.com/lukehoban/es6features#readme) 或 [Babel版](https://babeljs.io/learn-es2015/)
     - [Exploring JS](http://exploringjs.com) **【重点推荐】**
         - [Speaking JavaScript (ES5)](http://speakingjs.com/)（点击 [这里](http://speakingjs.com/es5/index.html) 阅读）

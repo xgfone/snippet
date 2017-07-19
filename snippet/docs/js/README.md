@@ -5,6 +5,7 @@
 - [JavaScript ES5 官方国际标准](http://www.ecma-international.org/ecma-262/5.1)（点击 [这里](http://yanhaijing.com/es5) 阅读中文版）
 - [JavaScript ES6(ES2015) 官方国际标准](http://www.ecma-international.org/ecma-262/6.0)
 - [JavaScript ES7(ES2016) 官方国际标准](http://www.ecma-international.org/ecma-262/7.0)
+- [JavaScript ES8(ES2017) 官方国际标准](https://www.ecma-international.org/ecma-262/8.0)
 - [ECMAScript 6 Features](https://github.com/lukehoban/es6features#readme) 或 [Babel版](https://babeljs.io/learn-es2015/)
 - [Exploring JS](http://exploringjs.com) **【重点推荐】**
     - [Speaking JavaScript (ES5)](http://speakingjs.com/)（点击 [这里](http://speakingjs.com/es5/index.html) 阅读）
