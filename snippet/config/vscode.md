@@ -15,6 +15,8 @@
         "editor.insertSpaces": false
     },
 
+    "C_Cpp.intelliSenseEngine": "Default",
+
     "debug.allowBreakpointsEverywhere": true,
     "debug.openExplorerOnEnd": true,
 
