@@ -42,6 +42,7 @@
 
     "files.encoding": "utf8",
     "files.eol": "\n",
+    "files.autoGuessEncoding": true,
     "files.trimTrailingWhitespace": true,
 
     "go.buildFlags": ["-race"],
