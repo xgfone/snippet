@@ -13,19 +13,19 @@
 
 注：以下是Python之父 `Guido` 建议的`命名规范`。
 
-        Type               |       Public        |    Internal
----------------------------|---------------------|------------------
-Packages                   | lower_with_under    |
-Modules                    | lower_with_under    | _lower_with_under
-Classes                    | CapWords            | _CapWords
-Exceptions                 | CapWords            |
-Functions                  | CapWords            |
-Global/Class Constants     | CAPS_WITH_UNDER     | _CAPS_WITH_UNDER
-Global/Class Variables     | lower_with_under    | _lower_with_under
-Instance Variables         | lower_with_under    | _lower_with_under(protected) or __lower_with_under(private)
-Method Names               | lower_with_under()  | _lower_with_under()(protected) or __lower_with_under()(private)
-Function/Method Parameters | lower_with_under    |
-Local Variables            | lower_with_under    |
+|        Type               |       Public        |    Internal
+|---------------------------|---------------------|------------------
+|Packages                   | lower_with_under    |
+|Modules                    | lower_with_under    | _lower_with_under
+|Classes                    | CapWords            | _CapWords
+|Exceptions                 | CapWords            |
+|Functions                  | CapWords            |
+|Global/Class Constants     | CAPS_WITH_UNDER     | _CAPS_WITH_UNDER
+|Global/Class Variables     | lower_with_under    | _lower_with_under
+|Instance Variables         | lower_with_under    | _lower_with_under(protected) or __lower_with_under(private)
+|Method Names               | lower_with_under()  | _lower_with_under()(protected) or __lower_with_under()(private)
+|Function/Method Parameters | lower_with_under    |
+|Local Variables            | lower_with_under    |
 
 ### 2、在Python中，变量名没有类型。类型属于对象，而不是变量名；变量名只是引用对象而已。
 注：在Python中，所有的东西都是对象，即完全面向对象（像C++，只能算是半完全面向对象——C++中的内建类型并不是我们所谓的“对象”）。但是Python中的变量有点特殊，其实不应该称为变量，应该称为“标签”或“标识”才对（Python官方文档中好像称为“`Name`”）；在Python中，有个“`binding`”概念，它的意思是把“Name”绑定（“binding”）到一个对象——这个对象是在底层的，并不对用户可见，但用户可以通过绑定到底层对象的“name”来引用、使用它，具体请参见下面的“变量名与对象”。
