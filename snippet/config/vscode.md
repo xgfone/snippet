@@ -138,6 +138,7 @@ Install a Package
 #searKing.preview-vscode                 # Preview Markdown, HTML, CSS, Image, etc.
 #vscodevim.vim                           # It will lead to 'editor.useTabStops' to be invalid.
 #anseki.vscode-color                     # Helper with GUI to generate color codes.
+#slevesque.vscode-hexdump                # Display a specified file in hexadecimal
 #christian-kohler.path-intellisense
 formulahendry.code-runner
 robertohuertasm.vscode-icons
