@@ -168,8 +168,8 @@
 ##### [dom4g](https://github.com/donnie4w/dom4g)
     golang 的 xml 处理库
 
-##### [cli](https://github.com/codegangsta/cli)
-    A small package for building command line apps in Go.
+##### [cli](https://github.com/urfave/cli)
+    A simple, fast, and fun package for building command line apps in Go.
 
 ##### [go-logging](https://github.com/op/go-logging)
     Golang logging library.
