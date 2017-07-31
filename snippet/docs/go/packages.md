@@ -298,3 +298,6 @@ Go client for Redis.
 
 ##### [ffjson](https://github.com/pquerna/ffjson)
     faster JSON serialization for Go.
+
+##### [govalidator](https://github.com/asaskevich/govalidator)
+    Go Package of validators and sanitizers for strings, numerics, slices and structs.
