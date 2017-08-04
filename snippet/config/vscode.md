@@ -45,10 +45,8 @@
     "files.autoGuessEncoding": true,
     "files.trimTrailingWhitespace": true,
 
-    "go.buildFlags": ["-race"],
-    "go.formatOnSave": true,
-    "go.formatTool": "goreturns",
-    //"go.lintTool": "gometalinter",
+    "go.inferGopath": true,
+    "go.autocompleteUnimportedPackages": true,
 
     "html.format.indentInnerHtml": true,
 
