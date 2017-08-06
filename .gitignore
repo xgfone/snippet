@@ -60,3 +60,6 @@ target/
 
 # CTags
 tags
+
+# Mac OS
+.DS_Store
