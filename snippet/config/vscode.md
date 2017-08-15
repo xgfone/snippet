@@ -35,8 +35,6 @@
     "editor.tabCompletion": true,
     "editor.renderWhitespace": "boundary",
 
-    "emmet.useNewEmmet": true,
-
     "explorer.openEditors.visible": 0,
     "extensions.autoUpdate": true,
 
