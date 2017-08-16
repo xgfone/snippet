@@ -361,7 +361,7 @@ DOCS
         - [SQLAlchemy分析](./snippet/docs/python/sqlalchemy-analysis.md)
         	- [SQLAlchemy Expression Language](./snippet/docs/python/sqlalchemy-analysis.md#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86--sqlalchemy-expression-language)
         	- [SQLAlchemy ORM](./snippet/docs/python/sqlalchemy-analysis.md#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86--sqlalchemy-orm)
-            - [SQLAlchemy ÁÆÄÂçïÊïôÁ®ã](https://blog.ansheng.me/article/python-full-stack-way-sqlalchemy)
+            - [SQLAlchemy 简单教程](https://blog.ansheng.me/article/python-full-stack-way-sqlalchemy)
         - [PasteDeploy](./snippet/docs/python/pastedeploy.md)
         - [Django Form工作流程](./snippet/docs/python/django-form.md)
         	- [Form类](./snippet/docs/python/django-form.md#%E4%B8%80form%E7%B1%BB)
