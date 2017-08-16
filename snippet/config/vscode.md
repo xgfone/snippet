@@ -60,7 +60,8 @@
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": [
         "--max-line-length=120",
-        "-d C0103,C0111,C0411,C0413,E1123,W0603,W0613,W0621,W0622,W0703,W1202"
+        "--max-module-lines=2000",
+        "-d C0103,C0111,C0411,C0412,C0413,E1123,R0201,R0902,R0903,R0913,R0914,W0212,W0603,W0613,W0621,W0622,W0703,W1202"
     ],
     "python.linting.pep8Enabled": true,
     "python.linting.pep8Args": [
@@ -75,10 +76,10 @@
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
 
-    "vim.leader": ";",
-    "vim.useSystemClipboard": true,
-    "vim.easymotion": true,
-    "vim.hlsearch": true,
+    // "vim.leader": ";",
+    // "vim.useSystemClipboard": true,
+    // "vim.easymotion": true,
+    // "vim.hlsearch": true,
 
     "vsicons.presets.angular": false,
     "vsicons.dontShowNewVersionMessage": true,
