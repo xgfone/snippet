@@ -58,6 +58,9 @@
 ##### [argparse](https://github.com/nodeca/argparse)
     CLI arguments parser for node.js. JS port of python's argparse module.
 
+##### [command-line-args](https://github.com/75lb/command-line-args)
+    A mature, feature-complete library to parse command-line options.
+
 ##### [log4js](https://github.com/nomiddlename/log4js-node)
     A port of log4js to node.js
 
