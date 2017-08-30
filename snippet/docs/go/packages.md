@@ -225,11 +225,14 @@
 ##### [GORM](https://github.com/jinzhu/gorm)
     The fantastic ORM library for Golang, aims to be developer friendly.
 
-##### [redigo](https://github.com/garyburd/redigo) [**Official Recommendation**]
+##### [redigo](https://github.com/garyburd/redigo)
 Go client for Redis.
 
 ##### [go-redis](https://github.com/go-redis/redis)
     Redis client for Golang. http://godoc.org/gopkg.in/redis.v3
+
+##### [go-zookeeper](https://github.com/samuel/go-zookeeper)
+    Native ZooKeeper client for Go.
 
 ##### [mgo](http://godoc.org/labix.org/v2/mgo)
     MongoDB driver for the Go language that implements a rich and well tested selection of features
