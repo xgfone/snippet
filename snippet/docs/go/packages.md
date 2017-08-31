@@ -105,9 +105,12 @@
     Fast HTTP package for Go. Tuned for high performance. Zero memory allocations in hot paths.
     Up to 10x faster than net/http.
 
-##### [thinkgo](https://github.com/henrylee2cn/thinkgo)
-    ThinkGo 是一款 Go 语言编写的 web 快速开发框架。
-    它基于开源框架 Gin 进行二次开发，旨在实现一种类 ThinkPHP 的高可用、高效率的 web 框架。
+##### [faygo](https://github.com/henrylee2cn/faygo)
+    Faygo is a fast and concise Go Web framework that can be used to develop high-performance
+    web app(especially API) with fewer codes. Just define a struct Handler, Faygo will
+    automatically bind/verify the request parameters and generate the online API doc.
+
+    The original old name is `thinkgo`.
 
 ##### [Negroni](https://github.com/urfave/negroni)
     Idiomatic HTTP Middleware for Golang.
