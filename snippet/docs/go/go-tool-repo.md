@@ -79,7 +79,9 @@ var vcsPaths = []*vcsPath{
 }
 ```
 3. 重新编译 `go` 命令。
+
     (1) 在 Linux/Mac 下，执行 `$GOROOT/src/make.bash`。
+
     (2) 在 Windows 下，执行 `cd %$GOROOT%\src\cmd\go && go install`。
 
 **注意：**
