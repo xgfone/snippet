@@ -291,6 +291,9 @@ Go client for Redis.
 ##### [pongo2](https://github.com/flosch/pongo2)
     Django-syntax like template-engine for Go. No dependencies required by pongo2.
 
+##### [jet](https://github.com/CloudyKit/jet/)
+    Jet is a template engine developed to be easy to use, powerful, dynamic, yet secure and very fast.
+
 ##### [gjson](https://github.com/tidwall/gjson)
     Get JSON values very quickly in Go
 
