@@ -457,6 +457,7 @@ DOCS
     - [Git 思维导图](./snippet/docs/vcs/_static/git-shortcut.jpg)（点击 [这里](https://github.com/xgfone/snippet/raw/master/snippet/docs/vcs/_static/git-shortcut.jpg) 看大图）
     - [使用 `5W1H` 写出高可读的 Git Commit Message](./snippet/docs/vcs/git-commit-message.md)
     - [图解Git](https://marklodato.github.io/visual-git-guide/index-zh-cn.html)
+    - [一个小时学会 Git](http://www.cnblogs.com/best/p/7474442.html)
 - [Web](./snippet/docs/web)
     - [浏览器 HTTP 协议缓存机制详解](./snippet/docs/web/browse-http-cache.md)
     - [URL 中的 `#`](./snippet/docs/web/url_hash.md)
