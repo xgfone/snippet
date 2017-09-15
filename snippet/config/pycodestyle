@@ -1,0 +1,3 @@
+[pycodestyle]
+ignore = E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731
+max-line-length = 120
