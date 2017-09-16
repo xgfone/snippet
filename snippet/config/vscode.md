@@ -140,6 +140,7 @@ Install a Package
 formulahendry.code-runner
 robertohuertasm.vscode-icons
 ybaumes.highlight-trailing-white-spaces
+patrys.vscode-code-outline               # A code outline tree provider for VSCode
 alefragnani.project-manager              # Project Manager
 CoenraadS.bracket-pair-colorizer         # A customizable extension for colorizing matching brackets.
 
