@@ -59,7 +59,7 @@ DOCS
         - [跟着 Github 学习 Restful HTTP API 设计](http://cizixs.com/2016/12/12/restful-api-design-guide)
     - **Other**
         - [我的架构感悟：从美国宪法学习架构设计原则](http://gitbook.cn/books/58836d405a5adc3f0316023b/index.html)
-        - [实录：架构设计，可以学美国制宪；架构改造，可以学中国改革](http://www.10tiao.com/html/689/201702/2651576825/1.html)
+        - [实录：架构设计，可以学美国制宪；架构改造，可以学中国改革](http://www.10tiao.com/html/689/201702/2651576825/1.html)
         - [秒杀系统架构分析与实战](http://www.cnblogs.com/andy-zhou/p/5364136.html)
 - [Assembly](./snippet/docs/assembly)
     - [Linux 汇编语言开发指南](./snippet/docs/assembly/linux-assembly-development-guide.md)
