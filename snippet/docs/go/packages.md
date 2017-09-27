@@ -310,3 +310,6 @@ Go client for Redis.
 
 ##### [govalidator](https://github.com/asaskevich/govalidator)
     Go Package of validators and sanitizers for strings, numerics, slices and structs.
+
+##### [dateparse](https://github.com/araddon/dateparse)
+    GoLang Parse any date string without knowing format in advance.
