@@ -76,10 +76,10 @@
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
 
-    // "vim.leader": ";",
-    // "vim.useSystemClipboard": true,
-    // "vim.easymotion": true,
-    // "vim.hlsearch": true,
+    "vim.leader": ";",
+    "vim.useSystemClipboard": true,
+    "vim.easymotion": true,
+    "vim.hlsearch": true,
 
     "vsicons.presets.angular": false,
     "vsicons.dontShowNewVersionMessage": true,
@@ -109,11 +109,12 @@
     { "key": "shift+alt+s", "command": "projectManager.saveProject"},
     { "key": "shift+alt+o", "command": "projectManager.listProjectsNewWindow" },
 
-    { "key": "ctrl+f", "command": "actions.find" },
-    { "key": "ctrl+a", "command": "editor.action.selectAll" },
-    { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
-    { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
-    { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
+    // { "key": "ctrl+f", "command": "actions.find" },
+    // { "key": "ctrl+a", "command": "editor.action.selectAll" },
+    // { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
+    // { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
+    // { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
+    { "key": "ctrl+n", "command": "workbench.action.files.newUntitledFile", "when": "editorTextFocus && vim.active && vim.use<C-n>" }
 ]
 ```
 
@@ -133,10 +134,10 @@ Install a Package
 #steve8708.Align                         # Align text
 #humao.rest-client                       # Restful Client
 #searKing.preview-vscode                 # Preview Markdown, HTML, CSS, Image, etc.
-#vscodevim.vim                           # It will lead to 'editor.useTabStops' to be invalid.
 #anseki.vscode-color                     # Helper with GUI to generate color codes.
 #slevesque.vscode-hexdump                # Display a specified file in hexadecimal
 #christian-kohler.path-intellisense
+vscodevim.vim
 formulahendry.code-runner
 robertohuertasm.vscode-icons
 ybaumes.highlight-trailing-white-spaces
@@ -220,6 +221,7 @@ abusaidm.html-snippets                   # HTML 5
 
 ## Others
 #hcyang.ctags                            # CTags
+#fallenwood.viml                         # VimL
 ```
 
 #### For Windows
