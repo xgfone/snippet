@@ -53,10 +53,12 @@ DOCS
         - [LVS 技术原理](https://help.aliyun.com/knowledge_detail/39444.html)
         - [LVS 负载均衡原理及安装配置详解](./snippet/docs/architecture/ha-lb/lvs-lb-and-install.md)
         - [究竟啥才是互联网架构 `高可用`](http://mp.weixin.qq.com/s/7nfSvxZ4vJAxpIN5rCdaCw)
-    - RESTfull API
+    - **RESTfull API**
         - [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
         - [REST接口设计规范](http://wangwei.info/about-rest-api)
         - [跟着 Github 学习 Restful HTTP API 设计](http://cizixs.com/2016/12/12/restful-api-design-guide)
+    - **微服务**
+        - [微服务：从设计到部署(Designing and Deploying Microservices)](https://www.nginx.com/resources/library/designing-deploying-microservices/) [中文版](https://github.com/oopsguy/microservices-from-design-to-deployment-chinese) 点击[阅读](http://oopsguy.com/books/microservices/)
     - **Other**
         - [我的架构感悟：从美国宪法学习架构设计原则](http://gitbook.cn/books/58836d405a5adc3f0316023b/index.html)
         - [实录：架构设计，可以学美国制宪；架构改造，可以学中国改革](http://www.10tiao.com/html/689/201702/2651576825/1.html)
