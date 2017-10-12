@@ -114,6 +114,8 @@
     // { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
     // { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
     // { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
+    { "command": "editor.action.insertCursorAbove", "key": "ctrl+shift+up", "when": "editorTextFocus" },
+    { "command": "editor.action.insertCursorBelow", "key": "ctrl+shift+down", "when": "editorTextFocus" },
     { "key": "ctrl+n", "command": "workbench.action.files.newUntitledFile", "when": "editorTextFocus && vim.active && vim.use<C-n>" }
 ]
 ```
