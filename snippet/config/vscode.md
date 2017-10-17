@@ -109,13 +109,18 @@
     { "key": "shift+alt+s", "command": "projectManager.saveProject"},
     { "key": "shift+alt+o", "command": "projectManager.listProjectsNewWindow" },
 
+    { "key": "ctrl+shift+up", "command": "editor.action.insertCursorAbove", "when": "editorTextFocus" },
+    { "key": "ctrl+shift+down", "command": "editor.action.insertCursorBelow", "when": "editorTextFocus" },
+
     // { "key": "ctrl+f", "command": "actions.find" },
     // { "key": "ctrl+a", "command": "editor.action.selectAll" },
     // { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
     // { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
-    // { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" }
-    { "command": "editor.action.insertCursorAbove", "key": "ctrl+shift+up", "when": "editorTextFocus" },
-    { "command": "editor.action.insertCursorBelow", "key": "ctrl+shift+down", "when": "editorTextFocus" },
+    // { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" },
+
+    // On deepin linux, the notify system will use the shortcut `Ctrl+`, so we will override it.
+    { "key": "alt+`", "command": "workbench.action.terminal.toggleTerminal" },
+
     { "key": "ctrl+n", "command": "workbench.action.files.newUntitledFile", "when": "editorTextFocus && vim.active && vim.use<C-n>" }
 ]
 ```
