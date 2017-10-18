@@ -120,6 +120,9 @@
 
     // On deepin linux, the notify system will use the shortcut `Ctrl+`, so we will override it.
     { "key": "alt+`", "command": "workbench.action.terminal.toggleTerminal" },
+    { "key": "alt+1", "command": "workbench.action.terminal.focusAtIndex1" },
+    { "key": "alt+2", "command": "workbench.action.terminal.focusAtIndex2" },
+    { "key": "alt+3", "command": "workbench.action.terminal.focusAtIndex3" },
 
     { "key": "ctrl+n", "command": "workbench.action.files.newUntitledFile", "when": "editorTextFocus && vim.active && vim.use<C-n>" }
 ]
