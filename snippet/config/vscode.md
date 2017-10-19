@@ -7,13 +7,13 @@
     // "bookmarks.saveBookmarksBetweenSessions": true,
     // "bookmarks.navigateThroughAllFiles": true,
 
-    "[c]": {
-        "editor.insertSpaces": false
-    },
+    // "[c]": {
+    //     "editor.insertSpaces": false
+    // },
 
-    "[cpp]": {
-        "editor.insertSpaces": false
-    },
+    // "[cpp]": {
+    //     "editor.insertSpaces": false
+    // },
 
     "C_Cpp.intelliSenseEngine": "Default",
 
@@ -54,20 +54,9 @@
     "projectManager.showProjectNameInStatusBar": true,
 
     "python.autoComplete.addBrackets": true,
-    // "python.jediPath": "C:\\Users\\Administrator\\AppData\\Roaming\\Jedi",
-    // "python.jediPath": "~/Library/Caches/Jedi",
     "python.linting.maxNumberOfProblems": 120,
     "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": [
-        "--max-line-length=120",
-        "--max-module-lines=2000",
-        "-d C0103,C0111,C0411,C0412,C0413,E1123,R0201,R0902,R0903,R0913,R0914,W0212,W0603,W0613,W0621,W0622,W0703,W1202"
-    ],
     "python.linting.pep8Enabled": true,
-    "python.linting.pep8Args": [
-        "--max-line-length=120",
-        "--ignore=E125,E126,E127,E128,E129,E221,E265,E309,E401,E402,E731"
-    ],
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.nosetestArgs": [],
 
@@ -251,21 +240,6 @@ npm install -g eslint
 #### For python
 ```
 pip install pylint nose pep8 jedi
-```
-
-#### For Go
-```
-go get -v github.com/nsf/gocode
-go get -v github.com/rogpeppe/godef
-go get -v github.com/zmb3/gogetdoc
-go get -v github.com/golang/lint/golint
-go get -v github.com/lukehoban/go-outline
-go get -v sourcegraph.com/sqs/goreturns
-go get -v golang.org/x/tools/cmd/gorename
-go get -v github.com/tpng/gopkgs
-go get -v github.com/newhook/go-symbols
-go get -v golang.org/x/tools/cmd/guru
-go get -v github.com/cweill/gotests/...
 ```
 
 #### For C/C++
