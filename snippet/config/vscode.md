@@ -160,7 +160,7 @@ lamartire.git-indicators                 # Atom like git counters.
 
 
 ## Python
-donjayamanne.python                      # Python
+ms-python.python                      # Python
 
 
 ## Go
