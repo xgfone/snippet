@@ -101,8 +101,10 @@
     { "key": "ctrl+shift+up", "command": "editor.action.insertCursorAbove", "when": "editorTextFocus" },
     { "key": "ctrl+shift+down", "command": "editor.action.insertCursorBelow", "when": "editorTextFocus" },
 
+    { "key": "ctrl+k m", "command": "workbench.action.editor.changeLanguageMode" },
+
+    { "key": "ctrl+a", "command": "editor.action.selectAll" },
     // { "key": "ctrl+f", "command": "actions.find" },
-    // { "key": "ctrl+a", "command": "editor.action.selectAll" },
     // { "key": "ctrl+x", "command": "editor.action.clipboardCutAction", "when": "editorTextFocus" },
     // { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction", "when": "editorTextFocus" },
     // { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction", "when": "editorTextFocus" },
