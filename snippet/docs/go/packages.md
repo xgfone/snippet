@@ -23,9 +23,6 @@
 ##### [goversioninfo](https://github.com/josephspurrier/goversioninfo)
     Golang Microsoft Windows File Properties/Version Info and Icon Resource Generator
 
-##### [btlike](https://github.com/btlike)
-    高性能、全功能BT搜索引擎.
-
 ##### [leacrawler](https://github.com/lealife/leacrawler)
     Web template crawler written by golang.
 
@@ -192,17 +189,11 @@
 ##### [nodb](https://github.com/lunny/nodb)
     A pure Go embed Nosql database with kv, list, hash, zset, bitmap, set.
 
-##### [go-restful](https://github.com/emicklei/go-restful)
-    package for building REST-style Web Services using Google Go.
-
 ##### [gogs](https://github.com/gogits/gogs)
     Gogs(Go Git Service) is a painless self-hosted Git Service.
 
 ##### [ledisdb](https://github.com/siddontang/ledisdb)
     a high performance NoSQL powered by Go http://ledisdb.com.
-
-##### [negroni](https://github.com/codegangsta/negroni)
-    Idiomatic HTTP Middleware for Golang.
 
 ##### [beego](https://github.com/astaxie/beego)
     beego is an open-source, high-performance web framework for the Go programming language.
@@ -268,9 +259,6 @@ Go client for Redis.
 ##### [gofc](https://github.com/Kmotiko/gofc)
     OpenFlow Controller written in go.
 
-##### [graceful](https://github.com/tylerb/graceful)
-    Graceful is a Go package enabling graceful shutdown of an http.Handler server.
-
 ##### [goquery](https://github.com/PuerkitoBio/goquery)
     A little like that j-thing, only in Go.
     goquery brings a syntax and a set of features similar to jQuery to the Go language.
@@ -313,3 +301,7 @@ Go client for Redis.
 
 ##### [dateparse](https://github.com/araddon/dateparse)
     GoLang Parse any date string without knowing format in advance.
+
+
+##### [gobreaker](https://github.com/sony/gobreaker)
+    Circuit Breaker implemented in Go.
