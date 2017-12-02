@@ -31,9 +31,9 @@
     "editor.minimap.maxColumn": 80,
     "editor.renderIndentGuides": true,
     "editor.useTabStops": true,
-    "editor.detectIndentation": true,
     "editor.tabCompletion": true,
     "editor.renderWhitespace": "boundary",
+    "editor.quickSuggestionsDelay": 2,
 
     "explorer.openEditors.visible": 0,
     "extensions.autoUpdate": true,
