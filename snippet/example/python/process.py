@@ -25,7 +25,6 @@ class ProcessManager:
         worker = Process(target=task)
         worker.daemon = True
         worker.start()
-        LOG.info("+++++ %s", worker.is_alive())
         return worker
 
     def launch_task(self, func, *args, **kwargs):
