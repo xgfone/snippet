@@ -28,6 +28,9 @@
 
 ## Packages
 
+##### [evio](https://github.com/tidwall/evio)
+    Fast event-loop networking for Go.
+
 ##### [go-flags](https://github.com/jessevdk/go-flags) [Recommendation]
     a go library for parsing command line arguments
 
