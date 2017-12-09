@@ -3,6 +3,7 @@ import logging
 import traceback
 
 from multiprocessing import Process
+from threading import Lock
 
 LOG = logging.getLogger(__name__)
 
@@ -20,6 +21,8 @@ class _Task:
 class ProcessManager:
     def __init__(self):
         self._tasks = {}
+        self._lock = Lock()
+        self._quit = False
 
     def _spawn_task(self, task):
         worker = Process(target=task)
@@ -36,9 +39,20 @@ class ProcessManager:
         worker = self._spawn_task(task)
         self._tasks[worker] = task
 
+    def quit(self):
+        with self._lock:
+            self._quit = True
+
     def wait(self, reload=True):
         while True:
             time.sleep(1)
+
+            with self._lock:
+                if self._quit:
+                    for worker in self._tasks:
+                        worker.terminate()
+                    return
+
             try:
                 self._wait(reload)
             except Exception:
