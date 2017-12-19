@@ -2,11 +2,11 @@
 # of appearance. Changing the order has an impact on the overall integration
 # process, which may cause wedges in the gate later.
 
-pbr<2.0,>=1.4
+pbr>=1.4
 setuptools>=16.0
 six>=1.9.0
 oslo.config>=2.1.0 # Apache-2.0
-oslo.log>=1.8.0 # Apache-2.0
+# gevent>=1.2.0
 # PyMySQL
 # SQLAlchemy
 # oslo.service

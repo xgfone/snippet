@@ -12,7 +12,9 @@ _UNICODE_TYPES = (unicode_type, type(None))
 _BASESTRING_TYPES = (basestring_type, type(None))
 
 
-def get_version(project):
+def get_version(project, version=None):
+    if version:
+        return version
     return pbr.version.VersionInfo(project).version_string()
 
 

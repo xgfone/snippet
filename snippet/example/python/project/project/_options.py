@@ -6,5 +6,6 @@ from oslo_config import cfg
 CONF = cfg.CONF
 
 global_opts = [
-    # TODO
+    cfg.StrOpt("log_file", default="", help="The path of the log file."),
+    cfg.StrOpt("log_level", default="DEBUG", help="The log level, such as DEBUG, INFO, etc."),
 ]
