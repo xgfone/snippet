@@ -45,6 +45,7 @@
 
     "go.inferGopath": true,
     "go.autocompleteUnimportedPackages": true,
+    "go.useLanguageServer": true,
 
     "html.format.indentInnerHtml": true,
 
