@@ -21,8 +21,8 @@ class Configuration(object):
             "float": FLOAT_TYPE,
         }
 
-        BOOL_TRUE = ["t", "true", "1"]
-        BOOL_FALSE = ["f", "false", "0"]
+        BOOL_TRUE = ["t", "1", "T", "on", "On", "ON", "true", "True", "TRUE"]
+        BOOL_FALSE = ["f", "0", "F", "off", "Off", "OFF", "false", "False", "FALSE"]
 
         def __init__(self, _type, name, short=None, default=None, nargs=1,
                      help=None, ignore_empty=False):
