@@ -46,8 +46,8 @@ class Configuration(object):
         self._caches = {self._default_group_name: self._default_group}
         self._opts = {}
 
-        self._bool_true = ["t", "1", "T", "true", "True", "TRUE"]
-        self._bool_false = ["f", "0", "F", "false", "False", "FALSE"]
+        self._bool_true = ["t", "1", "T", "on", "On", "ON", "true", "True", "TRUE"]
+        self._bool_false = ["f", "0", "F", "off", "Off", "OFF", "false", "False", "FALSE"]
 
         try:
             "".decode()
