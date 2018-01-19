@@ -310,3 +310,12 @@ Go client for Redis.
 
 ##### [gobreaker](https://github.com/sony/gobreaker)
     Circuit Breaker implemented in Go.
+
+##### [otto](https://github.com/robertkrimen/otto)
+    A JavaScript interpreter in Go (golang).
+
+##### [goja](https://github.com/dop251/goja)
+    ECMAScript 5.1(+) implementation written in Go.
+
+##### [go-server-js](https://github.com/zengming00/go-server-js)
+    a js server based on goja.
