@@ -335,7 +335,6 @@ DOCS
     	- [写一个每秒接收 100 万数据包的程序究竟有多难](http://blog.jobbole.com/87759/)
     	- [端口扫描](./snippet/docs/network/others/port-scan.md)
         - [用户空间网络栈](./snippet/docs/network/others/userspace-net-stack.md)
-- [Openstack](./snippet/docs/openstack)
 - [Package](./snippet/docs/package)
 - [Python](./snippet/docs/python)
     - [前言](./snippet/docs/python/python-preface.md)
