@@ -305,6 +305,8 @@ Go client for Redis.
 ##### [dateparse](https://github.com/araddon/dateparse)
     GoLang Parse any date string without knowing format in advance.
 
+##### [gopsutil](https://github.com/shirou/gopsutil)
+    psutil for golang.
 
 ##### [gobreaker](https://github.com/sony/gobreaker)
     Circuit Breaker implemented in Go.
