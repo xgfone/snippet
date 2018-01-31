@@ -3,6 +3,19 @@
 from __future__ import print_function, absolute_import, unicode_literals, division
 
 import sys
+import argparse
+
+if sys.version_info[0] == 2:
+    PY2 = True
+    Byte, Unicode = str, unicode
+else:
+    PY2 = False
+    Byte, Unicode = bytes, str
+
+is_string = lambda s: True if isinstance(s, (Byte, Unicode)) else False
+to_unicode = lambda s, e="utf-8": s if isinstance(s, Unicode) else s.decode(e)
+to_bytes = lambda s, e="utf-8": s if isinstance(s, Byte) else s.encode(e)
+to_str = to_bytes if PY2 else to_unicode
 
 
 # @Author: xgfone
@@ -11,7 +24,7 @@ class Configuration(object):
 
     class __Option(object):
         INT_TYPE = int
-        STR_TYPE = str
+        STR_TYPE = to_unicode
         BOOL_TYPE = bool
         FLOAT_TYPE = float
         STR2TYPE = {
@@ -38,12 +51,6 @@ class Configuration(object):
             self.help = help
             self._value = None
 
-        @classmethod
-        def fix_py2(cls):
-            if sys.version_info[0] == 2:
-                cls.STR_TYPE = unicode
-                cls.STR2TYPE["str"] = cls.STR_TYPE
-
         @property
         def is_bool(self):
             return self.type is self.BOOL_TYPE
@@ -52,7 +59,7 @@ class Configuration(object):
             if isinstance(value, (self.BOOL_TYPE, self.INT_TYPE, self.FLOAT_TYPE)):
                 return value
 
-            if isinstance(value, list) and len(value) > 0:
+            if isinstance(value, list) and value:
                 value = value[0]
 
             value = value.strip()
@@ -72,7 +79,6 @@ class Configuration(object):
                 m = "{0} can not be converted to {1}".format(value, self.type)
                 raise ValueError(m)
 
-    __Option.fix_py2()
     __DEFAULT_OPTION = __Option("str", "default")
 
     def __init__(self, description="", filenames=None, config_opt="config-file",
@@ -124,7 +130,7 @@ class Configuration(object):
         self.__init_opts()
 
     def __init_opts(self):
-        r1 = Configuration.__Option("str", self.__config_opt, ignore_empty=True,
+        r1 = Configuration.__Option("str", self.__config_opt, ignore_empty=False,
                                     help="The path of the configuration file")
         r2 = Configuration.__Option("bool", "strict", default=False,
                                     help="If true, enable the strict mode.")
@@ -144,6 +150,7 @@ class Configuration(object):
     def __parse(self, argv=None):
         if self.__parsed:
             raise Exception("Have been parsed")
+        self.__parsed = True
 
         # Parse the CLI options
         clis = self.__parse_cli(argv=argv)
@@ -178,7 +185,6 @@ class Configuration(object):
             self.__caches[name] = self.__get_value(name, value)
 
         self.__check_empty()
-        self.__parsed = True
 
     def __check_empty(self):
         if self.__ignore_empty:
@@ -191,18 +197,7 @@ class Configuration(object):
                 raise ValueError(m)
 
     def __parse_cli(self, argv=None):
-        try:
-            import argparse
-            Parser = argparse.ArgumentParser
-            add_option = Parser.add_argument
-            get_args = lambda parser: parser.parse_args(args=argv)
-        except ImportError:
-            import optparse
-            Parser = optparse.OptionParser
-            add_option = Parser.add_option
-            get_args = lambda parser: parser.parse_args(args=argv)[0]
-
-        parser = Parser(description=self.__description)
+        parser = argparse.ArgumentParser(description=self.__description)
         for opt in self.__opts.values():
             kwargs = {}
             if opt.help is not None:
@@ -219,16 +214,16 @@ class Configuration(object):
 
             names = []
             short = opt.short
-            if short is not None and len(short) > 0:
+            if short is not None and short:
                 if short[0] != "-":
                     short = "-" + short
                 names.append(short)
             name = self.__hyphen(opt.name) if self.__use_hyphen else opt.name
             names.append("--" + name)
 
-            add_option(parser, *names, **kwargs)
-        args = get_args(parser)
-        return args
+            parser.add_argument(*names, **kwargs)
+
+        return parser.parse_args(args=argv)
 
     def __parse_files(self, filenames):
         for filename in filenames:
