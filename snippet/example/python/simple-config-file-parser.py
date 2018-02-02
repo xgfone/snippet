@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 # @Author: xgfone
 # @Email: xgfone@126.com
 class Configuration(object):
