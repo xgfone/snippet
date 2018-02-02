@@ -1,5 +1,3 @@
-
-
 # @Author: xgfone
 # @Email: xgfone@126.com
 class Configuration(object):
@@ -162,8 +160,9 @@ class Configuration(object):
 
         gname = self._default_group_name
         group = self._caches[gname]
-        for line in lines:
-            line = line.strip()
+        index, max_index = 0, len(lines)
+        while index < max_index:
+            line = lines[index].strip()
 
             # Comment
             if not line or line[0] in ("#", "=", ";"):
@@ -193,9 +192,18 @@ class Configuration(object):
             if name in group:
                 m = "The option {} in the group {} has been parsed"
                 raise ValueError(m.format(name, gname))
+
+            # Handle the continuation line
+            index += 1
+            values = []
+            while value and value[-1] == "\\":
+                values.append(value.rstrip("\\").strip())
+                value = lines[index].strip()
+                index += 1
+
             opt = self._opts[gname].get(name, None)
             if opt:
-                setattr(group, name, opt[0](value))
+                setattr(group, name, opt[0]("\n".join(values)))
 
     def register_bool(self, name, default=None, group=None, help=None):
         """Register the bool option.
