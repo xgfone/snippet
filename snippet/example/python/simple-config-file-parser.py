@@ -202,10 +202,9 @@ class Configuration(object):
                 values = [value.rstrip("\\").strip()]
                 while index < max_index:
                     value = lines[index].strip()
-                    if value[-1:] == "\\":
-                        values.append(value.rstrip("\\").strip())
-                        index += 1
-                    else:
+                    values.append(value.rstrip("\\").strip())
+                    index += 1
+                    if value[-1:] != "\\":
                         break
                 value = "\n".join(values)
 
@@ -258,10 +257,7 @@ class Configuration(object):
 
 if __name__ == "__main__":
     conf = Configuration()
-    conf.register_str("abc", default="")
     conf.register_str("attr", default="abc")
-    conf.register_str("qq")
     conf.parse("test.conf")
     print("conf.attr = {}".format(conf.attr))
     print('conf["attr"] = {}'.format(conf["attr"]))
-    print(conf.abc, conf.qq)
