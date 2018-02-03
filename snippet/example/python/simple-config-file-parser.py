@@ -9,7 +9,7 @@ class Configuration(object):
             self.__name = group_name
 
         def __repr__(self):
-            return "Group(name={})".format(self.__name)
+            return "Group(name={}, vars={})".format(self.__name, vars(self))
 
         def __contains__(self, name):
             return hasattr(self, name)
@@ -166,6 +166,7 @@ class Configuration(object):
         index, max_index = 0, len(lines)
         while index < max_index:
             line = lines[index].strip()
+            index += 1
 
             # Comment
             if not line or line[0] in ("#", "=", ";"):
@@ -189,7 +190,7 @@ class Configuration(object):
             # Group Option Values
             items = line.split("=", 1)
             if len(items) != 2:
-                raise ValueError("the format of the option is wrong, must contain =")
+                raise ValueError("the format is wrong, must contain =: %s", line)
 
             name, value = self._uniformize(items[0].strip()), items[1].strip()
             if name in group:
@@ -197,16 +198,20 @@ class Configuration(object):
                 raise ValueError(m.format(name, gname))
 
             # Handle the continuation line
-            index += 1
-            values = []
-            while value and value[-1] == "\\":
-                values.append(value.rstrip("\\").strip())
-                value = lines[index].strip()
-                index += 1
+            if value[-1:] == "\\":
+                values = [value.rstrip("\\").strip()]
+                while index < max_index:
+                    value = lines[index].strip()
+                    if value[-1:] == "\\":
+                        values.append(value.rstrip("\\").strip())
+                        index += 1
+                    else:
+                        break
+                value = "\n".join(values)
 
             opt = self._opts[gname].get(name, None)
             if opt:
-                setattr(group, name, opt[0]("\n".join(values)))
+                setattr(group, name, opt[0](value))
 
     def register_bool(self, name, default=None, group=None, help=None):
         """Register the bool option.
@@ -253,7 +258,10 @@ class Configuration(object):
 
 if __name__ == "__main__":
     conf = Configuration()
+    conf.register_str("abc", default="")
     conf.register_str("attr", default="abc")
-    conf.parse()
+    conf.register_str("qq")
+    conf.parse("test.conf")
     print("conf.attr = {}".format(conf.attr))
     print('conf["attr"] = {}'.format(conf["attr"]))
+    print(conf.abc, conf.qq)
