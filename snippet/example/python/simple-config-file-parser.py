@@ -190,7 +190,7 @@ class Configuration(object):
             # Group Option Values
             items = line.split("=", 1)
             if len(items) != 2:
-                raise ValueError("the format is wrong, must contain =: %s", line)
+                raise ValueError("the format is wrong, must contain '=': " + line)
 
             name, value = self._uniformize(items[0].strip()), items[1].strip()
             if name in group:
