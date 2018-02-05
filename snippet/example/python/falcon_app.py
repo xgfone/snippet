@@ -1,4 +1,5 @@
 import logging
+import traceback
 import falcon
 
 from falcon import routing
@@ -30,6 +31,7 @@ class Application(falcon.API):
         resp.status = falcon.HTTP_500
         resp.body = str(ex)
         LOG.error("Get an exception: method=%s, url=%s, err=%s", req.method, req.path, ex)
+        LOG.error(traceback.format_exc())
 
     def add_route(self, uri_template, resource, *args, **kwargs):
         """Override the add_route in the parent class.

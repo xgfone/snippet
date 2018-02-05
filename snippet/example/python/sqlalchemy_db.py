@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.elements import TextClause
@@ -6,41 +8,59 @@ from sqlalchemy.sql.elements import TextClause
 class DB(object):
     """Manager the DB connection."""
 
-    class _Session:
-        def __init__(self, s):
-            self._session = s
+    def __init__(self, write_connection, read_connection=None, autocommit=True,
+                 expire_on_commit=False, echo=False, encoding="utf-8",
+                 poolclass=None, pool=None, min_pool_size=1, max_pool_size=5,
+                 pool_timeout=10, connection_recycle_time=3600):
 
-        def __getattr__(self, name):
-            return getattr(self._session, name)
+        kwargs = {
+            "echo": echo,
+            "encoding": encoding,
+            "poolclass": poolclass,
+            "pool": pool,
+            "pool_size": min_pool_size,
+            "pool_timeout": pool_timeout,
+            "pool_recycle": connection_recycle_time,
+            "max_overflow": max_pool_size - min_pool_size,
+            "convert_unicode": True,
+        }
+        self._kwargs = kwargs
+        self._autocommit = autocommit
+        self._expire_on_commit = expire_on_commit
 
-        def __del__(self):
-            self.close()
+        self._write_engine = create_engine(write_connection, **kwargs)
+        self._write_session_cls = self._get_session_cls(self._write_engine)
 
-        def close(self):
-            if self._session:
-                self._session.close()
-                self._session = None
+        if read_connection:
+            self._read_engine = create_engine(read_connection, **kwargs)
+            self._read_session_cls = self._get_session_cls(self._read_engine)
+        else:
+            self._read_engine = self._write_engine
+            self._read_session_cls = self._write_session_cls
 
-    def __init__(self, connection, timeout=240):
-        self._connection = connection
-        self._timeout = timeout
+    def _get_session_cls(self, engine):
+        return sessionmaker(bind=engine, autocommit=self._autocommit,
+                            expire_on_commit=self._expire_on_commit)
 
-        self._engine = create_engine(connection, pool_recycle=timeout)
-        self._session_cls = sessionmaker(bind=self._engine, autocommit=True)
+    def get_write_session(self):
+        return self._write_session_cls()
+
+    def get_read_session(self):
+        return self._read_session_cls()
 
     def get_session(self):
-        return self._Session(self._session_cls())
+        return self.get_write_session()
 
-    def execute(self, sql, **kwargs):
+    def execute(self, sql, session=None, **kwargs):
         if not isinstance(sql, TextClause):
             sql = text(sql)
-        return self.get_session().execute(sql, kwargs)
+        return (session or self.get_session()).execute(sql, kwargs)
 
     def fetchall(self, sql, **kwargs):
-        return self.execute(sql, **kwargs).fetchall()
+        return self.execute(sql, self.get_read_session(), **kwargs).fetchall()
 
     def fetchone(self, sql, **kwargs):
-        return self.execute(sql, **kwargs).fetchone()
+        return self.execute(sql, self.get_read_session(), **kwargs).fetchone()
 
     def first(self, sql, **kwargs):
-        return self.execute(sql, **kwargs).first()
+        return self.execute(sql, self.get_read_session(), **kwargs).first()
