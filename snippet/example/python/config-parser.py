@@ -38,6 +38,7 @@ def set_builtin(name, value, force=False):
     return True
 
 
+is_string = lambda s: True if isinstance(s, (Bytes, Unicode)) else False
 to_str = to_unicode if PY3 else to_bytes
 set_builtin("str", to_unicode, force=True)
 # Patch End
@@ -112,9 +113,10 @@ class Configuration(object):
 
     __slots__ = ["_default_group_name", "_default_group", "_allow_empty",
                  "_encoding", "_parsed", "_caches", "_opts", "_bool_true",
-                 "_bool_false", "_py2"]
+                 "_bool_false", "_py2", "_description"]
 
-    def __init__(self, allow_empty=False, default_group="DEFAULT", encoding="utf-8"):
+    def __init__(self, description=None, allow_empty=False, encoding="utf-8",
+                 default_group="DEFAULT"):
         """A simple configuration file parser based on the format INI.
 
         When an configuration option does not exist, for getting one default
@@ -123,6 +125,7 @@ class Configuration(object):
         """
 
         self._parsed = False
+        self._description = description
         self._default_group_name = default_group
         self._default_group = Configuration.Group(self._default_group_name)
         self._allow_empty = allow_empty
@@ -376,7 +379,7 @@ class Configuration(object):
 
     ###########################################################################
     # Parse CLI
-    def parse_cli(self, args=None, desc="", config_file_name="config-file"):
+    def parse_cli(self, args=None, config_file_name="config-file"):
         """Parse the cli options."""
         if self._parsed:
             raise Exception("Have been parsed")
@@ -388,7 +391,8 @@ class Configuration(object):
             self._check_and_set_default()
             return
 
-        gopts, args = self._parser_cli(args, desc=desc, config_file_name=config_file_name)
+        gopts, args = self._parser_cli(args, description=self._description,
+                                       config_file_name=config_file_name)
 
         if config_file_name:
             config_file = getattr(args, self._uniformize(config_file_name), "")
@@ -406,8 +410,8 @@ class Configuration(object):
         self._check_and_fix()
         return args
 
-    def _parser_cli(self, args, desc="", config_file_name=None):
-        cli = ArgumentParser(description=desc)
+    def _parser_cli(self, args, description=None, config_file_name=None):
+        cli = ArgumentParser(description=description)
         if config_file_name:
             cli.add_argument("--" + config_file_name, default="", help="The config file path.")
 
