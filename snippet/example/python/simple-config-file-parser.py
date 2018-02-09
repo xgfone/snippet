@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import argparse
 
 if sys.version_info[0] < 3:
     import __builtin__ as builtins
@@ -45,6 +44,38 @@ set_builtin("str", to_unicode, force=True)
 ##############################################################################
 
 
+##############################################################################
+# Python 2.6 Patch
+try:
+    from argparse import ArgumentParser
+except ImportError:
+    from optparse import OptionParser
+
+    class OptionParserGroupProxy(object):
+        def __init__(self, group):
+            self.__group = group
+
+        def __repr__(self):
+            return str(self.__group)
+
+        def __getattr__(self, name):
+            return getattr(self.__group, name)
+
+        def add_argument(self, *args, **kwargs):
+            return self.__group.add_option(*args, **kwargs)
+
+    class ArgumentParser(OptionParser):
+        def add_argument_group(self, *args, **kwargs):
+            group = self.add_option_group(*args, **kwargs)
+            return OptionParserGroupProxy(group)
+
+        def add_argument(self, *args, **kwargs):
+            return self.add_option(*args, **kwargs)
+
+# Python 2.6 Patch End
+##############################################################################
+
+
 # @Author: xgfone
 # @Email: xgfone@126.com
 class Configuration(object):
@@ -72,7 +103,7 @@ class Configuration(object):
             try:
                 return getattr(self, name)
             except AttributeError:
-                raise KeyError("The group '{0}' has no the option '{0}'".format(self.__name, name))
+                raise KeyError("The group '{0}' has no the option '{1}'".format(self.__name, name))
 
         def items(self):
             d = vars(self)
@@ -376,7 +407,7 @@ class Configuration(object):
         return args
 
     def _parser_cli(self, args, desc="", config_file_name=None):
-        cli = argparse.ArgumentParser(description=desc)
+        cli = ArgumentParser(description=desc)
         if config_file_name:
             cli.add_argument("--" + config_file_name, default="", help="The config file path.")
 
