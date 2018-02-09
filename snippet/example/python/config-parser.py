@@ -113,10 +113,10 @@ class Configuration(object):
 
     __slots__ = ["_default_group_name", "_default_group", "_allow_empty",
                  "_encoding", "_parsed", "_caches", "_opts", "_bool_true",
-                 "_bool_false", "_py2", "_description"]
+                 "_bool_false", "_py2", "_description", "_version"]
 
     def __init__(self, description=None, allow_empty=False, encoding="utf-8",
-                 default_group="DEFAULT"):
+                 default_group="DEFAULT", version=None):
         """A simple configuration file parser based on the format INI.
 
         When an configuration option does not exist, for getting one default
@@ -130,6 +130,7 @@ class Configuration(object):
         self._default_group = Configuration.Group(self._default_group_name)
         self._allow_empty = allow_empty
         self._encoding = encoding
+        self._version = version if version else "Unknown"
 
         self._caches = {self._default_group_name: self._default_group}
         self._opts = {}
@@ -243,7 +244,7 @@ class Configuration(object):
         """Return True if it has been parsed, or False."""
         return self._parsed
 
-    def parse(self, filenames=""):
+    def parse_files(self, filenames=""):
         """Parse the INI configuration files.
 
         The argument is either a string standing for the path of the
@@ -379,6 +380,9 @@ class Configuration(object):
 
     ###########################################################################
     # Parse CLI
+    def parse(self, *args, **kwargs):
+        return self.parse_cli(*args, **kwargs)
+
     def parse_cli(self, args=None, config_file_name="config-file"):
         """Parse the cli options."""
         if self._parsed:
@@ -393,6 +397,9 @@ class Configuration(object):
 
         gopts, args = self._parser_cli(args, description=self._description,
                                        config_file_name=config_file_name)
+        if getattr(args, "version", False):
+            print(self._version)
+            sys.exit(0)
 
         if config_file_name:
             config_file = getattr(args, self._uniformize(config_file_name), "")
@@ -414,6 +421,7 @@ class Configuration(object):
         cli = ArgumentParser(description=description)
         if config_file_name:
             cli.add_argument("--" + config_file_name, default="", help="The config file path.")
+        cli.add_argument("--version", action="store_true", help="Print the version and exit.")
 
         group_opts = {}
         for gname, opts in self._opts.items():
