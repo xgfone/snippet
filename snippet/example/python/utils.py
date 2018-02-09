@@ -4,6 +4,7 @@
 from __future__ import absolute_import, unicode_literals, print_function, division
 
 import sys
+import os.path
 
 if sys.version_info[0] < 3:
     import builtins
@@ -56,3 +57,11 @@ class ObjectDict(dict):
         except KeyError:
             raise AttributeError("'%s' object has no attribute '%s'" % (
                                  self.__class__.__name__, name))
+
+
+# Execute and return a python module for Python3.
+def execpyfile(filename, *args):
+    if not os.path.exists(filename):
+        raise RuntimeError("'{}' does not exist".format(filename))
+    code = compile(open(filename, 'rb').read(), filename, 'exec')
+    return exec(code, *args)
