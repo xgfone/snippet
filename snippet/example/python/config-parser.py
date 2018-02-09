@@ -204,6 +204,8 @@ class Configuration(object):
         return float(value)
 
     def _parse_bool(self, value):
+        if isinstance(value, bool):
+            return value
         if value in self._bool_true:
             return True
         elif value in self._bool_false:
@@ -409,10 +411,12 @@ class Configuration(object):
                     self._parse_file(filename)
 
         for cli_opt, (gname, name) in gopts.items():
-            default = self._opts[gname][name][1]
+            opt = self._opts[gname][name]
             value = getattr(args, cli_opt, None)
-            if value is not None and value != default:
-                self._set_group_opt(gname, name, value, force=True)
+            if value is not None:
+                value = opt[0](value)
+                if value != opt[1]:
+                    self._set_group_opt(gname, name, value, force=True)
 
         self._check_and_fix()
         return args
@@ -428,8 +432,9 @@ class Configuration(object):
             group = cli if gname == self._default_group_name else cli.add_argument_group(gname)
             for name, (parser, default, help) in opts.items():
                 action = None
-                if parser is self._parse_bool:
+                if parser == self._parse_bool:
                     action = "store_false" if default else "store_true"
+                    default = False if default is None else default
 
                 if gname == self._default_group_name:
                     opt_name = self._unniformize(name)
@@ -445,9 +450,13 @@ class Configuration(object):
 
 if __name__ == "__main__":
     conf = Configuration()
+    conf.register_bool("bool")
+    conf.register_int("int")
     conf.register_str("attr", default="abc", help="opt test")
     conf.register_int("attr", default=None, group="group", help="group test")
-    conf.parse_cli(["--group-attr", "456"])
+    conf.parse_cli(["--group-attr", "456", "--bool", "--int", "123"])
+    print("int = {0}, type={1}".format(conf.int, type(conf.int)))
+    print("bool = {0}, type={1}".format(conf.bool, type(conf.bool)))
     print("conf.attr = {0}".format(conf.attr))
     print('conf["attr"] = {0}'.format(conf["attr"]))
     print("conf.group.attr = {0}".format(conf.group.attr))
