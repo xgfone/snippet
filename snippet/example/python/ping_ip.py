@@ -9,9 +9,6 @@ import threading
 import ipaddress
 import subprocess
 
-from socket import inet_aton, inet_ntoa
-from struct import pack as struct_pack, unpack as struct_unpack
-
 OPT = "-n 1 -w 1000" if sys.platform in ("win32", "cygwin") else "-c 1 -W 1"
 
 
