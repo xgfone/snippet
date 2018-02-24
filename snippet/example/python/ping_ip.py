@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+#
+# For Python 3.3+
+#
 
 import sys
 import queue
