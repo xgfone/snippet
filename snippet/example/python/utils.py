@@ -65,3 +65,19 @@ def execpyfile(filename, *args):
         raise RuntimeError("'{}' does not exist".format(filename))
     code = compile(open(filename, 'rb').read(), filename, 'exec')
     return exec(code, *args)
+
+
+###############################################################################
+from socket import inet_aton, inet_ntoa
+from struct import pack as struct_pack, unpack as struct_unpack
+
+_ALL_IP_MASK = 2 ** 32 - 1
+_IP_MASK_CACHES = {}
+for i in range(0, 33):
+    _IP_MASK_CACHES[i] = (_ALL_IP_MASK >> i) ^ _ALL_IP_MASK
+
+
+def normalize_ip_subnet(ip, fmt=to_str("!I")):
+    ip, mask = ip.split("/")
+    ip = struct_unpack(fmt, inet_aton(ip))[0] & _IP_MASK_CACHES[int(mask)]
+    return "{}/{}".format(inet_ntoa(struct_pack(fmt, ip)), mask)
