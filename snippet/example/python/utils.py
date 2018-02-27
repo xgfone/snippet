@@ -81,3 +81,16 @@ def normalize_ip_subnet(ip, fmt=to_str("!I")):
     ip, mask = ip.split("/")
     ip = struct_unpack(fmt, inet_aton(ip))[0] & _IP_MASK_CACHES[int(mask)]
     return "{}/{}".format(inet_ntoa(struct_pack(fmt, ip)), mask)
+
+
+###############################################################################
+def readn(reader, size=-1):
+    if size < 0:
+        return to_unicode(reader.read())
+
+    tmp = []
+    while size > 0:
+        data = reader.read(size)
+        tmp.append(data)
+        size -= len(data)
+    return to_unicode(b"".join(tmp))
