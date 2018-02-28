@@ -183,7 +183,7 @@ class Configuration(object):
             raise ValueError("The group '{0}' has had the value of '{1}'".format(gname, opt_name))
         setattr(self._caches[gname], opt_name, opt_value)
 
-    def _register(self, name, parser, default=None, group=None, help=None):
+    def _register(self, name, parser, default=None, group=None, help=None, short=None):
         if self._parsed:
             raise Exception("Have been parsed")
 
@@ -194,7 +194,7 @@ class Configuration(object):
         if name in self._opts[group]:
             raise KeyError("The option {0} has been regisetered".format(name))
 
-        self._opts[group][name] = (parser, default, help)
+        self._opts[group][name] = (parser, default, help, short)
         self._caches.setdefault(group, Configuration.Group(group))
 
     def _parse_int(self, value):
@@ -382,6 +382,60 @@ class Configuration(object):
 
     ###########################################################################
     # Parse CLI
+    def register_cli_bool(self, name, default=None, group=None, help=None,
+                          short=None):
+        """Register the bool option with CLI.
+
+        The value of this option will be parsed to the type of bool.
+        """
+        self._register(name, self._parse_bool, default=default, group=group,
+                       help=help, short=short)
+
+    def register_cli_int(self, name, default=None, group=None, help=None,
+                         short=None):
+        """Register the int option with CLI.
+
+        The value of this option will be parsed to the type of int.
+        """
+        self._register(name, self._parse_int, default=default, group=group,
+                       help=help, short=short)
+
+    def register_cli_float(self, name, default=None, group=None, help=None,
+                           short=None):
+        """Register the float option with CLI.
+
+        The value of this option will be parsed to the type of float.
+        """
+        self._register(name, self._parse_float, default=default, group=group,
+                       help=help, short=short)
+
+    def register_cli_str(self, name, default=None, group=None, help=None,
+                         short=None):
+        """Register the str option with CLI.
+
+        The value of this option will be parsed to the type of str.
+        """
+        self._register(name, self._parse_string, default=default, group=group,
+                       help=help, short=short)
+
+    def register_cli_int_list(self, name, default=None, group=None, help=None,
+                              short=None):
+        """Register the int list option with CLI.
+
+        The value of this option will be parsed to the type of int list.
+        """
+        self._register(name, self._parse_ints, default=default, group=group,
+                       help=help, short=short)
+
+    def register_cli_str_list(self, name, default=None, group=None, help=None,
+                              short=None):
+        """Register the string list option with CLI.
+
+        The value of this option will be parsed to the type of string list.
+        """
+        self._register(name, self._parse_strings, default=default, group=group,
+                       help=help, short=short)
+
     def parse(self, *args, **kwargs):
         return self.parse_cli(*args, **kwargs)
 
@@ -430,7 +484,7 @@ class Configuration(object):
         group_opts = {}
         for gname, opts in self._opts.items():
             group = cli if gname == self._default_group_name else cli.add_argument_group(gname)
-            for name, (parser, default, help) in opts.items():
+            for name, (parser, default, help, short) in opts.items():
                 action = None
                 if parser == self._parse_bool:
                     action = "store_false" if default else "store_true"
@@ -443,17 +497,19 @@ class Configuration(object):
                     opt_name = self._unniformize("{0}-{1}".format(gname, name))
                     opt_key = self._uniformize(opt_name)
                 group_opts[opt_key] = (gname, name)
-                group.add_argument("--" + opt_name, action=action, default=default, help=help)
+                short = "-" + short if short and short[0] != "-" else short
+                names = [short, "--" + opt_name] if short else ["--" + opt_name]
+                group.add_argument(*names, action=action, default=default, help=help)
 
         return group_opts, cli.parse_args(args=args)
 
 
 if __name__ == "__main__":
     conf = Configuration()
-    conf.register_bool("bool")
-    conf.register_int("int")
-    conf.register_str("attr", default="abc", help="opt test")
-    conf.register_int("attr", default=None, group="group", help="group test")
+    conf.register_cli_bool("bool", short="b")
+    conf.register_cli_int("int")
+    conf.register_cli_str("attr", default="abc", help="opt test")
+    conf.register_cli_int("attr", default=None, group="group", help="group test")
     conf.parse_cli(["--group-attr", "456", "--bool", "--int", "123"])
     print("int = {0}, type={1}".format(conf.int, type(conf.int)))
     print("bool = {0}, type={1}".format(conf.bool, type(conf.bool)))
