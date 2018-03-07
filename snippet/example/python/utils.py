@@ -37,7 +37,7 @@ def to_unicode(v, encoding="utf-8", **kwargs):
 
 def set_builtin(name, value, force=False):
     exist = getattr(builtins, name, None)
-    if exist and force:
+    if exist and not force:
         return False
     setattr(builtins, name, value)
     return True
