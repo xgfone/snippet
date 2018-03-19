@@ -95,7 +95,8 @@ class Configuration(object):
             return hasattr(self, name)
 
         def __getattr__(self, name):
-            raise AttributeError("The group '{0}' has no the option '{1}'".format(self.__name, name))
+            e = "The group '{0}' has no the option '{1}'"
+            raise AttributeError(e.format(self.__name, name))
 
         def __setitem__(self, name, value):
             setattr(self, name, value)
@@ -104,7 +105,8 @@ class Configuration(object):
             try:
                 return getattr(self, name)
             except AttributeError:
-                raise KeyError("The group '{0}' has no the option '{1}'".format(self.__name, name))
+                e = "The group '{0}' has no the option '{1}'"
+                raise KeyError(e.format(self.__name, name))
 
         def items(self):
             d = vars(self)
@@ -180,7 +182,8 @@ class Configuration(object):
         gname = group_name if group_name else self._default_group_name
         group = self._caches[gname]
         if hasattr(group, opt_name) and not force:
-            raise ValueError("The group '{0}' has had the value of '{1}'".format(gname, opt_name))
+            e = "The group '{0}' has had the option of '{1}'"
+            raise ValueError(e.format(gname, opt_name))
         setattr(self._caches[gname], opt_name, opt_value)
 
     def _register(self, name, parser, default=None, group=None, help=None, short=None):
@@ -276,7 +279,7 @@ class Configuration(object):
                     continue
 
                 if not self._allow_empty:
-                    msg = "The option '{0}' in the group '{1}' doesn't have a value."
+                    msg = "The option '{0}' in the group '{1}' has no value."
                     raise ValueError(msg.format(name, gname))
 
         # Set the options in the default group into self.
@@ -430,12 +433,18 @@ class Configuration(object):
     def _parser_cli(self, args, description=None, config_file_name=None):
         cli = ArgumentParser(description=description)
         if config_file_name:
-            cli.add_argument("--" + config_file_name, default="", help="The config file path.")
-        cli.add_argument("--version", action="store_true", help="Print the version and exit.")
+            cli.add_argument("--" + config_file_name, default="",
+                             help="The config file path.")
+        cli.add_argument("--version", action="store_true",
+                         help="Print the version and exit.")
 
         group_opts = {}
         for gname, opts in self._opts.items():
-            group = cli if gname == self._default_group_name else cli.add_argument_group(gname)
+            if gname == self._default_group_name:
+                group = cli
+            else:
+                group = cli.add_argument_group(gname)
+
             for name, (parser, default, help, short) in opts.items():
                 action = None
                 if parser == self._parse_bool:
