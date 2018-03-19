@@ -338,104 +338,56 @@ class Configuration(object):
             if opt:
                 self._set_group_opt(gname, name, opt[0](value))
 
-    def register_bool(self, name, default=None, group=None, help=None):
+    def register_bool(self, name, short=None, default=None, group=None, help=None):
         """Register the bool option.
 
         The value of this option will be parsed to the type of bool.
         """
-        self._register(name, self._parse_bool, default=default, group=group, help=help)
+        self._register(name, self._parse_bool, short=short, default=default,
+                       group=group, help=help)
 
-    def register_int(self, name, default=None, group=None, help=None):
+    def register_int(self, name, short=None, default=None, group=None, help=None):
         """Register the int option.
 
         The value of this option will be parsed to the type of int.
         """
-        self._register(name, self._parse_int, default=default, group=group, help=help)
+        self._register(name, self._parse_int, short=short, default=default,
+                       group=group, help=help)
 
-    def register_float(self, name, default=None, group=None, help=None):
+    def register_float(self, name, short=None, default=None, group=None, help=None):
         """Register the float option.
 
         The value of this option will be parsed to the type of float.
         """
-        self._register(name, self._parse_float, default=default, group=group, help=help)
+        self._register(name, self._parse_float, short=short, default=default,
+                       group=group, help=help)
 
-    def register_str(self, name, default=None, group=None, help=None):
+    def register_str(self, name, short=None, default=None, group=None, help=None):
         """Register the str option.
 
         The value of this option will be parsed to the type of str.
         """
-        self._register(name, self._parse_string, default=default, group=group, help=help)
+        self._register(name, self._parse_string, short=short, default=default,
+                       group=group, help=help)
 
-    def register_int_list(self, name, default=None, group=None, help=None):
+    def register_int_list(self, name, short=None, default=None, group=None, help=None):
         """Register the int list option.
 
         The value of this option will be parsed to the type of int list.
         """
-        self._register(name, self._parse_ints, default=default, group=group, help=help)
+        self._register(name, self._parse_ints, short=short, default=default,
+                       group=group, help=help)
 
-    def register_str_list(self, name, default=None, group=None, help=None):
+    def register_str_list(self, name, short=None, default=None, group=None, help=None):
         """Register the string list option.
 
         The value of this option will be parsed to the type of string list.
         """
-        self._register(name, self._parse_strings, default=default, group=group, help=help)
+        self._register(name, self._parse_strings, short=short, default=default,
+                       group=group, help=help)
 
     ###########################################################################
     # Parse CLI
-    def register_cli_bool(self, name, default=None, group=None, help=None,
-                          short=None):
-        """Register the bool option with CLI.
-
-        The value of this option will be parsed to the type of bool.
-        """
-        self._register(name, self._parse_bool, default=default, group=group,
-                       help=help, short=short)
-
-    def register_cli_int(self, name, default=None, group=None, help=None,
-                         short=None):
-        """Register the int option with CLI.
-
-        The value of this option will be parsed to the type of int.
-        """
-        self._register(name, self._parse_int, default=default, group=group,
-                       help=help, short=short)
-
-    def register_cli_float(self, name, default=None, group=None, help=None,
-                           short=None):
-        """Register the float option with CLI.
-
-        The value of this option will be parsed to the type of float.
-        """
-        self._register(name, self._parse_float, default=default, group=group,
-                       help=help, short=short)
-
-    def register_cli_str(self, name, default=None, group=None, help=None,
-                         short=None):
-        """Register the str option with CLI.
-
-        The value of this option will be parsed to the type of str.
-        """
-        self._register(name, self._parse_string, default=default, group=group,
-                       help=help, short=short)
-
-    def register_cli_int_list(self, name, default=None, group=None, help=None,
-                              short=None):
-        """Register the int list option with CLI.
-
-        The value of this option will be parsed to the type of int list.
-        """
-        self._register(name, self._parse_ints, default=default, group=group,
-                       help=help, short=short)
-
-    def register_cli_str_list(self, name, default=None, group=None, help=None,
-                              short=None):
-        """Register the string list option with CLI.
-
-        The value of this option will be parsed to the type of string list.
-        """
-        self._register(name, self._parse_strings, default=default, group=group,
-                       help=help, short=short)
-
     def parse(self, *args, **kwargs):
         return self.parse_cli(*args, **kwargs)
 
@@ -506,10 +458,10 @@ class Configuration(object):
 
 if __name__ == "__main__":
     conf = Configuration()
-    conf.register_cli_bool("bool", short="b")
-    conf.register_cli_int("int")
-    conf.register_cli_str("attr", default="abc", help="opt test")
-    conf.register_cli_int("attr", default=None, group="group", help="group test")
+    conf.register_bool("bool", short="b")
+    conf.register_int("int")
+    conf.register_str("attr", default="abc", help="opt test")
+    conf.register_int("attr", default=None, group="group", help="group test")
     conf.parse_cli(["--group-attr", "456", "--bool", "--int", "123"])
     print("int = {0}, type={1}".format(conf.int, type(conf.int)))
     print("bool = {0}, type={1}".format(conf.bool, type(conf.bool)))
