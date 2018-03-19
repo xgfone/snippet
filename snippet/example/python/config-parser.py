@@ -137,8 +137,8 @@ class Configuration(object):
         self._caches = {self._default_group_name: self._default_group}
         self._opts = {}
 
-        self._bool_true = ["t", "1", "T", "on", "On", "ON", "true", "True", "TRUE"]
-        self._bool_false = ["f", "0", "F", "off", "Off", "OFF", "false", "False", "FALSE"]
+        self._bool_true = ["t", "1", "on", "true"]
+        self._bool_false = ["f", "0", "off", "false"]
 
         try:
             "".decode()
@@ -209,6 +209,10 @@ class Configuration(object):
     def _parse_bool(self, value):
         if isinstance(value, bool):
             return value
+        elif not is_string(value):
+            return bool(value)
+
+        value = value.lower()
         if value in self._bool_true:
             return True
         elif value in self._bool_false:
