@@ -32,7 +32,7 @@ def to_unicode(v, encoding="utf-8", **kwargs):
 
 def set_builtin(name, value, force=False):
     exist = getattr(builtins, name, None)
-    if exist and force:
+    if exist and not force:
         return False
     setattr(builtins, name, value)
     return True
@@ -40,7 +40,6 @@ def set_builtin(name, value, force=False):
 
 is_string = lambda s: True if isinstance(s, (Bytes, Unicode)) else False
 to_str = to_unicode if PY3 else to_bytes
-set_builtin("str", to_unicode, force=True)
 # Patch End
 ##############################################################################
 
@@ -481,3 +480,4 @@ if __name__ == "__main__":
     print("conf.attr = {0}".format(conf.attr))
     print('conf["attr"] = {0}'.format(conf["attr"]))
     print("conf.group.attr = {0}".format(conf.group.attr))
+    print(str)
