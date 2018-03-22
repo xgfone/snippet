@@ -407,7 +407,7 @@ class Configuration(object):
             args = sys.argv[1:]
         if not args:
             self._check_and_set_default()
-            return
+            return None
 
         gopts, args = self._parser_cli(args, description=self._description,
                                        config_file_name=config_file_name)
