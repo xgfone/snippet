@@ -9,9 +9,21 @@ class DB(object):
     """Manager the DB connection."""
 
     def __init__(self, write_connection, read_connection=None, autocommit=True,
-                 expire_on_commit=False, echo=False, encoding="utf-8",
+                 expire_on_commit=False, echo=False, encoding="utf8",
                  poolclass=None, pool=None, min_pool_size=1, max_pool_size=5,
                  pool_timeout=10, connection_recycle_time=3600):
+
+        if "charset=" not in write_connection:
+            if "?" in write_connection:
+                write_connection = "%s&charset=%s" % (write_connection, encoding)
+            else:
+                write_connection = "%s?charset=%s" % (write_connection, encoding)
+
+        if read_connection and "charset=" not in read_connection:
+            if "?" in read_connection:
+                read_connection = "%s&charset=%s" % (read_connection, encoding)
+            else:
+                read_connection = "%s?charset=%s" % (read_connection, encoding)
 
         kwargs = {
             "echo": echo,
