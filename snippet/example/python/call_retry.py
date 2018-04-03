@@ -28,3 +28,6 @@ class Retry(object):
                     remaining_retries -= 1
 
         return wrapper
+
+    def call(self, func, *args, **kwargs):
+        return self(func)(*args, *kwargs)
