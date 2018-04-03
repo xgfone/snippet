@@ -19,7 +19,7 @@ class Retry(object):
             while True:
                 try:
                     return func(*args, **kwargs)
-                except Exception:
+                except (IOError, OSError):
                     if remaining_retries <= 0:
                         raise
                     time.sleep(interval)
