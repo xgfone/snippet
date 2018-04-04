@@ -114,5 +114,5 @@ def send_http_get(url, quote=True, use_key=False, co="?", timeout=5, **ks):
             url = url.format(**ks)
     resp = requests.get(url, timeout=timeout)
     if resp.status_code != 200:
-        raise OSError("%s: status_code=%s" % (resp.status_code))
+        raise OSError("%s: status_code=%s" % (url, resp.status_code))
     return resp.json()

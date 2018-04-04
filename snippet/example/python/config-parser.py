@@ -221,7 +221,7 @@ class Configuration(object):
     def _parse_string(self, value):
         if self._py2:
             if isinstance(value, str):
-                value.decode(self._encoding)
+                return value.decode(self._encoding)
         else:
             if not isinstance(value, str):
                 return value.decode(self._encoding)
@@ -234,13 +234,11 @@ class Configuration(object):
         return self._parse_list(self._parse_string, value)
 
     def _parse_list(self, parser, value):
-        vs = []
-        for v in value.strip(",").split(","):
-            v = v.strip()
-            if not v:
-                continue
-            vs.append(parser(v))
-        return vs
+        if isinstance(value, (list, tuple)):
+            vs = value
+        else:
+            vs = (v.strip() for v in value.split(",") if v.strip())
+        return tuple((parser(v) for v in vs))
 
     def _uniformize(self, name):
         return name.replace("-", "_")
@@ -301,7 +299,7 @@ class Configuration(object):
         gname = self._default_group_name
         index, max_index = 0, len(lines)
         while index < max_index:
-            line = lines[index].strip()
+            line = self._parse_string(lines[index]).strip()
             index += 1
 
             # Comment

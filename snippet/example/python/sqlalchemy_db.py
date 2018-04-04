@@ -9,7 +9,7 @@ class DB(object):
     """Manager the DB connection."""
 
     def __init__(self, write_connection, read_connection=None, autocommit=True,
-                 expire_on_commit=False, echo=False, encoding="utf8",
+                 expire_on_commit=False, echo=False, encoding=str("utf8"),
                  poolclass=None, pool=None, min_pool_size=1, max_pool_size=5,
                  pool_timeout=10, connection_recycle_time=3600):
 
