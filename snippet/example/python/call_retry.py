@@ -30,4 +30,4 @@ class Retry(object):
         return wrapper
 
     def call(self, func, *args, **kwargs):
-        return self(func)(*args, *kwargs)
+        return self(func)(*args, **kwargs)

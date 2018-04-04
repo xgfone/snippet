@@ -55,8 +55,8 @@ class ObjectDict(dict):
         try:
             return self[name]
         except KeyError:
-            raise AttributeError("'%s' object has no attribute '%s'" % (
-                                 self.__class__.__name__, name))
+            m = "'%s' object has no attribute '%s'" % (self.__class__.__name__, name)
+            raise AttributeError(m)
 
 
 # Execute and return a python module for Python3.
@@ -94,3 +94,25 @@ def readn(reader, size=-1):
         tmp.append(data)
         size -= len(data)
     return to_unicode(b"".join(tmp))
+
+
+import requests
+
+try:
+    from urllib.parse import quote as qs_quote
+except ImportError:
+    from urllib import quote as qs_quote
+
+
+def send_http_get(url, quote=True, use_key=False, co="?", timeout=5, **ks):
+    if ks:
+        to = lambda v: qs_quote(to_str(v)) if quote else v
+        ks = {k: to(v() if callable(v) else v) for k, v in ks.items() if v is not None}
+        if use_key:
+            url = co.join((url, "&".join(("%s=%s" % (k, v) for k, v in ks.items()))))
+        else:
+            url = url.format(**ks)
+    resp = requests.get(url, timeout=timeout)
+    if resp.status_code != 200:
+        raise OSError("%s: status_code=%s" % (resp.status_code))
+    return resp.json()
