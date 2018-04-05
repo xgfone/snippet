@@ -18,8 +18,20 @@
 #    under the License.
 from sqlalchemy.orm import object_mapper
 
+try:
+    import six
+    Iterator = six.Iterator
+except ImportError:
+    import sys
+    if sys.version_info[0] >= 3:
+        Iterator = object
+    else:
+        class Iterator(object):
+            def next(self):
+                return type(self).__next__(self)
 
-class ModelBase:
+
+class ModelBase(Iterator):
     """Base class for models."""
     __table_initialized__ = False
 
@@ -85,7 +97,7 @@ class ModelBase:
         return [key for key, value in self.items()]
 
 
-class ModelIterator:
+class ModelIterator(Iterator):
     def __init__(self, model, columns):
         self.model = model
         self.i = columns
