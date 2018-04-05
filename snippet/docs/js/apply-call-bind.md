@@ -1,5 +1,14 @@
 # JavaScript 中至关重要的 `Apply`, `Call` 和 `Bind`
 
+## 等式总结：
+```js
+    obj.method(arg1, arg2)
+==> method.call(obj, arg1, arg2)
+==> method.apply(obj, [arg1, arg2])
+==> (method.bind(obj, arg1, arg2))()
+```
+
+
 本文基于 [JavaScript’s Apply, Call, and Bind Methods are Essential for JavaScript Professionals](http://javascriptissexy.com/javascript-apply-call-and-bind-methods-are-essential-for-javascript-professionals) 阅读整理而来, 其中对于原文中的内容进行了部分翻译与增删, 例如 ES6 中开发的注意事项以及三者之间的区别等等, 望周知。 阅读本文内容的先备知识包括:
 
 - 理解 JavaScript 中的 this 关键字
