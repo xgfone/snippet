@@ -1,80 +1,115 @@
-#!/usr/bin/env python
-# encoding: utf8
+# -*- encoding: utf8 -*-
+
 from __future__ import absolute_import, print_function, unicode_literals, division
 
-import zookeeper
+try:
+    import eventlet
+except ImportError:
+    eventlet = None
+
+from .pool import ResourcePool
+from kazoo import exceptions as zkexc
+from kazoo.client import KazooClient
 
 
-def refactor_path(f):
-    def wrapper(*args, **kwargs):
-        _refactor = kwargs.pop("refactor", True)
-        if _refactor:
-            path = kwargs.get("path", None)
-            if path is not None:
-                kwargs["path"] = args[0]._path(path)  # args[0] is an instance of ZooKeeper
-        return f(*args, **kwargs)
-
-    return wrapper
+def _get_zk_handler():
+    if eventlet:
+        from kazoo.handlers.eventlet import SequentialEventletHandler as h
+    else:
+        from kazoo.handlers.threading import SequentialThreadingHandler as h
+    return h()
 
 
 class ZooKeeper(object):
-    DEFAULT_ACL = [{"perms": 0x1f, "scheme": "world", "id": "anyone"}]
+    def __init__(self, hosts="127.0.0.1:2181", prefix="/"):
+        prefix = prefix.rstrip("/")
+        if prefix and not prefix.startswith("/"):
+            raise ValueError("prefix must start with /")
+        self._prefix = prefix
+        self._zk = KazooClient(hosts=hosts, handler=_get_zk_handler())
+        self._zk.start()
 
-    def __init__(self, connector, root="/", acl=None, flags=0):
-        self.root = root.rstrip("/")
-        if not self.root:
-            self.root = "/"
-        self.zk = zookeeper.init(connector)
-        self.acl = acl if acl else self.DEFAULT_ACL
-        self.flags = flags
+    def __del__(self):
+        self.close()
 
     def _path(self, path):
-        path = path.strip("/")
-        if path:
-            path = "/".join((self.root, path))
-        else:
-            path = self.root
+        if self._prefix:
+            return "{0}/{1}".format(self._prefix, path)
         return path
 
-    @refactor_path
-    def create(self, path="", value=""):
-        try:
-            zookeeper.create(self.zk, path, value, self.acl, self.flags)
-        except zookeeper.NodeExistsException:
-            pass
-        except zookeeper.NoNodeException:
-            self.create(path=path.rsplit("/", 1)[0], refactor=False)
-            self.create(path=path, value=value, refactor=False)
+    def close(self):
+        if not self._zk:
+            return
 
-    @refactor_path
-    def delete(self, path="", recursion=True):
         try:
-            zookeeper.delete(self.zk, path)
-        except zookeeper.NoNodeException:
+            self._zk.stop()
+            self._zk.close()
+        except Exception:
             pass
-        except zookeeper.NotEmptyException:
-            if recursion:
-                for subpath in self.ls(path=path, refactor=False):
-                    self.delete(path="/".join((path, subpath)), recursion=recursion, refactor=False)
-                self.delete(path=path, recursion=recursion, refactor=False)
-            else:
+        finally:
+            self._zk = None
+
+    def create(self, path, value="", makepath=True):
+        self._zk.create(self._path(path), value, makepath=makepath)
+
+    def delete(self, path, recursive=True):
+        self._zk.delete(self._path(path), recursive=recursive)
+
+    def set(self, path, value, makepath=True):
+        path = self._path(path)
+        try:
+            self._zk.set(path, value)
+        except zkexc.NoNodeError:
+            if not makepath:
                 raise
+            self._zk.create(path, value, makepath=True)
 
-    @refactor_path
-    def set(self, path="", value=""):
+    def get(self, path, none=True):
         try:
-            zookeeper.set(self.zk, path, value)
-        except zookeeper.NoNodeException:
-            self.create(path=path, value=value, refactor=False)
-            self.set(path=path, value=value, refactor=False)
+            return self._zk.get(self._path(path))
+        except zkexc.NoNodeError:
+            if none:
+                return None
+            raise
 
-    @refactor_path
-    def get(self, path=""):
-        return zookeeper.get(self.zk, path)
+    def ls(self, path, none=True):
+        try:
+            return self._zk.get_children(self._path(path))
+        except zkexc.NoNodeError:
+            if none:
+                return None
+            raise
 
-    @refactor_path
-    def ls(self, path=""):
-        return zookeeper.get_children(self.zk, path)
+
+class ZkPoolProxy(object):
+    def __init__(self, hosts, prefix="/", pool_size=10):
+        self.__pool = ResourcePool(ZooKeeper, hosts=hosts, prefix=prefix,
+                                   capacity=pool_size, autowrap=True)
+
+    def _call(self, zk, method, *args, **kwargs):
+        try:
+            v = getattr(zk, method)(*args, **kwargs)
+        except Exception:
+            self.__pool.put_with_close(zk)
+            raise
+        else:
+            self.__pool.put(zk)
+            return v
 
     def close(self):
-        zookeeper.close(self.zk)
+        self.__pool.close()
+
+    def create(self, path, value="", makepath=True):
+        self.__pool.get().create(path, value=value, makepath=makepath)
+
+    def delete(self, path, recursive=True):
+        self.__pool.get().delete(path, recursive=recursive)
+
+    def set(self, path, value, makepath=True):
+        self.__pool.get().set(path, value, makepath=makepath)
+
+    def get(self, path, none=True):
+        return self.__pool.get().get(path, none=none)
+
+    def ls(self, path, none=True):
+        return self.__pool.get().ls(path, none=none)
