@@ -1,6 +1,7 @@
 # -*- encoding: utf-8
 
 import time
+import functools
 
 
 class Retry(object):
@@ -12,22 +13,23 @@ class Retry(object):
         self._increase_retry_interval = increase_retry_interval
 
     def __call__(self, func):
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            interval = self._retry_interval
-            remaining_retries = self._max_retries
-
-            while True:
-                try:
-                    return func(*args, **kwargs)
-                except (IOError, OSError):
-                    if remaining_retries <= 0:
-                        raise
-                    time.sleep(interval)
-                    if self._increase_retry_interval:
-                        interval = min(interval * 2, self._max_retry_interval)
-                    remaining_retries -= 1
+            return self.call(func, *args, **kwargs)
 
         return wrapper
 
     def call(self, func, *args, **kwargs):
-        return self(func)(*args, **kwargs)
+        interval = self._retry_interval
+        remaining_retries = self._max_retries
+
+        while True:
+            try:
+                return func(*args, **kwargs)
+            except (IOError, OSError):
+                if remaining_retries <= 0:
+                    raise
+                time.sleep(interval)
+                if self._increase_retry_interval:
+                    interval = min(interval * 2, self._max_retry_interval)
+                remaining_retries -= 1
