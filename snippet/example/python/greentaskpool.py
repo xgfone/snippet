@@ -5,7 +5,7 @@ import logging
 LOG = logging.getLogger(__name__)
 
 
-class TaskPool(object):
+class GreenTaskPool(object):
     from threading import Thread
 
     def __init__(self, size=10000, use_eventlet=False, use_gevent=False,
@@ -33,7 +33,7 @@ class TaskPool(object):
             self._pool = None
             LOG.warning("Use threading.Thread to execute the task.")
 
-        self._spawn = self._pool.spawn if self._pool else TaskPool._spawn_thread
+        self._spawn = self._pool.spawn if self._pool else GreenTaskPool._spawn_thread
 
     def _init_eventlet(self, eventlet):
         eventlet.monkey_patch(all=True)
@@ -45,7 +45,7 @@ class TaskPool(object):
 
     @staticmethod
     def _spawn_thread(func, *args, **kwargs):
-        t = TaskPool.Thread(target=func, args=args, kwargs=kwargs)
+        t = GreenTaskPool.Thread(target=func, args=args, kwargs=kwargs)
         t.daemon = True
         t.start()
         return t
