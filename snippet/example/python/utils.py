@@ -104,7 +104,8 @@ except ImportError:
     from urllib import quote as qs_quote
 
 
-def send_http_get(url, quote=True, use_key=False, co="?", timeout=5, **ks):
+def send_http_get(url, quote=True, use_key=False, co="?", timeout=5,
+                  raise404=True, has_result=True, **ks):
     if ks:
         to = lambda v: qs_quote(to_str(v)) if quote else v
         ks = {k: to(v() if callable(v) else v) for k, v in ks.items() if v is not None}
@@ -113,6 +114,15 @@ def send_http_get(url, quote=True, use_key=False, co="?", timeout=5, **ks):
         else:
             url = url.format(**ks)
     resp = requests.get(url, timeout=timeout)
-    if resp.status_code != 200:
-        raise OSError("%s: status_code=%s" % (url, resp.status_code))
-    return resp.json()
+    status_code = resp.status_code
+    if status_code == 404:
+        if raise404:
+            raise Exception("not found %s" % url)
+        return None
+    elif status_code == 200:
+        if has_result:
+            return resp.json()
+        return None
+    elif status_code == 204:
+        return None
+    raise OSError("%s: status_code=%s" % (url, status_code))
