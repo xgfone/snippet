@@ -50,6 +50,10 @@ class ModelBase(Iterator):
             session.add(self)
             session.flush()
 
+    def __repr__(self):
+        attrs = ", ".join(("%s=%s" % (k, v) for k, v in self.items()))
+        return "%s(%s)" % (self.__tablename__.title(), attrs)
+
     def __setitem__(self, key, value):
         setattr(self, key, value)
 
