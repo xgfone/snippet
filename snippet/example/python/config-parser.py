@@ -404,7 +404,7 @@ class Configuration(object):
         if args is None:
             args = sys.argv[1:]
         if not args:
-            self._check_and_set_default()
+            self._check_and_fix()
             return None
 
         gopts, args = self._parser_cli(args, description=self._description,
