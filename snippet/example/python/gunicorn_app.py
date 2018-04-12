@@ -3,7 +3,6 @@
 
 import sys
 
-from os.path import split as split_path
 from multiprocessing import cpu_count
 from gunicorn.util import import_app
 from gunicorn.config import Setting, validate_string
@@ -25,49 +24,40 @@ class AppConfigFile(Setting):
         """
 
 
-class Application(_Application):
+class AppManager(_Application):
     _DEFAULT_OPTIONS = {
-        "bind": "0.0.0.0:80",
+        "bind": "0.0.0.0:8000",
         "workers": cpu_count() * 2,
-        "worker_class": "eventlet",
+        "worker_class": "gevent",
         "worker_connections": 10000,
     }
 
     def __init__(self, app=None, app_name=None, app_conf=None,
-                 load_app_config=None, workers=None, options=None):
+                 config_options=None, usage=None, prog=None):
 
         self._app = app
         self._app_name = app_name
         self._app_conf = app_conf or {}
 
-        self._load_app_config = self._load_app_config_default
-        if load_app_config:
-            self._load_app_config = load_app_config
+        self._config_options = self._DEFAULT_OPTIONS.copy()
+        self._config_options.update(config_options or {})
 
-        self._options = self._DEFAULT_OPTIONS.copy()
-        self._options.update(options or {})
-        if workers is not None:
-            self._options["workers"] = workers
+        super(AppManager, self).__init__(usage=usage, prog=prog)
 
-        super(Application, self).__init__()
-
-    def _load_app_config_default(self, filepath):
+    def load_app_config(self, filepath):
         """Consider the config file as a python module to load."""
 
-        if filepath[0] != "/":
-            return self.get_config_from_module_name(filepath)
-
-        filedir, filename = split_path(filepath)
-        sys.path.append(filedir)
-        conf = self.get_config_from_module_name(filename[:-3])
-        sys.path.remove(filedir)
-        return conf
+        if filepath[0] == "/":
+            cfg = self.get_config_from_filename(filepath)
+        else:
+            cfg = self.get_config_from_module_name(filepath)
+        self._app_conf.update(cfg)
 
     def init(self, parser, opts, args):
         if opts.app_config:
-            self._app_conf.update(self._load_app_config(opts.app_conf))
+            self.load_app_config(opts.app_conf)
 
-        if args > 0:
+        if args:
             self._app = args[0]
             if not self._app_name:
                 self._app_name = args[0]
@@ -78,17 +68,20 @@ class Application(_Application):
         if self._app_name:
             self.cfg.set("default_proc_name", self._app_name)
 
-        return self._options
+        return self._config_options
 
     def load(self):
         sys.path.insert(0, self.cfg.chdir)
-        app = import_app(self._app)
+        app = self._app
+        if isinstance(app, str):
+            app = import_app(self._app)
         app.conf = self._app_conf
         return app
 
 
 def main():
-    Application().run()
+    AppManager().run()
+
 
 if __name__ == "__main__":
     main()
