@@ -275,8 +275,8 @@ class Configuration(object):
             for name, opt in opts.items():
                 if name in group:
                     continue
-                elif opt[1] is not None:
-                    setattr(group, name, opt[1])
+                elif opt[1] is not None or opt[0] == self._parse_bool:
+                    self._set_group_opt(gname, name, opt[1])
                     continue
 
                 if not self._allow_empty:
