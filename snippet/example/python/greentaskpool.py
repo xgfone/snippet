@@ -13,18 +13,18 @@ class GreenTaskPool(object):
         self._size = size
 
         if use_eventlet:
-            import eventlet
+            eventlet = __import__("eventlet")
             self._pool = self._init_eventlet(eventlet)
         elif use_gevent:
-            import gevent
+            gevent = __import__("gevent")
             self._pool = self._init_gevent(gevent)
         elif auto_detection:
             try:
-                import eventlet
+                eventlet = __import__("eventlet")
                 self._pool = self._init_eventlet(eventlet)
             except ImportError:
                 try:
-                    import gevent
+                    gevent = __import__("gevent")
                     self._init_gevent(gevent)
                 except ImportError:
                     self._pool = None
