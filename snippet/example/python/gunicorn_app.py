@@ -1,12 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
-
-import sys
 
 from multiprocessing import cpu_count
 from gunicorn.util import import_app
-from gunicorn.config import Setting, validate_string
+from gunicorn.config import Setting, validate_string, validate_bool
 from gunicorn.app.base import Application as _Application
+
+
+def add_app_version(version, name=None, help=None):
+    class AppVersion(Setting):
+        validator = validate_bool
+        desc = "Print app's version and exit."
+
+        def add_option(self, parser):
+            parser.add_argument(name or "--app-version", action="version",
+                                version=version + "\n", help=help or self.desc)
+
+    return AppVersion
 
 
 class AppConfigFile(Setting):
@@ -26,17 +36,18 @@ class AppConfigFile(Setting):
 
 class AppManager(_Application):
     _DEFAULT_OPTIONS = {
-        "bind": "0.0.0.0:8000",
+        "bind": "0.0.0.0:8888",
         "workers": cpu_count() * 2,
         "worker_class": "gevent",
         "worker_connections": 10000,
     }
 
-    def __init__(self, app=None, app_name=None, app_conf=None,
+    def __init__(self, app=None, app_name=None, app_conf=None, load_app=None,
                  config_options=None, usage=None, prog=None):
 
         self._app = app
         self._app_name = app_name
+        self._load_app = load_app
         self._app_conf = app_conf or {}
 
         self._config_options = self._DEFAULT_OPTIONS.copy()
@@ -62,8 +73,12 @@ class AppManager(_Application):
             if not self._app_name:
                 self._app_name = args[0]
 
-        if not self._app:
-            raise RuntimeError("not app")
+        if not self._app and not self._load_app:
+            raise RuntimeError("no app")
+
+        if not self._app_name and self._app:
+            self._app_name = self._app if isinstance(self._app, str) else \
+                             self._app.__class__.__name__
 
         if self._app_name:
             self.cfg.set("default_proc_name", self._app_name)
@@ -71,11 +86,16 @@ class AppManager(_Application):
         return self._config_options
 
     def load(self):
-        sys.path.insert(0, self.cfg.chdir)
-        app = self._app
-        if isinstance(app, str):
-            app = import_app(self._app)
-        app.conf = self._app_conf
+        if self._app:
+            app = self._app
+            if isinstance(app, str):
+                app = import_app(self._app)
+        else:
+            app = self._load_app()
+
+        if hasattr(app, "load_conf"):
+            app.load_conf(self._app_conf)
+
         return app
 
 
