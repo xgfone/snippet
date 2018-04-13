@@ -3,15 +3,9 @@
 import sys
 
 if sys.version_info[0] < 3:
-    import __builtin__ as builtins
     PY3, Unicode, Bytes = False, unicode, str
 else:
-    import builtins
     PY3, Unicode, Bytes = True, str, bytes
-
-# to_bytes = lambda v, e="utf-8": v.encode(e) if isinstance(v, Unicode) else v
-# to_unicode = lambda v, e="utf-8": v.decode(e) if isinstance(v, Bytes) else v
-# to_str = to_unicode if PY3 else to_bytes
 
 
 def to_bytes(v, encoding="utf-8", **kwargs):
@@ -30,19 +24,12 @@ def to_unicode(v, encoding="utf-8", **kwargs):
     return to_unicode(str(v), encoding=encoding)
 
 
-def set_builtin(name, value, force=False):
-    exist = getattr(builtins, name, None)
-    if exist and not force:
-        return False
-    setattr(builtins, name, value)
-    return True
-
-
-is_string = lambda s: True if isinstance(s, (Bytes, Unicode)) else False
 to_str = to_unicode if PY3 else to_bytes
+is_bytes = lambda s: isinstance(s, Bytes)
+is_unicode = lambda s: isinstance(s, Unicode)
+is_string = lambda s: isinstance(s, (Bytes, Unicode))
 # Patch End
 ##############################################################################
-
 
 ##############################################################################
 # Python 2.6 Patch
@@ -155,7 +142,7 @@ class Configuration(object):
         except KeyError:
             pass
 
-        msg = "'{0}' object has no attribute '{1}"
+        msg = "'{0}' object has no attribute '{1}'"
         raise AttributeError(msg.format(self.__class__.__name__, name))
 
     def __getitem__(self, name):
