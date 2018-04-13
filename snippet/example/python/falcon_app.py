@@ -49,24 +49,29 @@ class Application(falcon.API):
             add_route("/path/to", resource, "resource_method", methods=["GET"])
             add_route("/path/to", resource, action="resource_method", methods="GET")
             add_route("/path/to", resource, action="resource_method", methods=["GET"])
+            add_route("/path/to", None, action_func_or_method, "GET")
+            add_route("/path/to", None, action_func_or_method, "GET", "POST")
+            add_route("/path/to", None, action_func_or_method, ["GET", "POST"])
+            add_route("/path/to", None, action=action_func_or_method, methods="GET")
+            add_route("/path/to", None, action=action_func_or_method, methods=["GET", "POST"])
         """
 
-        resource = resource if resource else self._resource
         if not resource:
-            raise ValueError("resource is missing")
+            resource = self._resource
 
-        if not args and not kwargs:
-            super(Application, self).add_route(uri_template, resource)
-            return
-
-        if not args:
-            action = kwargs["action"]
-            methods = kwargs["methods"]
-        else:
+        if args:
             action = args[0]
             methods = args[1:]
             if not methods:
                 methods = kwargs["methods"]
+        elif kwargs:
+            action = kwargs["action"]
+            methods = kwargs["methods"]
+        elif resource:
+            super(Application, self).add_route(uri_template, resource)
+            return
+        else:
+            raise ValueError("Route arguments error")
 
         if not action:
             raise ValueError("action is empty")
