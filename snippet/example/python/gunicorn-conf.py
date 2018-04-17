@@ -3,17 +3,17 @@
 
 import multiprocessing
 
-appname = "sgapi"
+appname = "{APPNAME}"
 
 # [Gunicorn Setting]
 daemon = True
 bind = "0.0.0.0:10100"
-errorlog = "/log/sgapi/{}.log".format(appname)
-pidfile = "/log/sgapi/{}.pid".format(appname)
+errorlog = "/log/{appname}/{appname}.log".format(appname=appname)
+pidfile = "/log/{appname}/{appname}.pid".format(appname=appname)
 proc_name = appname
 worker_class = "gevent"
 worker_connections = 10000
 workers = multiprocessing.cpu_count() * 2
-raw_env = "APP_CONFIG={}".format(__file__)
+raw_env = "APP_CONFIG={0}".format(__file__)
 
 # [App Setting]
