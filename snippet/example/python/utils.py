@@ -7,16 +7,9 @@ import sys
 import os.path
 
 if sys.version_info[0] < 3:
-    import builtins
     PY3, Unicode, Bytes = False, unicode, str
 else:
-    import __builtin__ as builtins
     PY3, Unicode, Bytes = True, str, bytes
-
-
-# to_bytes = lambda v, e="utf-8": v.encode(e) if isinstance(v, Unicode) else v
-# to_unicode = lambda v, e="utf-8": v.decode(e) if isinstance(v, Bytes) else v
-# to_str = to_unicode if PY3 else to_bytes
 
 
 def to_bytes(v, encoding="utf-8", **kwargs):
@@ -34,17 +27,10 @@ def to_unicode(v, encoding="utf-8", **kwargs):
         return v
     return to_unicode(str(v), encoding=encoding)
 
-
-def set_builtin(name, value, force=False):
-    exist = getattr(builtins, name, None)
-    if exist and not force:
-        return False
-    setattr(builtins, name, value)
-    return True
-
-
 to_str = to_unicode if PY3 else to_bytes
-set_builtin("str", to_unicode, force=True)
+is_bytes = lambda s: isinstance(s, Bytes)
+is_unicode = lambda s: isinstance(s, Unicode)
+is_string = lambda s: isinstance(s, (Bytes, Unicode))
 
 
 class ObjectDict(dict):
@@ -63,6 +49,20 @@ class ObjectDict(dict):
 def execpyfile(filename, *args):
     if not os.path.exists(filename):
         raise RuntimeError("'{}' does not exist".format(filename))
+    if args:
+        globals = args[0]
+        if "__file__" not in globals:
+            globals["__file__"] = filename
+        if "__builtins__" not in globals:
+            globals["__builtins__"] = __builtins__
+        if "__name__" not in globals:
+            globals["__name__"] = "__exec__"
+    else:
+        args = ({
+            "__file__": filename,
+            "__builtins__": __builtins__,
+            "__name__": "__exec__",
+        },)
     code = compile(open(filename, 'rb').read(), filename, 'exec')
     return exec(code, *args)
 
