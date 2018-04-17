@@ -11,7 +11,7 @@ class DB(object):
     def __init__(self, write_connection, read_connection=None, autocommit=True,
                  expire_on_commit=False, echo=False, encoding=str("utf8"),
                  poolclass=None, pool=None, min_pool_size=1, max_pool_size=5,
-                 pool_timeout=10, connection_recycle_time=3600):
+                 pool_timeout=10, idle_timeout=3600):
 
         if "charset=" not in write_connection:
             if "?" in write_connection:
@@ -32,7 +32,7 @@ class DB(object):
             "pool": pool,
             "pool_size": min_pool_size,
             "pool_timeout": pool_timeout,
-            "pool_recycle": connection_recycle_time,
+            "pool_recycle": idle_timeout,
             "max_overflow": max_pool_size - min_pool_size,
             "convert_unicode": True,
         }
