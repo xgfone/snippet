@@ -13,17 +13,9 @@ class DB(object):
                  poolclass=None, pool=None, min_pool_size=1, max_pool_size=5,
                  pool_timeout=10, idle_timeout=3600):
 
-        if "charset=" not in write_connection:
-            if "?" in write_connection:
-                write_connection = "%s&charset=%s" % (write_connection, encoding)
-            else:
-                write_connection = "%s?charset=%s" % (write_connection, encoding)
-
-        if read_connection and "charset=" not in read_connection:
-            if "?" in read_connection:
-                read_connection = "%s&charset=%s" % (read_connection, encoding)
-            else:
-                read_connection = "%s?charset=%s" % (read_connection, encoding)
+        write_connection = self._fix_charset(write_connection, encoding)
+        if read_connection:
+            read_connection = self._fix_charset(read_connection, encoding)
 
         kwargs = {
             "echo": echo,
@@ -36,19 +28,33 @@ class DB(object):
             "max_overflow": max_pool_size - min_pool_size,
             "convert_unicode": True,
         }
-        self._kwargs = kwargs
+
         self._autocommit = autocommit
         self._expire_on_commit = expire_on_commit
 
-        self._write_engine = create_engine(write_connection, **kwargs)
+        self._write_engine = self._create_engine(write_connection, kwargs)
         self._write_session_cls = self._get_session_cls(self._write_engine)
 
         if read_connection:
-            self._read_engine = create_engine(read_connection, **kwargs)
+            self._read_engine = self._create_engine(read_connection, kwargs)
             self._read_session_cls = self._get_session_cls(self._read_engine)
         else:
             self._read_engine = self._write_engine
             self._read_session_cls = self._write_session_cls
+
+    def _fix_charset(self, connection, encoding):
+        if "mysql" in connection and "charset=" not in connection:
+            if "?" in connection:
+                return "%s&charset=%s" % (connection, encoding)
+            return "%s?charset=%s" % (connection, encoding)
+        return connection
+
+    def _create_engine(self, connection, kwargs):
+        if connection.startswith("sqlite:///"):
+            kwargs.pop("pool_size", None)
+            kwargs.pop("pool_timeout", None)
+            kwargs.pop("max_overflow", None)
+        return create_engine(connection, **kwargs)
 
     def _get_session_cls(self, engine):
         return sessionmaker(bind=engine, autocommit=self._autocommit,
