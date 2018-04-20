@@ -11,7 +11,7 @@ class DB(object):
     def __init__(self, write_connection, read_connection=None, autocommit=True,
                  expire_on_commit=False, echo=False, encoding=str("utf8"),
                  poolclass=None, pool=None, min_pool_size=2, max_pool_size=5,
-                 pool_timeout=30, idle_timeout=3600):
+                 pool_timeout=30, idle_timeout=3600, base=None):
 
         write_connection = self._fix_charset(write_connection, encoding)
         if read_connection:
@@ -29,6 +29,7 @@ class DB(object):
             "convert_unicode": True,
         }
 
+        self._base = base
         self._autocommit = autocommit
         self._expire_on_commit = expire_on_commit
 
@@ -59,6 +60,9 @@ class DB(object):
     def _get_session_cls(self, engine):
         return sessionmaker(bind=engine, autocommit=self._autocommit,
                             expire_on_commit=self._expire_on_commit)
+
+    def create_tables(self, base=None):
+        (base or self._base).metadata.create_all(self._write_engine)
 
     def get_write_session(self):
         return self._write_session_cls()
