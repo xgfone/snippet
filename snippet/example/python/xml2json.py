@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """xml2json.py  Convert XML to JSON
 Relies on ElementTree for the XML parsing.  This is based on
 pesterfish.py but uses a different XML->JSON mapping.
@@ -24,6 +26,8 @@ Look at the Yahoo version closely to see how it works.  Maybe can adopt
 that completely if it makes more sense...
 R. White, 2006 November 6
 """
+
+from __future__ import print_function
 
 import json
 
