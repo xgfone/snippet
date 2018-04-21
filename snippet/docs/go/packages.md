@@ -319,3 +319,6 @@ Go client for Redis.
 
 ##### [go-server-js](https://github.com/zengming00/go-server-js)
     a js server based on goja.
+
+##### [tollbooth](github.com/didip/tollbooth)
+    Simple middleware to rate-limit HTTP requests.
