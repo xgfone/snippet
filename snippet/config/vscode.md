@@ -139,6 +139,7 @@ Install a Package
 #anseki.vscode-color                     # Helper with GUI to generate color codes.
 #slevesque.vscode-hexdump                # Display a specified file in hexadecimal
 #christian-kohler.path-intellisense
+jinsihou.diff-tool
 vscodevim.vim
 formulahendry.code-runner
 robertohuertasm.vscode-icons
@@ -161,6 +162,9 @@ howardzuo.vscode-gitk                    # Show git commit log for selected sour
 pprice.better-merge                      # Improved git merge conflict support.
 lamartire.git-indicators                 # Atom like git counters.
 
+## SQL
+formulahendry.vscode-mysql            # MySQL Management Tool
+mtxr.sqltools                         # SQL
 
 ## Python
 ms-python.python                      # Python
@@ -196,7 +200,7 @@ pranaygp.vscode-css-peek                 # CSS
 abusaidm.html-snippets                   # HTML 5
 #formulahendry.auto-close-tag            # HTML/XML
 #formulahendry.auto-rename-tag           # HTML/XML
-
+#hdg.live-html-previewer                 # Edit and preview HTML
 
 ## Browser
 #akamud.vscode-caniuse                   # Can I Use
@@ -220,6 +224,8 @@ abusaidm.html-snippets                   # HTML 5
 ## YAML
 #Togusa09.tmlanguage                     # YAML
 
+## TOML
+#bungcip.better-toml                     # TOML
 
 ## Others
 #hcyang.ctags                            # CTags
