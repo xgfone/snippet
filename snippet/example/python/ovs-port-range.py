@@ -34,28 +34,28 @@ def _gen_rules_port_min(port_min, top_bit):
     # maximum. Top_bit has the form (1000000) with '1' pointing to the register
     # being processed, while mask has the form (0111111) with '1' showing
     # possible range to be covered.
-
+    #
     # With each rule generation cycle, mask and top_bit are bit shifted to the
     # right. When top_bit reaches 0 it means that last register was processed.
-
+    #
     # Let port_min be n bits long, top_bit = 1 << k, 0<=k<=n-1.
-
+    #
     # Each cycle step checks the following conditions:
-
+    #
     #     1). port & mask == 0
     #     This means that remaining bits k..1 are equal to '0' and can be
     #     covered by a single port/mask rule.
-
+    #
     #     If condition 1 doesn't fit, then both top_bit and mask are bit
     #     shifted to the right and condition 2 is checked:
-
+    #
     #     2). port & top_bit == 0
     #     This means that kth port bit is equal to '0'. By setting it to '1'
     #     and masking other (k-1) bits all ports in range
     #     [P, P + 2^(k-1)-1] are guaranteed to be covered.
     #     Let p_k be equal to port first (n-k) bits with rest set to 0.
     #     Then P = p_k | top_bit.
-
+    #
     # Correctness proof:
     # The remaining range to be encoded in a cycle is calculated as follows:
     # R = [port_min, port_min | mask].
@@ -65,14 +65,14 @@ def _gen_rules_port_min(port_min, top_bit):
     # from the range. Remaining range R will shrink by 2^(k-1).
     # If condition 2 doesn't hold, then even after top_bit/mask shift in next
     # iteration the value of R won't change.
-
+    #
     # Full cycle example for range [40, 64):
     # port=0101000, top_bit=1000000, k=6
     # * step 1, k=6, R=[40, 63]
     #   top_bit=1000000, mask=0111111 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
     #   top_bit=0100000, mask=0011111 -> condition 2 doesn't hold
-
+    #
     # * step 2, k=5, R=[40, 63]
     #   top_bit=0100000, mask=0011111 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
@@ -82,11 +82,11 @@ def _gen_rules_port_min(port_min, top_bit):
     #   top_bit=0010000, mask=0001111 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
     #   top_bit=0001000, mask=0000111 -> condition 2 doesn't hold
-
+    #
     # * step 4, k=3, R=[40, 47]
     #   top_bit=0001000, mask=0000111 -> condition 1 holds -> 0101xxx or
     #                                                         0x0028/fff8
-
+    #
     #   rules=[0x0030/fff0, 0x0028/fff8]
 
     rules = []
@@ -115,28 +115,28 @@ def _gen_rules_port_max(port_max, top_bit):
     # maximum. Top_bit has the form (1000000) with '1' pointing to the register
     # being processed, while mask has the form (0111111) with '1' showing
     # possible range to be covered.
-
+    #
     # With each rule generation cycle, mask and top_bit are bit shifted to the
     # right. When top_bit reaches 0 it means that last register was processed.
-
+    #
     # Let port_max be n bits long, top_bit = 1 << k, 0<=k<=n-1.
-
+    #
     # Each cycle step checks the following conditions:
-
+    #
     #     1). port & mask == mask
     #     This means that remaining bits k..1 are equal to '1' and can be
     #     covered by a single port/mask rule.
-
+    #
     #     If condition 1 doesn't fit, then both top_bit and mask are bit
     #     shifted to the right and condition 2 is checked:
-
+    #
     #     2). port & top_bit == top_bit
     #     This means that kth port bit is equal to '1'. By setting it to '0'
     #     and masking other (k-1) bits all ports in range
     #     [P, P + 2^(k-1)-1] are guaranteed to be covered.
     #     Let p_k be equal to port first (n-k) bits with rest set to 0.
     #     Then P = p_k | ~top_bit.
-
+    #
     # Correctness proof:
     # The remaining range to be encoded in a cycle is calculated as follows:
     # R = [port_max & ~mask, port_max].
@@ -146,7 +146,7 @@ def _gen_rules_port_max(port_max, top_bit):
     # from the range. Remaining range R will shrink by 2^(k-1).
     # If condition 2 doesn't hold, then even after top_bit/mask shift in next
     # iteration the value of R won't change.
-
+    #
     # Full cycle example for range [64, 105]:
     # port=1101001, top_bit=1000000, k=6
     # * step 1, k=6, R=[64, 105]
@@ -158,7 +158,7 @@ def _gen_rules_port_max(port_max, top_bit):
     #   top_bit=0100000, mask=0011111 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
     #   top_bit=0010000, mask=0001111 -> condition 2 doesn't hold
-
+    #
     # * step 3, k=4, R=[96, 105]
     #   top_bit=0010000, mask=0001111 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
@@ -168,16 +168,16 @@ def _gen_rules_port_max(port_max, top_bit):
     #   top_bit=0001000, mask=0000111 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
     #   top_bit=0000100, mask=0000011 -> condition 2 doesn't hold
-
+    #
     # * step 5, k=2, R=[104, 105]
     #   top_bit=0000100, mask=0000011 -> condition 1 doesn't hold, shifting
     #                                    mask/top_bit
     #   top_bit=0000010, mask=0000001 -> condition 2 doesn't hold
-
+    #
     # * step 6, k=1, R=[104, 105]
     #   top_bit=0000010, mask=0000001 -> condition 1 holds -> 1101001 or
     #                                                         0x0068
-
+    #
     #   rules=[0x0040/ffe0, 0x0060/fff8, 0x0068]
 
     rules = []
@@ -208,7 +208,7 @@ def port_rule_masking(port_min, port_max):
 
     # Let binary representation of port_min and port_max be n bits long and
     # have first m bits in common, 0 <= m <= n.
-
+    #
     # If remaining (n - m) bits of given ports define 2^(n-m) values, then
     # [port_min, port_max] range is covered by a single rule.
     # For example:
@@ -218,7 +218,7 @@ def port_rule_masking(port_min, port_max):
     # Ports have m=3 bits in common with the remaining (n-m)=3 bits
     # covering range [0, 2^3), which equals to a single 010xxx rule. The algo
     # will return [0x0010/fff8].
-
+    #
     # Else [port_min, port_max] range will be split into 2: range [port_min, T)
     # and [T, port_max]. Let p_m be the common part of port_min and port_max
     # with other (n-m) bits set to 0. Then T = p_m | 1 << (n-m-1).
@@ -230,7 +230,7 @@ def port_rule_masking(port_min, port_max):
     # initial range [40, 105] is divided into [40, 64) and [64, 105].
     # Each of the ranges will be processed separately, then the generated rules
     # will be merged.
-
+    #
     # Check port_max >= port_min.
     if port_max < port_min:
         raise ValueError(_("'port_max' is smaller than 'port_min'"))
