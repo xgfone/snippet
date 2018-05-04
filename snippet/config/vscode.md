@@ -7,16 +7,6 @@
     // "bookmarks.saveBookmarksBetweenSessions": true,
     // "bookmarks.navigateThroughAllFiles": true,
 
-    // "[c]": {
-    //     "editor.insertSpaces": false
-    // },
-
-    // "[cpp]": {
-    //     "editor.insertSpaces": false
-    // },
-
-    "C_Cpp.intelliSenseEngine": "Default",
-
     "debug.allowBreakpointsEverywhere": true,
     "debug.openExplorerOnEnd": true,
 
@@ -36,44 +26,50 @@
     "editor.quickSuggestionsDelay": 2,
 
     "explorer.openEditors.visible": 0,
-    "extensions.autoUpdate": true,
 
+    "files.defaultLanguage": "python",
     "files.encoding": "utf8",
     "files.eol": "\n",
     "files.autoGuessEncoding": true,
+    "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
 
     "go.inferGopath": true,
     "go.autocompleteUnimportedPackages": true,
     "go.useLanguageServer": true,
+    "go.gotoSymbol.ignoreFolders": [
+        "vendor",
+    ],
 
     "html.format.indentInnerHtml": true,
 
-    "projectManager.svn.baseFolders": [],
-    "projectManager.git.baseFolders": [],
-    "projectManager.git.maxDepthRecursion": 4,
-    "projectManager.showProjectNameInStatusBar": true,
+    // "projectManager.svn.baseFolders": [],
+    // "projectManager.git.baseFolders": [],
+    // "projectManager.git.maxDepthRecursion": 4,
+    // "projectManager.showProjectNameInStatusBar": true,
 
+    "python.pythonPath": "ipython",
     "python.autoComplete.addBrackets": true,
     "python.linting.maxNumberOfProblems": 120,
-    "python.linting.pylintEnabled": true,
-    "python.linting.pep8Enabled": true,
-    "python.unitTest.nosetestsEnabled": false,
-    "python.unitTest.nosetestArgs": [],
+    // "python.linting.pylintEnabled": true,
+    // "python.linting.pep8Enabled": true,
+
+    "svgviewer.enableautopreview": true,
 
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
 
-    "vim.leader": ";",
-    "vim.useSystemClipboard": true,
-    "vim.easymotion": true,
-    "vim.hlsearch": true,
+    // "vim.leader": ";",
+    // "vim.useSystemClipboard": true,
+    // "vim.easymotion": true,
+    // "vim.hlsearch": true,
 
     "vsicons.presets.angular": false,
     "vsicons.dontShowNewVersionMessage": true,
 
+    "window.restoreWindows": "all",
     "window.openFoldersInNewWindow": "on",
     "window.title": "${rootPath}${separator}${activeEditorMedium}${dirty}",
 
