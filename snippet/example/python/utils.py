@@ -98,38 +98,24 @@ def readn(reader, size=-1):
 
 import requests
 
-try:
-    from urllib.parse import quote as qs_quote
-except ImportError:
-    from urllib import quote as qs_quote
 
+def send_http_json(method, url, exc=True, headers=None, **kwargs):
+    """Send the HTTP request.
 
-def send_http_get(url, quote=True, use_key=False, co="?", timeout=5, json=False,
-                  raise404=True, has_result=True, headers=None, **ks):
-    if ks:
-        to = lambda v: qs_quote(to_str(v)) if quote else v
-        ks = {k: to(v() if callable(v) else v) for k, v in ks.items() if v is not None}
-        if use_key:
-            url = co.join((url, "&".join(("%s=%s" % (k, v) for k, v in ks.items()))))
-        else:
-            url = url.format(**ks)
+    See: http://www.python-requests.org/en/master/api/#requests.Session.request
+    """
 
-    if json:
-        if headers:
-            headers["Accept"] = "application/json"
-        else:
-            headers = {"Accept": "application/json"}
+    if headers:
+        headers["Accept"] = "application/json"
+    else:
+        headers = {"Accept": "application/json"}
 
-    resp = requests.get(url, headers=headers, timeout=timeout)
-    status_code = resp.status_code
-    if status_code == 404:
-        if raise404:
-            raise Exception("not found %s" % url)
-        return None
-    elif status_code == 200:
-        if has_result:
-            return resp.json() if json else resp.content
-        return None
-    elif status_code == 204:
-        return None
-    raise OSError("%s: status_code=%s" % (url, status_code))
+    resp = getattr(requests, method)(url, headers=headers, **kwargs)
+    if exc:
+        resp.raise_for_status()
+
+    data = resp.content
+    if resp.status_code == 200:
+        if resp.content:
+            data = resp.json()
+    return resp.status_code, data
