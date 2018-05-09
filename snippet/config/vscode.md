@@ -12,9 +12,7 @@
 
     "diffEditor.ignoreTrimWhitespace": false,
 
-    "editor.rulers": [
-        80, 100, 120
-    ],
+    "editor.rulers": [80, 100, 120],
     "editor.wordWrap": "on",
     "editor.mouseWheelZoom": true,
     "editor.minimap.enabled": true,
@@ -24,6 +22,7 @@
     "editor.tabCompletion": true,
     "editor.renderWhitespace": "boundary",
     "editor.quickSuggestionsDelay": 2,
+    "editor.fontFamily": "'Courier New', Consolas, monospace",
 
     "explorer.openEditors.visible": 0,
 
@@ -37,9 +36,7 @@
     "go.inferGopath": true,
     "go.autocompleteUnimportedPackages": true,
     "go.useLanguageServer": true,
-    "go.gotoSymbol.ignoreFolders": [
-        "vendor",
-    ],
+    "go.gotoSymbol.ignoreFolders": ["vendor"],
 
     "html.format.indentInnerHtml": true,
 
@@ -50,9 +47,8 @@
 
     "python.pythonPath": "ipython",
     "python.autoComplete.addBrackets": true,
-    "python.linting.maxNumberOfProblems": 120,
-    // "python.linting.pylintEnabled": true,
-    // "python.linting.pep8Enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pep8Enabled": true,
 
     "svgviewer.enableautopreview": true,
 
