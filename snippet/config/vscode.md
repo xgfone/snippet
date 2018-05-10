@@ -155,6 +155,11 @@ alefragnani.project-manager              # Project Manager
 CoenraadS.bracket-pair-colorizer         # A customizable extension for colorizing matching brackets.
 
 
+# Theme
+LeCrunchic.mariana-nord                  # Hybrid theme between Nord and Sublime's Mariana.
+arcticicestudio.nord-visual-studio-code  # An arctic, north-bluish clean and elegant VS Code theme.
+
+
 ## Format
 HookyQR.beautify                         # Format JS, JSON, CSS, HTML
 DotJoshJohnson.xml                       # Format XML
@@ -168,9 +173,11 @@ howardzuo.vscode-gitk                    # Show git commit log for selected sour
 pprice.better-merge                      # Improved git merge conflict support.
 lamartire.git-indicators                 # Atom like git counters.
 
+
 ## SQL
 formulahendry.vscode-mysql            # MySQL Management Tool
 mtxr.sqltools                         # SQL
+
 
 ## Python
 ms-python.python                      # Python
@@ -208,6 +215,7 @@ abusaidm.html-snippets                   # HTML 5
 #formulahendry.auto-rename-tag           # HTML/XML
 #hdg.live-html-previewer                 # Edit and preview HTML
 
+
 ## Browser
 #akamud.vscode-caniuse                   # Can I Use
 #msjsdiag.debugger-for-chrome            # JS Debuger
@@ -230,8 +238,10 @@ abusaidm.html-snippets                   # HTML 5
 ## YAML
 #Togusa09.tmlanguage                     # YAML
 
+
 ## TOML
 #bungcip.better-toml                     # TOML
+
 
 ## Others
 #hcyang.ctags                            # CTags
