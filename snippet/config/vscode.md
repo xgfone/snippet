@@ -30,12 +30,13 @@
     "files.encoding": "utf8",
     "files.eol": "\n",
     "files.autoGuessEncoding": true,
+    "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
 
     "go.inferGopath": true,
-    "go.autocompleteUnimportedPackages": true,
     "go.useLanguageServer": true,
+    "go.autocompleteUnimportedPackages": true,
     "go.gotoSymbol.ignoreFolders": ["vendor"],
 
     "html.format.indentInnerHtml": true,
