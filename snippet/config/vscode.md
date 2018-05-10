@@ -108,6 +108,9 @@
     { "key": "alt+2", "command": "workbench.action.terminal.focusAtIndex2" },
     { "key": "alt+3", "command": "workbench.action.terminal.focusAtIndex3" },
 
+    // Focus Next Terminal.
+    { "key": "ctrl+tab", "command": "workbench.action.terminal.focusNext" },
+
     { "key": "ctrl+n", "command": "workbench.action.files.newUntitledFile", "when": "editorTextFocus && vim.active && vim.use<C-n>" }
 ]
 ```
