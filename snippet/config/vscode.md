@@ -34,6 +34,16 @@
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
 
+    "gitlens.advanced.messages": {
+        "suppressResultsExplorerNotice": true,
+        "suppressShowKeyBindingsNotice": true
+    },
+    "gitlens.codeLens.scopes": [],
+    "gitlens.keymap": "chorded",
+    "gitlens.defaultDateStyle": "absolute",
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.historyExplorer.enabled": false,
+
     "go.inferGopath": true,
     "go.useLanguageServer": true,
     "go.autocompleteUnimportedPackages": true,
