@@ -322,3 +322,18 @@ Go client for Redis.
 
 ##### [tollbooth](github.com/didip/tollbooth)
     Simple middleware to rate-limit HTTP requests.
+
+##### [go-gtk](https://github.com/mattn/go-gtk)
+    Go binding for GTK.
+
+##### [gotk3](https://github.com/gotk3/gotk3)
+    Go bindings for GTK3.
+
+##### [ui](https://github.com/andlabs/ui)
+    Platform-native GUI library for Go.
+
+##### [walk](https://github.com/lxn/walk)
+    A Windows GUI toolkit for the Go Programming Language.
+
+##### [go-astilectron](https://github.com/asticode/go-astilectron)
+    Build cross platform GUI apps with GO and HTML/JS/CSS (powered by Electron).
