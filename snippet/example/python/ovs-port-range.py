@@ -233,7 +233,7 @@ def port_rule_masking(port_min, port_max):
     #
     # Check port_max >= port_min.
     if port_max < port_min:
-        raise ValueError(_("'port_max' is smaller than 'port_min'"))
+        raise ValueError("'port_max' is smaller than 'port_min'")
 
     bitdiff = port_min ^ port_max
     if bitdiff == 0:
