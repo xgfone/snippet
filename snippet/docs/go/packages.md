@@ -285,8 +285,8 @@ Go client for Redis.
 ##### [jet](https://github.com/CloudyKit/jet/)
     Jet is a template engine developed to be easy to use, powerful, dynamic, yet secure and very fast.
 
-##### [gjson](https://github.com/tidwall/gjson)
-    Get JSON values very quickly in Go
+##### [jsoniter](https://github.com/json-iterator/go)[**Recommendation**]
+    A high-performance 100% compatible drop-in replacement of "encoding/json".
 
 ##### [GoDS](https://github.com/emirpasic/gods)
     Implementation of various data structures and algorithms in Go.
@@ -295,9 +295,6 @@ Go client for Redis.
     Lists (ArrayList, SinglyLinkedList, DoublyLinkedList), Stacks (LinkedListStack, ArrayStack),
     Maps (HashMap, TreeMap, HashBidiMap, TreeBidiMap), Trees (RedBlackTree, AVLTree, BTree, BinaryHeap),
     Comparators, Iterators, Enumerables, Sort, JSON.
-
-##### [ffjson](https://github.com/pquerna/ffjson)
-    faster JSON serialization for Go.
 
 ##### [govalidator](https://github.com/asaskevich/govalidator)
     Go Package of validators and sanitizers for strings, numerics, slices and structs.
