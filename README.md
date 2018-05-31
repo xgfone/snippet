@@ -113,7 +113,7 @@ DOCS
         - [gRPC 拦截器 Interceptor](https://segmentfault.com/a/1190000007997759)
         - [gRPC HTTP/JSON 协议转换](https://segmentfault.com/a/1190000008106582)
 - [Docker](./snippet/docs/docker)
-    - [Docker — 从入门到实践](https://github.com/yeasy/docker_practice) （点击 [GitBook](https://www.gitbook.io/book/yeasy/docker_practice) 或 [Github](https://github.com/yeasy/docker_practice/blob/master/SUMMARY.md) 阅读）
+    - [Docker — 从入门到实践](https://github.com/yeasy/docker_practice) （点击 [GitBook](https://yeasy.gitbooks.io/docker_practice/content) 或 [Github](https://github.com/yeasy/docker_practice/blob/master/SUMMARY.md) 阅读）
 - [Document](./snippet/docs/document)
     - [Markdown](./snippet/docs/document/markdown)
         - [Cheat Sheet](./snippet/docs/document/markdown/cheatsheet.md)
