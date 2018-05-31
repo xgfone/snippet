@@ -2,7 +2,6 @@ package snippet
 
 import (
 	"fmt"
-	"sort"
 )
 
 func hexStr(num int) string {
@@ -246,6 +245,6 @@ func PortRuleMasking(minPort, maxPort int) []string {
 	rules := make([]string, len(minRules)+len(maxRules))
 	copy(rules, minRules)
 	copy(rules[len(minRules):], maxRules)
-	sort.Strings(rules)
+	// sort.Strings(rules)
 	return rules
 }
