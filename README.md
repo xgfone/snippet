@@ -457,6 +457,7 @@ DOCS
     - [Diff & Patch](./snippet/docs/tool/diff&patch.md)
     - other tools
 - [Version Control System](./snippet/docs/vcs)
+    - [Conventional Commits(约定式提交)](https://github.com/conventional-changelog/conventionalcommits.org)（阅读[英文版](https://conventionalcommits.org/lang/en) | [中文版](https://conventionalcommits.org/lang/zh-Hans)）
     - [SVN搭建与简单使用](./snippet/docs/vcs/build-svn-server.md)
     - [Git服务器架设](./snippet/docs/vcs/build-git-server.md)
     - [Git HTTP代理](./snippet/docs/vcs/git-http-proxy.md)
