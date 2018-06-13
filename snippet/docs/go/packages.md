@@ -334,3 +334,6 @@ Go client for Redis.
 
 ##### [go-astilectron](https://github.com/asticode/go-astilectron)
     Build cross platform GUI apps with GO and HTML/JS/CSS (powered by Electron).
+
+##### [netlink](https://github.com/vishvananda/netlink)
+    Simple netlink library for go.
