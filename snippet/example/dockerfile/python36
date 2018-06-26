@@ -1,0 +1,15 @@
+# Python 3.6 Dockerfile
+
+FROM centos:7
+
+ENV ROOT=/root
+
+RUN yum groupinstall -y 'Development Tools'
+RUN yum install -y openssl-devel zlib-devel sqlite-devel readline-devel wget tcpdump
+
+# Install Python 3.6
+RUN wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz -P /root
+RUN tar xf $ROOT/Python-3.6.5.tgz -C $ROOT
+WORKDIR $ROOT/Python-3.6.5
+RUN ./configure --enable-optimizations
+RUN make install
