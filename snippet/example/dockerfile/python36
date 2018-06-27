@@ -13,3 +13,7 @@ RUN tar xf $ROOT/Python-3.6.5.tgz -C $ROOT
 WORKDIR $ROOT/Python-3.6.5
 RUN ./configure --enable-optimizations
 RUN make install
+
+# Reset the work directory.
+WORKDIR $ROOT
+
