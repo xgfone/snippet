@@ -67,6 +67,7 @@
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
+    "terminal.integrated.experimentalTextureCachingStrategy": "dynamic",
 
     // "vim.leader": ";",
     // "vim.useSystemClipboard": true,
