@@ -455,6 +455,7 @@ DOCS
 	- [Packages](./snippet/docs/swift/packages.md)
 - [Tool](./snippet/docs/tool)
     - [Diff & Patch](./snippet/docs/tool/diff&patch.md)
+    - [tmux 使用手册](http://louiszhai.github.io/2017/09/30/tmux) （[备用](https://blog.csdn.net/chenqiuge1984/article/details/80132042)）
     - other tools
 - [Version Control System](./snippet/docs/vcs)
     - [Conventional Commits(约定式提交)](https://github.com/conventional-changelog/conventionalcommits.org)（阅读[英文版](https://conventionalcommits.org/lang/en) | [中文版](https://conventionalcommits.org/lang/zh-Hans)）

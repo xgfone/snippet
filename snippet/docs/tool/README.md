@@ -5,6 +5,7 @@
 ---
 
 - [Diff & Patch](./diff&patch.md)
+- [tmux 使用手册](http://louiszhai.github.io/2017/09/30/tmux) （[备用](https://blog.csdn.net/chenqiuge1984/article/details/80132042)）
 
 ---
 
