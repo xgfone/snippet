@@ -13,7 +13,7 @@
 - [IP Route2](./iproute2)
 - [IPv4](./ipv4)
 - [Kernel](./kernel)
-    - [Linux Kernel Map](./kernel/_static/linux-kernel-map.png)（点击 [这里](https://github.com/xgfone/snippet/raw/master/kernel/_static/linux-kernel-map.png) 看大图）
+    - [Linux Kernel Map](./kernel/_static/linux-kernel-map.png)（点击 [这里](https://github.com/xgfone/snippet/raw/master/snippet/docs/linux/kernel/_static/linux-kernel-map.png) 看大图）
 - [NetFilter](./netfilter)
     - [Linux IPtables使用入门](./netfilter/iptables-usage.md)
     - [TCP握手与IPtables](./netfilter/iptables-beginner.md)
