@@ -33,6 +33,7 @@
     - [Raw Socket 接收和发送数据包](./program/raw-socket.md)
     - [`SO_REUSEADDR` and `SO_REUSEPORT`](./program/so_reuse.md)
 - [Other](./others)
+    - [Linux Bridge - how it works](https://goyalankit.com/blog/linux-bridge)
     - [How to find namespaces in a Linux system](http://www.opencloudblog.com/?p=251)
     - [Linux Switching – Interconnecting Namespaces](http://www.opencloudblog.com/?p=66)
     - [Switching Performance – Connecting Linux Network Namespaces](http://www.opencloudblog.com/?p=96)

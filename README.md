@@ -316,6 +316,7 @@ DOCS
         - [Raw Socket 接收和发送数据包](./snippet/docs/linux/program/raw-socket.md)
         - [`SO_REUSEADDR` and `SO_REUSEPORT`](./snippet/docs/linux/program/so_reuse.md)
     - [Other](./snippet/docs/linux/others)
+        - [Linux Bridge - how it works](https://goyalankit.com/blog/linux-bridge)
         - [How to find namespaces in a Linux system](http://www.opencloudblog.com/?p=251)
         - [Linux Switching – Interconnecting Namespaces](http://www.opencloudblog.com/?p=66)
         - [Switching Performance – Connecting Linux Network Namespaces](http://www.opencloudblog.com/?p=96)
