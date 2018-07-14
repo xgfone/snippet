@@ -337,3 +337,6 @@ Go client for Redis.
 
 ##### [netlink](https://github.com/vishvananda/netlink)
     Simple netlink library for go.
+
+##### [netns](https://github.com/vishvananda/netns)
+    Simple network namespace handling for go.
