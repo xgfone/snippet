@@ -12,6 +12,8 @@
 
     "diffEditor.ignoreTrimWhitespace": false,
 
+    // "docker.attachShellCommand.linuxContainer": "//bin/bash", // For windows
+
     "editor.rulers": [80, 100, 120],
     "editor.wordWrap": "on",
     "editor.mouseWheelZoom": true,
