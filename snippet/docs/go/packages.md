@@ -340,3 +340,6 @@ Go client for Redis.
 
 ##### [netns](https://github.com/vishvananda/netns)
     Simple network namespace handling for go.
+
+##### [emission](https://github.com/chuckpreslar/emission)
+    A simple Event Emitter for Go like EventEmitter in NodeJS.
