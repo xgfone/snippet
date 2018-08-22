@@ -100,23 +100,23 @@ expr3, expr4 = expr1, expr2
 
 ## 9、Python操作符的优先级
 
-                                Operator                            |                Description
---------------------------------------------------------------------|---------------------------------------------------------------
-lambda                                                              | Lambda expression
-if - else                                                           | Conditional expression
-or                                                                  | Boolean OP
-and                                                                 | Boolean AND
-not x                                                               | Boolean  NOT
-in, not in, is, is not, <, <=, >, >=, !=, ==                        | Comparisons, including membership tests and identity tests
-\|                                                                  | Bitwise OR
-^                                                                   | Bitwise XOR
-&                                                                   | Bitwise AND
-<<, >>                                                              | Shifts
-+, -                                                                | Addition and subtraction
-*, /, //, %                                                         | Multiplication, division, remainder
-**                                                                  | Exponentiation
-x[index], x[index:index], x(arguments...), x.attribute              | Subscription, slicing, call, attribute reference
-(expression...), [expressions...], {key:datum...}, {expressions...} | Binding or tuple display, list display, dictionary display, set display
+|                                Operator                            |                Description
+|--------------------------------------------------------------------|---------------------------------------------------------------
+|lambda                                                              | Lambda expression
+|if - else                                                           | Conditional expression
+|or                                                                  | Boolean OP
+|and                                                                 | Boolean AND
+|not x                                                               | Boolean  NOT
+|in, not in, is, is not, <, <=, >, >=, !=, ==                        | Comparisons, including membership tests and identity tests
+|\|                                                                  | Bitwise OR
+|^                                                                   | Bitwise XOR
+|&                                                                   | Bitwise AND
+|<<, >>                                                              | Shifts
+|+, -                                                                | Addition and subtraction
+|*, /, //, %                                                         | Multiplication, division, remainder
+|**                                                                  | Exponentiation
+|x[index], x[index:index], x(arguments...), x.attribute              | Subscription, slicing, call, attribute reference
+|(expression...), [expressions...], {key:datum...}, {expressions...} | Binding or tuple display, list display, dictionary display, set display
 
 ### 说明
     (1) 上述优先级从上到下依次升高，即下边的操作符比下边的优先级要高；
