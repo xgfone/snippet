@@ -333,7 +333,15 @@ DOCS
     - [NAT](./snippet/docs/network/nat)
         - [穿越NAT的P2P通信方法的研究(英)](./snippet/docs/network/nat/p2p-communication-across-nat.md)
         - [P2P、UDP和TCP穿透NAT](./snippet/docs/network/nat/penetrate-nat.md)
-    - [OpenVSwitch & OpenFlow](./snippet/docs/network/ovs&of)
+    - [OpenVSwitch & OpenFlow](./snippet/docs/network/ovs-of)
+        - [OVS + DPDK](./snippet/docs/network/ovs-of/ovs-dpdk.md)
+        - **FAQ**
+            - [Quality of Service (QoS)](./snippet/docs/network/ovs-of/QoS.md)
+            - [Dump Flows](./snippet/docs/network/ovs-of/dump-flows.md)
+            - [`in_port`](./snippet/docs/network/ovs-of/in_port.md)
+            - [Tunnel](./snippet/docs/network/ovs-of/tunnel.md)
+            - [Other](./snippet/docs/network/ovs-of/others.md)
+        - [其它学习资料](./snippet/docs/network/ovs-of/link.md)
     - [Protocol](./snippet/docs/network/protocol)
         - [TCP/IP Protocol Layer](./snippet/docs/network/protocol/_static/tcpip.png)（点击 [这里](https://raw.githubusercontent.com/xgfone/snippet/master/snippet/docs/network/protocol/_static/tcpip.png) 看大图）
 	- [TCP](./snippet/docs/network/tcp)
