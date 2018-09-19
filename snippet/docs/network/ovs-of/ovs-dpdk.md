@@ -149,7 +149,6 @@ $ echo 1024 > /sys/devices/system/node/node1/hugepages/hugepages-2048kB/nr_hugep
 一旦 `Hugepages` 被保留，为了让保留的大页内存可见，我们须要将其挂载。
 
 ```shell
-$ mkdir /mnt/huge
 $ mount -t hugetlbfs nodev /dev/hugepages
 ```
 
