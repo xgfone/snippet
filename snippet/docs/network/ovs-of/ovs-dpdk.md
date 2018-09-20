@@ -175,7 +175,7 @@ $ dmesg | grep AMD-Vi            # For AMD CPU
 ```
 2. 我们可以通过下面的命令来确认 Linux Kernel 是否开启了 `IOMMU`。
 ```shell
-$ cat /proc/cmdline | grep iommu=pt
+$ cat /proc/cmdline | grep iommu=pt        # For supporting DPDK PF driver
 $ cat /proc/cmdline | grep intel_iommu=on  # For Intel CPU
 $ cat /proc/cmdline | grep amd_iommu=on    # For AMD CPU
 ```
