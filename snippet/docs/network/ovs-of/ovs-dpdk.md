@@ -63,6 +63,7 @@ $ yum install rpm-build autoconf automake libtool systemd-units \
 在执行 `.configure` 命令时，添加 `--with-dpdk` 选项即可，如：
 ```bash
 $ ./configure --with-dpdk=$DPDK_DIR/x86_64-native-linuxapp-gcc
+$ make && make install
 ```
 
 注意，如果 `DPDK` 是以静态编译，则 `OVS` 将会以静态方式进行链接；否则就以动态方式链接。另外，`DPDK` 目录的名字必须是 `DPDK` 的目标格式。`DPDK` 编译后的目录默认为 `build`，可以将其修改为目标格式名，如：`x86_64-native-linuxapp-gcc`。
