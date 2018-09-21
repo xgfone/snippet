@@ -48,9 +48,9 @@ $ rpmbuild -ba dpdk-17.11.4/pkg/dpdk.spec
 
 ```bash
 $ yum install rpm-build autoconf automake libtool systemd-units \
-    python2-devel python36-devel python2-six python2-sphinx \
+    python-devel python36-devel python-six python-sphinx \
     desktop-file-utils groff graphviz checkpolicy, selinux-policy-devel \
-    python2-twisted-core python2-zope-interface \
+    python-twisted-core python-zope-interface \
     openssl openssl-devel \
     libcap-ng libcap-ng-devel \
     procps-ng procps-ng-devel \
