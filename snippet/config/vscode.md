@@ -16,14 +16,15 @@
 
     "editor.rulers": [80, 100, 120],
     "editor.wordWrap": "on",
-    "editor.mouseWheelZoom": true,
-    "editor.minimap.enabled": true,
+    "editor.mouseWheelZoom": false,
+    "editor.minimap.enabled": false,
     "editor.minimap.maxColumn": 80,
     "editor.renderIndentGuides": true,
     "editor.useTabStops": true,
-    "editor.tabCompletion": true,
+    "editor.tabCompletion": "on",
     "editor.renderWhitespace": "boundary",
     "editor.quickSuggestionsDelay": 2,
+    "editor.fontSize": 24,
     "editor.fontFamily": "'Courier New', Consolas, monospace",
 
     "explorer.openEditors.visible": 0,
@@ -31,16 +32,18 @@
     "files.defaultLanguage": "python",
     "files.encoding": "utf8",
     "files.eol": "\n",
+    "files.enableTrash": false,
     "files.autoGuessEncoding": true,
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
+    "files.useExperimentalFileWatcher": true,
 
     "gitlens.advanced.messages": {
         "suppressResultsExplorerNotice": true,
         "suppressShowKeyBindingsNotice": true
     },
-    "gitlens.codeLens.scopes": [],
+    // "gitlens.codeLens.scopes": [],
     "gitlens.keymap": "chorded",
     "gitlens.defaultDateStyle": "absolute",
     "gitlens.hovers.currentLine.over": "line",
@@ -53,6 +56,8 @@
 
     "html.format.indentInnerHtml": true,
 
+    "markdown.preview.fontSize": 22,
+
     // "projectManager.svn.baseFolders": [],
     // "projectManager.git.baseFolders": [],
     // "projectManager.git.maxDepthRecursion": 4,
@@ -63,13 +68,15 @@
     "python.linting.pylintEnabled": true,
     "python.linting.pep8Enabled": true,
 
+    "rest-client.fontSize": 22,
+
     "svgviewer.enableautopreview": true,
 
+    "terminal.integrated.fontSize": 22,
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.setLocaleVariables": true,
-    "terminal.integrated.experimentalTextureCachingStrategy": "dynamic",
 
     // "vim.leader": ";",
     // "vim.useSystemClipboard": true,
@@ -86,7 +93,7 @@
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
     "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Quiet Light"
+    "workbench.colorTheme": "Atom One Light"
 }
 ```
 
