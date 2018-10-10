@@ -43,7 +43,7 @@
         "suppressResultsExplorerNotice": true,
         "suppressShowKeyBindingsNotice": true
     },
-    // "gitlens.codeLens.scopes": [],
+    "gitlens.codeLens.scopes": [],
     "gitlens.keymap": "chorded",
     "gitlens.defaultDateStyle": "absolute",
     "gitlens.hovers.currentLine.over": "line",
