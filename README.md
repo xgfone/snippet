@@ -354,7 +354,7 @@ DOCS
         - [用户空间网络栈](./snippet/docs/network/others/userspace-net-stack.md)
 - [OpenStack](./snippet/docs/openstack)
 - [Package](./snippet/docs/package)
-- [Python](./snippet/docs/python)（废弃，[看这里](https://github.com/xgfone/PythonInAction)）
+- [Python](./snippet/docs/python)（**废弃**，[看这里](https://github.com/xgfone/PythonInAction)）
     - [前言](./snippet/docs/python/python-preface.md)
     - [1. 基本知识](./snippet/docs/python/python-base.md)
     - [2. 数据类型](./snippet/docs/python/python-type.md)
