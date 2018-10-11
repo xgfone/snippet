@@ -154,7 +154,8 @@ Install a Package
 #searKing.preview-vscode                 # Preview Markdown, HTML, CSS, Image, etc.
 #anseki.vscode-color                     # Helper with GUI to generate color codes.
 #slevesque.vscode-hexdump                # Display a specified file in hexadecimal
-#christian-kohler.path-intellisense
+#christian-kohler.path-intellisense      # Autocomplete filenames
+earshinov.permute-lines
 jinsihou.diff-tool
 vscodevim.vim
 formulahendry.code-runner
