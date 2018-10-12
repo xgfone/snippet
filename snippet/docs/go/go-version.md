@@ -392,3 +392,46 @@ Go 编译器现在可以并发地编译包中的函数，以便充分利用多�
 4. OpenBSD 最低版本要求 6.0，且是最后一个支持 6.0 的版本。Go 1.11 最低要求 OpenBSD 6.2。
 5. Mac OS X 最低要求 10.8，且是最后一个支持 10.8 和 10.9 的版本。 Go 1.11 最低要求 Mac OS X 10.10。
 6. Windows 最低要求是 XP，且是最后一个支持 XP 和 Vista 的版本。Go 1.11 最低要求 Windows 7。
+
+
+# Go1.11
+
+## 移植
+1. OpenBSD 最低版本要求 6.2。
+2. Mac OS X 最低版本要求 10.10 Yosemite。
+3. Windows 最低要求是 Windows 7。
+4. 构建模式 `c-shared` 和 `c-archive` 现在已支持 `FreeBSD/AMD64`。
+5. 实验性支持 `WebAssembly`：编译后的文件大小，最小为 2MB，压缩后为 500KB；另外，Go 程序可以通过包 `syscall/js` 来调用 JS，但目前只支持测试。
+
+## 工具
+1. Go 开始初步支持 `modules`。
+2. 由于 `@` 符号对 Go `modules` 有特殊的意义，因此，不允许在导入路径中包含 `@` 符号。
+3. 一个新的包 `golang.org/x/tools/go/packages` 提供一个简单的 API 用来定位和加载 Go 源码包。但它还不能完全支持 `modules`，暂时还没有成为标准库的一部分。
+4. Go 1.11 是最后一个可以通过环境变量 `GOCACHE=off` 来禁用构建缓存（由 1.10 版本引入）的版本，从 1.12 版本开始，构建缓存是必须的。
+5. Go 1.11 也是最后一个支持 `godoc` 作为命令行工具的版本，将来 `godoc` 仅作为一个 Web 服务，应当使用 `go doc` 以代替 `godoc`。
+6. 编译器默认允许更多的函数进行内联，包括调用 `panic` 的函数。
+7. 编译器（包括 `go` 和 `cgo`）不再允许 `switch guard` 中声明未使用的变量。如：
+```go
+func f(v interface{}) {
+	switch x := v.(type) {
+	}
+}
+```
+
+## 运行时
+Go 现在使用稀疏堆，因此，Go 堆空间的大小不会再有限制（之前被限制在 512GiB 以内）。
+
+对于 `MacOS` 和 `iOS` 系统，Go 运行时将使用 `libSystem.dylib` 来代替直接调用内核，这会让 Go 二进制程序更容易兼容未来的 `MacOS` 和 `iOS` 版本。但 `syscall` 包仍是直接做系统调用。
+
+## 性能
+
+编译器会优化如下操作：
+```go
+for k := range maps {
+    delete(maps, k)
+}
+```
+
+编译器也会优化形式 `append(s, make([]T, n)...)` 的分片扩展。
+
+编译器还会优化一些边界检查。比如：编译器如果识别到 `i<j` 且 `j<len(s)`，就不会对 `s[i]` 做边界检查。
