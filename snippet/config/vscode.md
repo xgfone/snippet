@@ -24,7 +24,7 @@
     "editor.tabCompletion": "on",
     "editor.renderWhitespace": "boundary",
     "editor.quickSuggestionsDelay": 2,
-    "editor.fontSize": 24,
+    "editor.fontSize": 18,
     "editor.fontFamily": "'Courier New', Consolas, monospace",
 
     "explorer.openEditors.visible": 0,
@@ -56,8 +56,6 @@
 
     "html.format.indentInnerHtml": true,
 
-    "markdown.preview.fontSize": 22,
-
     // "projectManager.svn.baseFolders": [],
     // "projectManager.git.baseFolders": [],
     // "projectManager.git.maxDepthRecursion": 4,
@@ -68,11 +66,9 @@
     "python.linting.pylintEnabled": true,
     "python.linting.pep8Enabled": true,
 
-    "rest-client.fontSize": 22,
-
     "svgviewer.enableautopreview": true,
 
-    "terminal.integrated.fontSize": 22,
+    "terminal.integrated.fontSize": 18,
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.scrollback": 10000,
@@ -93,7 +89,6 @@
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
     "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Atom One Light"
 }
 ```
 
