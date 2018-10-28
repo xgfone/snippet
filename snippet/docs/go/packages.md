@@ -225,10 +225,10 @@
 ##### [GORM](https://github.com/jinzhu/gorm)
     The fantastic ORM library for Golang, aims to be developer friendly.
 
-##### [redigo](https://github.com/garyburd/redigo)
+##### [redigo](https://github.com/gomodule/redigo)
 Go client for Redis.
 
-##### [go-redis](https://github.com/go-redis/redis)
+##### [go-redis](https://github.com/go-redis/redis) [**Recommendation**]
     Redis client for Golang. http://godoc.org/gopkg.in/redis.v3
 
 ##### [go-zookeeper](https://github.com/samuel/go-zookeeper)
