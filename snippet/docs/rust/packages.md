@@ -2,6 +2,18 @@
 ##### [Awesome Rust](https://github.com/kud1ing/awesome-rust)
     A curated list of Rust code and resources.
 
+##### [config](https://github.com/mehcode/config-rs) [Recommended]
+    Layered configuration system for Rust applications.
+
+##### [log](https://crates.io/crates/log) [Base]
+    A lightweight logging facade for Rust.
+
+##### [log4rs](https://crates.io/crates/log4rs) [Recommended]
+    A highly configurable multi-output logging implementation for the `log` facade.
+
+##### [fern](https://crates.io/crates/fern)
+    Fern is a simple runtime-configurable logging library.
+
 ##### [mio](https://github.com/carllerche/mio)
     MIO is a lightweight IO library for Rust with a focus on adding as little overhead
     as possible over the OS abstractions.
@@ -29,15 +41,6 @@
 
 ##### [clap](https://crates.io/crates/clap)
     A simple to use, efficient, and full featured Command Line Argument Parser.
-
-##### [log](https://crates.io/crates/log)
-    A lightweight logging facade for Rust.
-
-##### [fern](https://crates.io/crates/fern)
-    Fern is a simple runtime-configurable logging library.
-
-##### [log4rs](https://crates.io/crates/log4rs)
-    A highly configurable multi-output logging implementation for the `log` facade.
 
 ##### [iron](https://crates.io/crates/iron)
     Extensible, Concurrency Focused Web Development in Rust.
