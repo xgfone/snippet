@@ -167,7 +167,7 @@ arcticicestudio.nord-visual-studio-code  # An arctic, north-bluish clean and ele
 
 
 ## Format
-HookyQR.beautify                         # Format JS, JSON, CSS, HTML
+esbenp.prettier-vscode                   # Format Code
 DotJoshJohnson.xml                       # Format XML
 
 
