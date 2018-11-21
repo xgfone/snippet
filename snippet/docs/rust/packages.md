@@ -21,7 +21,7 @@
     MIO is a lightweight IO library for Rust with a focus on adding as little overhead
     as possible over the OS abstractions.
 
-##### [futures](https://github.com/alexcrichton/futures-rs)
+##### [futures](https://github.com/rust-lang-nursery/futures-rs)
     Zero-cost futures and streams in Rust. [Asynchronous I/O]
 
 ##### [tokio-core](https://github.com/tokio-rs/tokio-core)
@@ -29,7 +29,7 @@
 
     Core I/O and event loop abstraction for asynchronous I/O in Rust built on futures and mio.
 
-##### [hypter](https://github.com/hyperium/hyper)
+##### [hyper](https://github.com/hyperium/hyper)
     An HTTP library for Rust.
 
 ##### [syncbox](https://github.com/carllerche/syncbox)
