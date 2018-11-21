@@ -8,7 +8,10 @@
 ##### [log](https://crates.io/crates/log) [Base]
     A lightweight logging facade for Rust.
 
-##### [log4rs](https://crates.io/crates/log4rs) [Recommended]
+##### [simplelog](https://github.com/Drakulix/simplelog.rs) [Recommended]
+    Simple Logging Facility for Rust based on the crate log.
+
+##### [log4rs](https://crates.io/crates/log4rs)
     A highly configurable multi-output logging implementation for the `log` facade.
 
 ##### [fern](https://crates.io/crates/fern)
