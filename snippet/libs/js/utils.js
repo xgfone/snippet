@@ -195,7 +195,8 @@ var client = function () {
 					system.win = "Vista";
 					break;
 				case "6.1":
-					system.win = "7":
+					system.win = "7";
+					break;
 				default:
 					system.win = "NT";
 					break;
