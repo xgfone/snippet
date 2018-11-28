@@ -404,6 +404,7 @@ DOCS
 - [Rust](./snippet/docs/rust)
     - [Rust Packages](./snippet/docs/rust/packages.md)
     - [Rust参考手册(表达式和Item部分未翻译)](./snippet/docs/rust/ref.md)
+    - [杂记](./snippet/docs/rust/notes.md)
     - `String` vs `&str`
         - [String vs &str in Rust functions](http://hermanradtke.com/2015/05/03/string-vs-str-in-rust-functions.html)
         - [Creating a Rust function that accepts String or &str](http://hermanradtke.com/2015/05/06/creating-a-rust-function-that-accepts-string-or-str.html)
