@@ -6,63 +6,63 @@ It is copied from http://exploringjs.com/es6/ch_overviews.html.
 
 # An overview of what’s new in ES6
 
-- 1. Categories of ES6 features
-- 2. New number and Math features
-    - 2.1. New integer literals
-    - 2.2. New Number properties
-    - 2.3. New Math methods
-- 3. New string features
-- 4. Symbols
-    - 4.1. Use case 1: unique property keys
-    - 4.2. Use case 2: constants representing concepts
-    - 4.3. Pitfall: you can’t coerce symbols to strings
-    - 4.4. Which operations related to property keys are aware of symbols?
-- 5. Template literals
-- 6. Variables and scoping
-    - 6.1. let
-    - 6.2. const
-    - 6.3. Ways of declaring variables
-- 7. Destructuring
-    - 7.1. Object destructuring
-    - 7.2. Array destructuring
-    - 7.3. Where can destructuring be used?
-- 8. Parameter handling
-    - 8.1. Default parameter values
-    - 8.2. Rest parameters
-    - 8.3. Named parameters via destructuring
-    - 8.4. Spread operator (...)
-- 9. Callable entities in ECMAScript 6
-- 10. Arrow functions
-- 11. New OOP features besides classes
-    - 11.1. New object literal features
-    - 11.2. New methods in Object
-- 12. Classes
-- 13. Modules
-    - 13.1. Multiple named exports
-    - 13.2. Single default export
-    - 13.3. Browsers: scripts versus modules
-- 14. The for-of loop
-- 15. New Array features
-- 16. Maps and Sets
-    - 16.1. Maps
-    - 16.2. Sets
-    - 16.3. WeakMaps
-- 17. Typed Arrays
-- 18. Iterables and iterators
-    - 18.1. Iterable values
-    - 18.2. Constructs supporting iteration
-- 19. Generators
-    - 19.1. What are generators?
-    - 19.2. Kinds of generators
-    - 19.3. Use case: implementing iterables
-    - 19.4. Use case: simpler asynchronous code
-    - 19.5. Use case: receiving asynchronous data
-- 20. New regular expression features
-- 21. Promises for asynchronous programming
-    - 21.1. Chaining then() calls
-    - 21.2. Executing asynchronous functions in parallel
-    - 21.3. Glossary: Promises
-- 22. Metaprogramming with proxies
+- [1. Categories of ES6 features](#1-categories-of-es6-features)
+- [2. New number and Math features](#2-new-number-and-math-features)
+    - [2.1. New integer literals](#21-new-integer-literals)
+    - [2.2. New `Number` properties](#22-new-number-properties)
+    - [2.3. New `Math` methods](#23-new-math-methods)
+- [3. New string features](#3-new-string-features)
+- [4. Symbols](#4-symbols)
+    - [4.1. Use case 1: unique property keys](#41-use-case-1-unique-property-keys)
+    - [4.2. Use case 2: constants representing concepts](#42-use-case-2-constants-representing-concepts)
+    - [4.3. Pitfall: you can’t coerce symbols to strings](#43-pitfall-you-cant-coerce-symbols-to-strings)
+    - [4.4. Which operations related to property keys are aware of symbols?](#44-which-operations-related-to-property-keys-are-aware-of-symbols)
+- [5. Template literals](#5-template-literals)
+- [6. Variables and scoping](#6-variables-and-scoping)
+    - [6.1. `let`](#61-let)
+    - [6.2. `const`](#62-const)
+    - [6.3. Ways of declaring variables](#63-ways-of-declaring-variables)
+- [7. Destructuring](#7-destructuring)
+    - [7.1. Object destructuring](#71-object-destructuring)
+    - [7.2. Array destructuring](#72-array-destructuring)
+    - [7.3. Where can destructuring be used?](#73-where-can-destructuring-be-used)
+- [8. Parameter handling](#8-parameter-handling)
+    - [8.1. Default parameter values](#81-default-parameter-values)
+    - [8.2. Rest parameters](#82-rest-parameters)
+    - [8.3. Named parameters via destructuring](#83-named-parameters-via-destructuring)
+    - [8.4. Spread operator (`...`)](#84-spread-operator-)
+- [9. Callable entities in ECMAScript 6](#9-callable-entities-in-ecmascript-6)
+- [10. Arrow functions](#10-arrow-functions)
+- [11. New OOP features besides classes](#11-new-oop-features-besides-classes)
+    - [11.1. New object literal features](#111-new-object-literal-features)
+    - [11.2. New methods in Object](#112-new-methods-in-object)
+- [12. Classes](#12-classes)
+- [13. Modules](#13-modules)
+    - [13.1. Multiple named exports](#131-multiple-named-exports)
+    - [13.2. Single default export](#132-single-default-export)
+    - [13.3. Browsers: scripts versus modules](#133-browsers-scripts-versus-modules)
+- [14. The `for-of` loop](#14-the-for-of-loop)
+- [15. New Array features](#15-new-array-features)
+- [16. Maps and Sets](#16-maps-and-sets)
+    - [16.1. Maps](#161-maps)
+    - [16.2. Sets](#162-sets)
+    - [16.3. WeakMaps](#163-weakmaps)
+- [17. Typed Arrays](#17-typed-arrays)
+- [18. Iterables and iterators](#18-iterables-and-iterators)
+    - [18.1. Iterable values](#181-iterable-values)
+    - [18.2. Constructs supporting iteration](#182-constructs-supporting-iteration)
+- [19. Generators](#19-generators)
+    - [19.1. What are generators?](#191-what-are-generators)
+    - [19.2. Kinds of generators](#192-kinds-of-generators)
+    - [19.3. Use case: implementing iterables](#193-use-case-implementing-iterables)
+    - [19.4. Use case: simpler asynchronous code](#194-use-case-simpler-asynchronous-code)
+    - [19.5. Use case: receiving asynchronous data](#195-use-case-receiving-asynchronous-data)
+- [20. New regular expression features](#20-new-regular-expression-features)
+- [21. Promises for asynchronous programming](#21-promises-for-asynchronous-programming)
+    - [21.1. Chaining `then()` calls](#211-chaining-then-calls)
+    - [21.2. Executing asynchronous functions in parallel](#212-executing-asynchronous-functions-in-parallel)
+    - [21.3. Glossary: Promises](#213-glossary-promises)
+- [22. Metaprogramming with proxies](#22-metaprogramming-with-proxies)
 
 ## 1 Categories of ES6 features
 The introduction of the ES6 specification lists all new features:
@@ -163,7 +163,7 @@ The global object `Math` has new methods for numerical, trigonometric and bitwis
 ```
 
 
-## 3 New `string` features
+## 3 New string features
 New string methods:
 ```js
 > 'hello'.startsWith('hell')
