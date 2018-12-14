@@ -47,7 +47,7 @@
     "gitlens.keymap": "chorded",
     "gitlens.defaultDateStyle": "absolute",
     "gitlens.hovers.currentLine.over": "line",
-    "gitlens.historyExplorer.enabled": false,
+    "gitlens.currentLine.enabled": false,
 
     "go.inferGopath": true,
     "go.useLanguageServer": true,
