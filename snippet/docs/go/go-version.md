@@ -435,3 +435,36 @@ for k := range maps {
 编译器也会优化形式 `append(s, make([]T, n)...)` 的分片扩展。
 
 编译器还会优化一些边界检查。比如：编译器如果识别到 `i<j` 且 `j<len(s)`，就不会对 `s[i]` 做边界检查。
+
+
+# Go1.12
+
+大部分改变都聚焦在工具链、运行时和库。
+
+## 语言变化
+无。
+
+## 移植
+
+1. 数据竞争侦测当前已支持 `linux/arm64` 架构。
+2. Go1.12 是最后一个支持 `FreeBSD 10.x` 的版本，下一个版本将要求 `FreeBSD 11.2+/12.0+`。
+3. Cgo 当前已支持 `linux/ppc64` 架构。
+4. `hurd` 被 `GOOS` 保留为 `GNU/Hurd` 系统。
+5. `windows/arm` 已可以运行在 32 位 ARM 的 Windows 10 IoT Core 系统上。
+6. Go1.12 是最后一个支持 `macOS 10.10 Yosemite` 的版本，下一个版本将要求 `macOS 10.11 EI Capitan` 及以上。
+
+## 工具
+
+1. `go tool vet` 不再被支持。请使用 `go vet` 以代替。
+2. Go1.12 是最一个支持 `binary-only` 包的版本。
+3. Go1.12 将 C 类型 `EGLDisplay` 译成 Go 类型 `uintptr`。
+4. `GO111MODULE` 被设置为 `on`。
+5. 在 Go1.12 中，`godoc` 仅仅是一个 Web 服务器，不再提供命令行接口。同时，Go1.12 也是最后一个包含 `godoc` 二进制的版本，从下一个版本开始，`godoc` 二进制命令须要通过 `go get` 来获取。
+
+## 运行时
+
+`runtime.Caller` 和 `runtime.Callers` 不再包含编译器产生的初始化函数；其它的没有太大的变化，总体来说，就是性能又有所提升。
+
+## 核心库
+
+1. Go1.12 可以通过设置环境 `GODEBUG` 为 `tls13=1` 来选择性地支持 TLS 1.3。
