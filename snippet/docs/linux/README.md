@@ -12,6 +12,14 @@
 - [DiskIO](./diskio)
 - [Distrbution](./distribution)
     - [Kali](./distribution/kali.md)
+    - Package Manager
+        - RPM
+            - [RPM Packaging Guide](https://rpm-packaging-guide.github.io/)
+            - [RPM Spec File Syntax](http://wiki.rosalab.ru/en/index.php/RPM_spec_file_syntax)
+            - [Fedora RPM Guide](https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/index.html)
+            - RPM.org
+                1. [Dependencies](https://rpm.org/user_doc/dependencies.html) and [More Dependencies](https://rpm.org/user_doc/more_dependencies.html)
+                2. [Macro syntax](https://rpm.org/user_doc/macros.html)
 - [IP Route2](./iproute2)
 - [IPv4](./ipv4)
 - [Kernel](./kernel)
