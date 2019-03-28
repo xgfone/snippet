@@ -11,8 +11,18 @@
     - [TC U32 man](http://man7.org/linux/man-pages/man8/tc-u32.8.html) （[源码](https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/tc/f_u32.c)）
 - [DiskIO](./diskio)
 - [Distrbution](./distribution)
-    - [Kali](./distribution/kali.md)
+    - Debian
+        - [用户手册](https://www.debian.org/doc/user-manuals)
+            - [The Debian Administrator's Handbook](https://www.debian.org/doc/manuals/debian-handbook/index.en.html) ([中文版](https://www.debian.org/doc/manuals/debian-handbook/index.zh-cn.html))
+            - [Debian Reference](https://www.debian.org/doc/manuals/debian-reference/index.en.html) ([中文版](https://www.debian.org/doc/manuals/debian-reference/index.zh-cn.html))
+        - [开发手册](https://www.debian.org/doc/devel-manuals)
+            - [Debian Policy Manual](https://www.debian.org/doc/debian-policy/)
+            - [Debian Developer's Reference](https://www.debian.org/doc/manuals/developers-reference/index.en.html)
+    - [Kali](./snippet/docs/linux/distribution/kali.md)
     - Package Manager
+        - DEB
+            - [Debian New Maintainers' Guide](https://www.debian.org/doc/manuals/maint-guide/index.en.html) ([中文版](https://www.debian.org/doc/manuals/maint-guide/index.zh-cn.html))
+            - [Guide for Debian Maintainers](https://www.debian.org/doc/manuals/debmake-doc/index.en.html) ([中文版](https://www.debian.org/doc/manuals/debmake-doc/index.zh-cn.html))
         - RPM
             - [RPM Packaging Guide](https://rpm-packaging-guide.github.io/)
             - [RPM Spec File Syntax](http://wiki.rosalab.ru/en/index.php/RPM_spec_file_syntax)
