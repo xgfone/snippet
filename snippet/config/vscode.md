@@ -51,6 +51,7 @@
 
     "go.inferGopath": true,
     "go.useLanguageServer": true,
+    "go.formatTool": "goimports",
     "go.autocompleteUnimportedPackages": true,
     "go.gotoSymbol.ignoreFolders": ["vendor"],
 
@@ -127,6 +128,7 @@
     // Focus Next Terminal.
     { "key": "ctrl+tab", "command": "workbench.action.terminal.focusNext" },
 
+    { "key": "ctrl+t ctrl+l", "command": "editor.action.transformToLowercase" },
     { "key": "ctrl+n", "command": "workbench.action.files.newUntitledFile", "when": "editorTextFocus && vim.active && vim.use<C-n>" }
 ]
 ```
