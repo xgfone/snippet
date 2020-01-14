@@ -18,6 +18,7 @@
     "editor.wordWrap": "on",
     "editor.mouseWheelZoom": false,
     "editor.minimap.enabled": false,
+    "editor.detectIndentation": false,
     "editor.minimap.maxColumn": 80,
     "editor.renderIndentGuides": true,
     "editor.useTabStops": true,
@@ -54,6 +55,25 @@
     "go.formatTool": "goimports",
     "go.autocompleteUnimportedPackages": true,
     "go.gotoSymbol.ignoreFolders": ["vendor"],
+    "go.useLanguageServer": true,
+    "go.formatTool": "goimports",
+    "go.autocompleteUnimportedPackages": true,
+    "go.gotoSymbol.ignoreFolders": [
+        "vendor"
+    ],
+    "[go]": {
+        "editor.snippetSuggestions": "none",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        }
+    },
+    "gopls": {
+        "usePlaceholders": true, // add parameter placeholders when completing a function
+        // Experimental settings
+        "completeUnimported": true, // autocomplete unimported packages
+        "deepCompletion": true,     // enable deep completion
+    },
 
     "html.format.indentInnerHtml": true,
 
