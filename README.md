@@ -196,8 +196,8 @@ DOCS
         - [Go 性能优化](./snippet/docs/go/optimization.md)
         - [优化Go的模式](http://blog.cyeam.com/golang/2016/08/18/apatternforoptimizinggo)
         - 《The Go Programming Language》(Go语言圣经) [中文版](https://github.com/gopl-zh/gopl-zh.github.com) [中文版阅读](https://docs.hundan.org/gopl-zh/) [官网](http://gopl.io) [源码](https://github.com/adonovan/gopl.io)
-        - [Go语言高级编程](https://github.com/chai2010/advanced-go-programming-book) [阅读](https://chai2010.cn/advanced-go-programming-book)
-        - [Go2编程指南](https://github.com/chai2010/go2-book) [阅读](https://chai2010.cn/go2-book/)
+        - [Go语言高级编程](https://github.com/chai2010/advanced-go-programming-book) （点击 [阅读](https://chai2010.cn/advanced-go-programming-book) 阅读）
+        - [Go2编程指南](https://github.com/chai2010/go2-book) （点击 [阅读](https://chai2010.cn/go2-book/) 阅读）
         - [Go 内嵌静态资源](http://fuxiaohei.me/2016/10/1/go-binary-embed-asset.html)
         - [XML 动态解析样例](./snippet/example/go/xml.go)
         - [Gopher Academy Blog](https://blog.gopheracademy.com/)
