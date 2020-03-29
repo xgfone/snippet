@@ -470,7 +470,6 @@ for k := range maps {
 1. Go1.12 可以通过设置环境 `GODEBUG` 为 `tls13=1` 来选择性地支持 TLS 1.3。
 
 
-
 # Go1.13
 
 ## 语言变化
@@ -488,7 +487,7 @@ for k := range maps {
 3. 对于 AIX/PPC64 架构，支持 `CGO`、外部链接以及 `c-archive` 和 `pie` 构建模式。
 4. 兼容性 Android 10。
 5. 对于 Darwin 系统，最低要求 macOS 10.11 El Capitan。
-6. 对于 FreeBSD 系统，是低要求.FreeBSD 11.2。
+6. 对于 FreeBSD 系统，最低要求 FreeBSD 11.2。
 7. 当前支持 `illumos` 操作系统。
 
 ## 工具
@@ -513,3 +512,57 @@ for k := range maps {
 
 1. `crypto/tls` 默认支持 TLS 1.3。但它能通过在 `GODEBUG` 环境变量中添加 `tls13=0` 来禁用它，不过，它只是个过滤选项，将在 Go 1.14 中被取消。
 2. `errors` 添加三个新的函数 `As`、`Is`、`Unwrap` 用来捕获、解出、判断错误。
+
+
+# Go1.14
+
+大部分改变都聚焦在工具链、运行时和库。
+
+## 语言改变
+在内嵌 `interface` 时，允许被内嵌的 `interface` 与内嵌的 `interface` 存在方法集重叠：这些重叠的方法必须拥有相同的名字和一致的方法签名（即参数和返回值的个数及其顺序）。这个改变可以解决典型的菱型内嵌 `interface`，如：有四个 `interface`：A、B、C、D，其中，A 被内嵌到 B 和 C 中，而 B 和 C 又同时被内嵌到 D 中，这在之前是不允许的，但从 Go1.14 开始，这是被允许的。
+
+## 移植
+
+### Darwin
+1. Go1.14 是最后一个支持 macOS 10.11 EI Capitan 的版本，从 Go1.15 开始则要求 macOS 10.12 Sierra 及以上。
+2. Go1.14 是最后一个在 macOS 上支持 32 位的版本，因为从 10.15 开始，macOS 不再支持 32 位程序。
+
+### Windows
+1. Go 二进制程序现在将启用 [DEP(Data Execution Prevention)](https://docs.microsoft.com/en-us/windows/win32/memory/data-execution-prevention)。
+2. 在创建文件时（即调用 `os.OpenFile` 或 `syscall.Open`），如果没有设置拥有者写权限位标志，则以只读权限模式创建该文件。
+
+### WebAssembly
+1. 通过从 GO 中的 `js.Value` 引用的 JavaScript 值，现在可以被 GC 回收了。
+2. `js.Value` 值不再通过 `==` 操作符进行比较，相反必须通过调用其方法 `Equal`。（注：主要是因为该值可以被 GC 回收了。）
+3. `js.Value` 现在有方法 `IsUndefined`、`IsNull`、`IsNaN` 以便用来判断该 JS 值是否是 `undefined`、`null`、`nan`。
+
+### RISC-V
+1. Go1.14 开始在 Linux 系统上试验性支持 64 位 RISC-V 指令集（`GOOS=linux GOARCH=riscv64`）。
+
+### FreeBSD
+1. Go现在开始在 FreeBSD 12.0 及其后续版本中支持 64 位 ARM 指令集。
+
+### Native Client(NaCl)
+1. 正如 Go1.13 中所声明的，从 Go1.14 开始，不再支持 NaCl（`GOOS=nacl`）。
+
+### Illumos
+对于 `runtime.NumCPU`，运行时现在遵守区域 CPU 容量（`zone.cpu-cap`资源控制），默认为 `GOMACPROCS`。
+
+## 工具
+
+1. 如果 `main` 模块顶层包含一个 `vendor` 目录并且 `go.mod` 指定 `go 1.14` 及其以上版本，则 `go` 命令自动将 `-mod` 默认设置到 `vendor`（即 `-mod=vendor`）。但是，一个新的标志 `mod=mod` 能改变这种默认设置行为，它将使 `go` 命令从模块缓存中加载模块，而不管 `vendor` 目录是否存在。
+2. 当设置显式或默认设置 `-mod=vendor` 时，GO命令会验证 `main` 模块中的 `vendor/modules.txt` 文件是否和它的 `go.mod` 文件一致。
+3. `go get` 命令不再接受命令行参数 `-mod`。
+4. 新增环境变量 `GOINSECURE` 来指示 GO 命令在从代码源直接获取设置的包时，不再强求 HTTPS 连接以及跳过证书验证。`GOINSECURE` 的设置方式和 `GOPRIVATE` 一样。
+5. 如果某个模块的最新版本中包含 `go.mod` 文件，`go get` 不再更新到一个 `incompatible` 的主版本，除非显式地请求这样的版本。另外，如果直接从代码源获取这样的模块时，`go list` 也会自动忽略 `incompatible` 的主版本
+6. 除了 `go mod tidy` 之外的其它 GO 命令不再移除 `indirect` 依赖的 `require` 指令。
+7. 如果只是对 `go.mod` 文件进行修改性的改变，除了 `go mod tidy` 之外的其它 GO 命令不再编辑 `go.mod` 文件。
+
+## 运行时
+1. 对于那些零开销调用，Go1.14 极大的提升了 `defer` 的性能。
+2. Goroutines 可异步抢占。因此，没有任何函数调用的死循环不再导致锁死调度器。但仅支持除 `windows/arm`、`darwin/arm`、`js/wasm` 和 `plan9/*` 外的其它平台。
+3. 页分配更高效，避免在大量 `GOMACPROCS` 情况下锁竞争，在高速并行分配大量内存时，延迟更低、吞吐量更高。
+4. 被 `time.After`、`time.Tick`、`net.Conn.SetDeadline` 等使用的内部计时器更高效，减少了一些锁竞争和上下文切换。
+
+## 核心库
+1. 新增一个包 `hash/maphash`，它提供字节序列的 Hash 功能，可以被用来实现哈希表或其它需要映射任意字符串或字节序列到一个唯一 64 位无符号整数的数据结构。注：哈希函数是耐碰撞的，但不是加密性的。

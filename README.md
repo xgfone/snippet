@@ -187,6 +187,7 @@ DOCS
         - [GO1.11](./snippet/docs/go/go-version.md#go111)
         - [GO1.12](./snippet/docs/go/go-version.md#go112)
         - [GO1.13](./snippet/docs/go/go-version.md#go113)
+        - [GO1.14](./snippet/docs/go/go-version.md#go114)
     - [Others]
         - [Go Playground](https://wide.b3log.org/playground)
         - [Golang net.http标准库](./snippet/docs/go/net-http.md)

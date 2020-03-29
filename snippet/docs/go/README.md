@@ -44,7 +44,8 @@ Go语言笔记
 	- [GO1.10](./go-version.md#go110)
 	- [GO1.11](./go-version.md#go111)
 	- [GO1.12](./go-version.md#go112)
-    - [GO1.13](./go-version.md#go113)
+	- [GO1.13](./go-version.md#go113)
+	- [GO1.14](./go-version.md#go114)
 
 ------
 
