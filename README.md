@@ -36,7 +36,7 @@ The code snippets of all kinds of languages and some docs.
 DOCS
 ====
 
-- [Algorithm](./snippet/docs/algorithm)
+- [Algorithm](./snippet/docs/algorithm/README.md)
     - [算法分析与设计](./snippet/docs/algorithm/algorithm-analysis-and-design.md)
     - [红黑树深入剖析及Java实现](http://tech.meituan.com/redblack-tree.html)
     - [漫画：什么是动态规划](http://mp.weixin.qq.com/s/_kHeAI4PvF-KH7IQrmnRVg)
