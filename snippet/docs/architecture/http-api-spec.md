@@ -13,6 +13,22 @@
 - POST：请求参数放置在 Body 中，并使用请求头 `Content-Type` 说明 Body 数据的格式，建议使用 JSON 格式。
 
 ### 请求参数
+#### Query 参数
+对于一个嵌套型的参数，如果通过 Query 参数进行传递，则要将其平铺成 Query 参数，比如：
+```json
+{
+    "User": {
+        "Name": "Aaron",
+        "Email": "aaron@example.com"
+    }
+}
+```
+作为 Query 参数，要将其转换为 `User.Name=Aaron & User.Email=aaron@example.com`。
+
+如果 Query 参数的值是个数组，可以直接先将其转换为 JSON 字符串，然后再作为 Query 参数的值，如 `Ids=["UUID1", "UUID2", "UUID3"]`。如果服务器接收到此 Query 参数，可以直接用 JSON 解码器进行解码。
+
+注意：对于 Query 参数值，在发送请求前，要先对其进行转义，比如：`Ids=["UUID1", "UUID2", "UUID3"]` 要被转义为 `Ids=%5B%22UUID1%22%2C+%22UUID2%22%2C+%22UUID3%22%5D`。
+
 #### 请求指令
 请求指令可以通过 URL Path 来区分，也可以使用 Action 参数来表示。如果使用 Path，可以使用 Router 来完成；如果使用 Action 参数，则既可放在 Query（参数名为 `Action`）中，也可作为公共参数放在请求头（请求头名为 `X-Action`）中。
 
