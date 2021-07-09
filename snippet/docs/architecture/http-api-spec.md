@@ -55,7 +55,7 @@
 API Version 可以放在 **URL Path** 中（如 `/v1`），也可以作为 **公共参数** 放在 **请求头** 中（请求头名为 `X-Version` 或 `X-Api-Version`）。
 
 ### 认证信息
-**认证信息被视为公共参数，因此，则放在请求头中。**为了兼容 Web 标准，则将认证信息放在请求头 `Authorization` 中，参数值格式为 `AuthMethod AuthInfoValue`。其中，`AutMethod`表示认证方法（如 `Basic`、`Token`、`OAuth2`、`HMAC-SHA256` 等），`AuthInfoValue` 表示完成认证所需要的信息。
+**认证信息被视为公共参数，因此，则放在请求头中。** 为了兼容 Web 标准，则将认证信息放在请求头 `Authorization` 中，参数值格式为 `AuthMethod AuthInfoValue`。其中，`AutMethod`表示认证方法（如 `Basic`、`Token`、`OAuth2`、`HMAC-SHA256` 等），`AuthInfoValue` 表示完成认证所需要的信息。
 
 对于类似 API 网关的代理，认证通过后，当转发给后端服务时，则可将解析出来的认证信息（如：登录者ID、登录者名字、登录者的角色类型等）放在请求头中（请求头名分别为 `X-Operator-Id`、`X-Operator-Name`、`X-Operator-Role-Type`等），然后再转发给后端服务；这样，后端服务在接收到请求时，则可以直接从请求头中取出相关的用户信息。
 
