@@ -59,6 +59,7 @@ Mysql建表与索引使用规范详解
 ------ 创建索引
 -- 添加全文索引：
 ALTER TABLE `table_name` ADD FULLTEXT `index_name` (`column_name`, ...)
+CREATE FULLTEXT INDEX `index_name` ON `table_name`(`column_name`, ...);
 
 -- 添加主键索引：
 ALTER TABLE `table_name` ADD PRIMARY KEY [`index_name`] (`column_name`, ...)
