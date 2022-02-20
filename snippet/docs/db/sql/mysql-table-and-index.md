@@ -56,10 +56,33 @@ Mysql建表与索引使用规范详解
 
 例: index 相关语法
 ```sql
-CREATE INDEX log_url ON logaudit_log(url);
-show index from logaudit_log;
-drop index log_request_time on logaudit_log;
+------ 创建索引
+-- 添加全文索引：
+ALTER TABLE `table_name` ADD FULLTEXT `index_name` (`column_name`, ...)
+
+-- 添加主键索引：
+ALTER TABLE `table_name` ADD PRIMARY KEY [`index_name`] (`column_name`, ...)
+
+-- 添加唯一索引：
+ALTER TABLE `table_name` ADD UNIQUE [`index_name`] (`column_name`, ...)
+CREATE UNIQUE INDEX `index_name` ON `table_name` (`column_name`, ...)
+
+-- 添加普通索引：
+ALTER TABLE `table_name` ADD INDEX `index_name` (`column_name`, ...)
+CREATE INDEX `index_name` ON `table_name` (`column_name`, ...)
+
+-- 如果被索引的列是字符串或文本类型，可以指定列名后设置被索引的长度，如 (userid, username(8))
+
+------ 查看索引
+SHOW INDEX FROM `table_name`;
+
+
+------ 删除索引
+DROP INDEX `index_name` ON `table_name`;
+ALTER TABLE `table_name` DROP INDEX `index_name`；
+ALTER TABLE `table_name` DROP PRIMARY KEY;
 ```
+
 ### SQL执行效率检测EXPLAIN
 `explain`显示了 mysql 如何使用索引来处理`select`语句以及连接表。可以帮助选择更好的索引和写出更优化的查询语句。
 
